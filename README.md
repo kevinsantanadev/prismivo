@@ -2,7 +2,7 @@
 
 Plataforma SaaS B2B de **client operations** criada para profissionais e pequenas empresas de serviços centralizarem clientes, projetos, aprovações, arquivos, atendimento e cobranças.
 
-> Status atual: Marco 7 concluído — aplicação independente, colaboração com papéis granulares, perfis personalizáveis, acessibilidade visual, administração inicial e defesa em profundidade aplicada no banco.
+> Status atual: Marco 8 concluído — administração avançada, filtros de auditoria, indicadores temporais e relatórios exportáveis com controle de acesso.
 
 ## Visão geral
 
@@ -55,13 +55,14 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Suspensão, remoção e alteração de papel com proteção do último proprietário;
 - Matriz de permissões aplicada nas rotas de escrita e preparada para defesa em profundidade no RLS;
 - Painel administrativo inicial com métricas reais e trilha de atividades da organização;
+- Painel administrativo avançado com filtros por período e tipo, busca, paginação, gráfico de volume e exportação CSV protegida contra fórmulas;
 - Termos, Privacidade, Cookies, Cancelamento, Acessibilidade e Segurança em rotas indexáveis próprias;
 - Páginas individuais de clientes e projetos com relacionamentos protegidos;
 - Quadro de tarefas com prioridades, prazos e atualização persistente de status;
 - Upload privado com validação de tamanho, extensão, MIME e assinatura;
 - Download autenticado, exclusão lógica e vínculo de arquivos a projetos;
 - Atendimento com protocolo, prioridade, mensagens, encerramento e reabertura;
-- Vinte e cinco testes unitários de validação, permissões e segurança;
+- Vinte e nove testes unitários de validação, permissões, relatórios e segurança;
 - Builds local e Vercel validados, além de lint e tipagem estrita.
 
 ## Arquitetura planejada
@@ -161,10 +162,10 @@ Cada pessoa cria a própria conta e confirma o e-mail. No primeiro acesso, o onb
 
 ## Próximos marcos
 
-1. Marco 8: evoluir a administração com filtros, relatórios e auditoria dedicada;
-2. Construir CMS, métricas históricas e pagamentos demonstrativos;
-3. Adicionar versionamento de entregáveis, comentários e anexos em atendimentos;
-4. Testes E2E, rate limiting distribuído, observabilidade e CI/CD.
+1. Construir CMS, métricas históricas e pagamentos demonstrativos;
+2. Adicionar versionamento de entregáveis, comentários e anexos em atendimentos;
+3. Ampliar testes E2E, rate limiting distribuído, observabilidade e CI/CD;
+4. Concluir a revisão de produção, publicação independente e inclusão no portfólio.
 
 ## Autoria e licença
 

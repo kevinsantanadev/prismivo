@@ -3589,6 +3589,35 @@ button {
 .audit-list p { margin: 4px 0; color: var(--app-muted); font-size: .7rem; }
 .audit-list small { color: #899087; font-size: .62rem; }
 .audit-list code { align-self: start; border-radius: 6px; background: color-mix(in srgb,var(--app-line) 42%,transparent); padding: 5px 7px; color: var(--app-muted); font-size: .58rem; }
+.admin-report-grid { display: grid; grid-template-columns: minmax(0,1.65fr) minmax(260px,.7fr); gap: 16px; margin: 16px 0; }
+.admin-activity-chart,.admin-report-note { min-width: 0; }
+.activity-chart-summary { display: flex; align-items: baseline; gap: 10px; margin-top: 12px; }
+.activity-chart-summary strong { font-size: clamp(2rem,4vw,3.5rem); letter-spacing: -.06em; }
+.activity-chart-summary span,.admin-report-note p { color: var(--app-muted); font-size: .72rem; line-height: 1.6; }
+.activity-bars { display: grid; height: 164px; grid-template-columns: repeat(7,minmax(0,1fr)); align-items: end; gap: 10px; margin: 24px 0 0; padding: 0; list-style: none; }
+.activity-bars li { display: grid; min-width: 0; height: 100%; grid-template-rows: minmax(90px,1fr) auto auto; justify-items: center; gap: 5px; }
+.activity-bar-track { position: relative; display: flex; width: min(34px,72%); height: 100%; align-items: end; overflow: hidden; border-radius: 8px 8px 4px 4px; background: color-mix(in srgb,var(--app-line) 38%,transparent); }
+.activity-bar-track > span { width: 100%; border-radius: inherit; background: linear-gradient(180deg,var(--lime),color-mix(in srgb,var(--violet) 58%,var(--lime))); }
+.activity-bars strong { font-size: .68rem; }
+.activity-bars small { overflow: hidden; max-width: 100%; color: var(--app-muted); font-size: .55rem; text-overflow: ellipsis; white-space: nowrap; }
+.admin-report-note { display: flex; flex-direction: column; }
+.admin-report-note p { margin: 12px 0 22px; }
+.admin-report-note .app-primary-button { width: 100%; margin-top: auto; }
+.admin-report-filters { display: grid; grid-template-columns: minmax(150px,.42fr) minmax(180px,.58fr) minmax(240px,1fr) auto; align-items: end; gap: 12px; margin: 22px 0 12px; border-top: 1px solid var(--app-line); padding-top: 18px; }
+.admin-report-filters .form-field { margin: 0; }
+.admin-report-filters :is(select,input) { width: 100%; border: 1px solid var(--app-line); border-radius: 10px; background: var(--app-surface); color: var(--app-ink); }
+.admin-search-field > div { position: relative; }
+.admin-search-field svg { position: absolute; top: 50%; left: 12px; width: 16px; transform: translateY(-50%); color: var(--app-muted); pointer-events: none; }
+.admin-search-field input { padding-left: 38px; }
+.report-result-count { margin: 6px 0 2px; color: var(--app-muted); font-size: .66rem; }
+.admin-empty-report { display: grid; justify-items: center; border-top: 1px solid var(--app-line); padding: 48px 20px; text-align: center; }
+.admin-empty-report svg { width: 28px; margin-bottom: 12px; color: var(--app-muted); }
+.admin-empty-report strong { font-size: .82rem; }
+.admin-empty-report p { margin: 6px 0 0; }
+.admin-pagination { display: flex; align-items: center; justify-content: center; gap: 16px; border-top: 1px solid var(--app-line); padding-top: 18px; }
+.admin-pagination :is(a,span) { border-radius: 8px; color: var(--app-muted); padding: 8px 10px; font-size: .66rem; }
+.admin-pagination a { border: 1px solid var(--app-line); color: var(--app-ink); }
+.admin-pagination [aria-disabled="true"] { opacity: .45; }
 
 .invitation-card { max-width: 620px; margin: 0 auto; text-align: center; }
 .invitation-card .brand { justify-content: center; margin-bottom: 46px; }
@@ -3600,6 +3629,8 @@ button {
 
 @media (max-width: 1180px) {
   .admin-metrics { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .admin-report-grid { grid-template-columns: 1fr; }
+  .admin-report-filters { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 760px) {
@@ -3610,6 +3641,7 @@ button {
   .member-row { display: grid; }
   .member-controls { display: grid !important; grid-template-columns: 1fr 1fr auto; }
   .admin-metrics { grid-template-columns: 1fr 1fr; }
+  .admin-report-filters { grid-template-columns: 1fr; }
   .audit-list article { grid-template-columns: auto minmax(0,1fr); }
   .audit-list code { grid-column: 2; justify-self: start; }
 }
@@ -3619,6 +3651,8 @@ button {
   .member-controls { grid-template-columns: 1fr; }
   .icon-danger-button { width: 100%; }
   .invite-result { grid-template-columns: 1fr; }
+  .activity-bars { gap: 5px; }
+  .activity-bar-track { width: min(24px,82%); }
 }
 
 .form-field label span {

@@ -165,6 +165,22 @@ export const ticketMessageSchema = z.object({
 
 export const ticketStatusSchema = z.object({ action: z.enum(["close", "reopen"]) });
 
+export const adminReportQuerySchema = z.object({
+  period: z
+    .enum(["7", "30", "90"])
+    .default("30")
+    .transform((value) => Number(value) as 7 | 30 | 90),
+  type: z
+    .string()
+    .trim()
+    .min(1)
+    .max(64)
+    .regex(/^(?:all|[a-z0-9_.-]+)$/i, "Tipo de atividade inválido.")
+    .default("all"),
+  query: z.string().trim().max(100, "Use no máximo 100 caracteres.").default(""),
+  page: z.coerce.number().int().min(1).max(500).default(1),
+});
+
 export function zodFieldErrors(error: z.ZodError) {
   const fields: Record<string, string> = {};
   for (const issue of error.issues) {

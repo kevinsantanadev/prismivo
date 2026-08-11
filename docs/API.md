@@ -136,6 +136,14 @@ As rotas internas usam um envelope pequeno e previsível:
 
 O navegador nunca informa `user_id`, `organization_id`, papel ou plano como autoridade.
 
+### `GET /api/admin/reports`
+
+- exporta em CSV a trilha operacional autorizada da organização;
+- aceita `period` (`7`, `30` ou `90`), `type` e `query`;
+- exige sessão válida e permissão `admin.view` verificada no servidor;
+- limita a exportação a 1.000 registros e impede cache compartilhado;
+- neutraliza células que poderiam ser interpretadas como fórmulas por planilhas.
+
 ## Endpoints principais planejados
 
 ### Segurança de conta

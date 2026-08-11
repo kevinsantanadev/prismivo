@@ -9,7 +9,7 @@ Retirar a dependência do gateway de identidade e do formato de hospedagem atuai
 - Vercel foi escolhida como ambiente independente de execução do Next.js;
 - Supabase foi escolhido para PostgreSQL, autenticação e armazenamento privado;
 - o schema PostgreSQL está aplicado por migração versionada;
-- todas as treze tabelas públicas possuem RLS e políticas por usuário ou organização;
+- todas as vinte e quatro tabelas públicas possuem RLS e políticas por usuário ou organização;
 - cadastro, confirmação de e-mail, login, logout, recuperação e troca de senha estão implementados;
 - as APIs, páginas protegidas e arquivos usam a sessão do Supabase no servidor;
 - os adaptadores do ambiente anterior permanecem temporariamente para permitir uma transição sem indisponibilidade.

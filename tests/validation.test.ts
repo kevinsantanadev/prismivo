@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { isJsonRequest, isSameOriginRequest } from "../lib/api";
 import { hasPermission } from "../lib/permissions";
 import {
+  adminReportQuerySchema,
   approvalDecisionSchema,
   approvalSchema,
   clientSchema,
@@ -18,6 +19,7 @@ import {
   ticketSchema,
   ticketStatusSchema,
 } from "../lib/validation";
+import { buildCsvDocument, escapeCsvCell } from "../lib/reports/csv";
 
 describe("onboarding validation", () => {
   it("accepts a complete free-workspace setup", () => {
@@ -217,5 +219,27 @@ describe("team permissions and invitations", () => {
   it("accepts only controlled member states", () => {
     expect(memberAccessSchema.safeParse({ role: "viewer", status: "suspended" }).success).toBe(true);
     expect(memberAccessSchema.safeParse({ role: "root", status: "active" }).success).toBe(false);
+  });
+});
+
+describe("administrative reporting", () => {
+  it("normalizes supported audit filters", () => {
+    const result = adminReportQuerySchema.safeParse({ period: "90", type: "project.created", query: "entrega", page: "3" });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data).toEqual({ period: 90, type: "project.created", query: "entrega", page: 3 });
+  });
+
+  it("rejects unsupported periods and unsafe activity types", () => {
+    expect(adminReportQuerySchema.safeParse({ period: "365", type: "all" }).success).toBe(false);
+    expect(adminReportQuerySchema.safeParse({ period: "30", type: "type,or(true)" }).success).toBe(false);
+  });
+
+  it("escapes spreadsheet formulas and quotes in CSV cells", () => {
+    expect(escapeCsvCell("=IMPORTXML('x')")).toBe("\"'=IMPORTXML('x')\"");
+    expect(escapeCsvCell('Ação "concluída"')).toBe('"Ação ""concluída"""');
+  });
+
+  it("builds a deterministic CSV document", () => {
+    expect(buildCsvDocument(["Título", "Total"], [["Entrega", 2]])).toBe('"Título","Total"\r\n"Entrega","2"');
   });
 });

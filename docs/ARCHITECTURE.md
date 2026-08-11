@@ -173,3 +173,7 @@ O service worker melhora a resiliência somente do conteúdo público. Dashboard
 ### ADR-009 — Rate limiting persistente e fail-closed
 
 Fluxos de autenticação consomem contadores no PostgreSQL por janelas fixas. A aplicação envia apenas um hash da combinação entre identidade e origem; o valor original e o segredo de derivação não são persistidos. Em produção, ausência do segredo ou falha do contador bloqueia a tentativa sensível em vez de liberar tráfego sem proteção.
+
+### ADR-010 — Localização persistente com lista permitida
+
+O idioma é limitado a PT-BR, inglês ou espanhol e persistido no dispositivo e em um cookie funcional `SameSite=Lax`, sem dados pessoais. Componentes interativos atualizam a experiência imediatamente, enquanto páginas renderizadas no servidor leem somente valores normalizados. Formulários enviam o idioma escolhido para que mensagens de validação continuem consistentes sem confiar em textos arbitrários do navegador.

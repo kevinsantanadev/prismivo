@@ -129,7 +129,7 @@ docs/
 
 ## Requisitos
 
-- Node.js `>=22.13.0`;
+- Node.js `>=22.13.0 <23`;
 - npm compatível com o lockfile;
 - Git;
 - Projeto Supabase para testar os fluxos autenticados completos.

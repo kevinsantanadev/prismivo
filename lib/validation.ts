@@ -181,6 +181,30 @@ export const adminReportQuerySchema = z.object({
   page: z.coerce.number().int().min(1).max(500).default(1),
 });
 
+export const contentItemSchema = z.object({
+  kind: z.enum(["article", "case_study", "service", "help"]),
+  slug: z
+    .string()
+    .trim()
+    .min(3, "Informe um endereço com pelo menos 3 caracteres.")
+    .max(100)
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Use letras minúsculas, números e hífens."),
+  title: z.string().trim().min(4).max(160),
+  excerpt: z.string().trim().min(20).max(320),
+  body: z.string().trim().min(80).max(30000),
+  tags: z.array(z.string().trim().min(2).max(32)).max(8).default([]),
+  status: z.enum(["draft", "published"]).default("draft"),
+});
+
+export const contentStatusSchema = z.object({
+  status: z.enum(["draft", "published", "archived"]),
+});
+
+export const billingSubscriptionSchema = z.object({
+  planCode: z.enum(["free", "professional", "scale"]),
+  billingCycle: z.enum(["monthly", "annual"]),
+});
+
 export function zodFieldErrors(error: z.ZodError) {
   const fields: Record<string, string> = {};
   for (const issue of error.issues) {

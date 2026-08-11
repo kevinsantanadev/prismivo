@@ -144,6 +144,20 @@ O navegador nunca informa `user_id`, `organization_id`, papel ou plano como auto
 - limita a exportação a 1.000 registros e impede cache compartilhado;
 - neutraliza células que poderiam ser interpretadas como fórmulas por planilhas.
 
+### `POST /api/content` e `PATCH /api/content/:id`
+
+- criam conteúdo isolado da organização e alteram apenas estados editoriais conhecidos;
+- validam endereço, formato, tamanho, tags e permissão `content.write`;
+- derivam autor e organização da sessão e registram a ação na trilha operacional.
+
+### `POST /api/billing/subscription`
+
+- ativa uma assinatura exclusivamente em modo demonstrativo;
+- exige `owner` ou `admin` e valida novamente a permissão na RPC do banco;
+- calcula o valor a partir da tabela `plans`, sem confiar em preço enviado pelo navegador;
+- atualiza assinatura, histórico, plano da organização, atividade e notificação na mesma transação;
+- não recebe nem armazena dados de cartão e não executa uma cobrança real.
+
 ## Endpoints principais planejados
 
 ### Segurança de conta

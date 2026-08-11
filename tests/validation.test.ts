@@ -5,7 +5,10 @@ import {
   adminReportQuerySchema,
   approvalDecisionSchema,
   approvalSchema,
+  billingSubscriptionSchema,
   clientSchema,
+  contentItemSchema,
+  contentStatusSchema,
   invitationSchema,
   memberAccessSchema,
   notificationActionSchema,
@@ -241,5 +244,38 @@ describe("administrative reporting", () => {
 
   it("builds a deterministic CSV document", () => {
     expect(buildCsvDocument(["Título", "Total"], [["Entrega", 2]])).toBe('"Título","Total"\r\n"Entrega","2"');
+  });
+});
+
+describe("content and demonstrative billing", () => {
+  const content = {
+    kind: "article",
+    slug: "operacoes-com-clareza",
+    title: "Operações com clareza",
+    excerpt: "Um resumo profissional com contexto suficiente para orientar a leitura.",
+    body: "Este conteúdo possui detalhes suficientes para passar pela validação editorial e representar um material real do estúdio.",
+    tags: ["operações", "gestão"],
+    status: "draft",
+  };
+
+  it("accepts bounded editorial content and known workflow states", () => {
+    expect(contentItemSchema.safeParse(content).success).toBe(true);
+    expect(contentStatusSchema.safeParse({ status: "published" }).success).toBe(true);
+  });
+
+  it("rejects unsafe slugs and unsupported content states", () => {
+    expect(contentItemSchema.safeParse({ ...content, slug: "../../admin" }).success).toBe(false);
+    expect(contentStatusSchema.safeParse({ status: "deleted_forever" }).success).toBe(false);
+  });
+
+  it("limits billing changes to server-supported plans and cycles", () => {
+    expect(billingSubscriptionSchema.safeParse({ planCode: "professional", billingCycle: "annual" }).success).toBe(true);
+    expect(billingSubscriptionSchema.safeParse({ planCode: "custom-price", billingCycle: "daily" }).success).toBe(false);
+  });
+
+  it("grants content and billing permissions only to expected roles", () => {
+    expect(hasPermission("editor", "content.write")).toBe(true);
+    expect(hasPermission("editor", "billing.manage")).toBe(false);
+    expect(hasPermission("admin", "billing.manage")).toBe(true);
   });
 });

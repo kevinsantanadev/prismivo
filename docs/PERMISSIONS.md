@@ -6,7 +6,7 @@
 | --- | --- |
 | Visitante | Conteúdo público autorizado, sem acesso ao espaço privado |
 | Leitor (`viewer`) | Consulta dados autorizados sem alterar registros |
-| Editor (`editor`) | Clientes, projetos, tarefas, aprovações e arquivos |
+| Editor (`editor`) | Clientes, projetos, tarefas, aprovações, arquivos e conteúdo |
 | Suporte (`support`) | Chamados, respostas e dados mínimos de atendimento |
 | Administrador (`admin`) | Gestão operacional e da equipe, sem promover outro administrador |
 | Proprietário (`owner`) | Controle integral da organização e transferência de propriedade |
@@ -20,12 +20,14 @@
 | Criar/editar clientes e projetos | — | ✓ | — | ✓ | ✓ |
 | Gerenciar tarefas, aprovações e arquivos | — | ✓ | — | ✓ | ✓ |
 | Responder atendimento | — | ✓ | ✓ | ✓ | ✓ |
+| Criar e publicar conteúdo da empresa | — | ✓ | — | ✓ | ✓ |
+| Alterar assinatura e consultar cobrança | — | — | — | ✓ | ✓ |
 | Gerenciar membros inferiores | — | — | — | ✓ | ✓ |
 | Promover administrador/proprietário | — | — | — | — | ✓ |
 | Ver painel administrativo | — | — | — | ✓ | ✓ |
 | Alterar identidade da organização | — | — | — | ✓ | ✓ |
 
-As rotas de escrita verificam a matriz novamente no servidor. A migração do Marco 7 replica as restrições no PostgreSQL para impedir que uma chamada direta à Data API contorne a aplicação.
+As rotas de escrita verificam a matriz novamente no servidor. As migrações replicam as restrições no PostgreSQL para impedir que uma chamada direta à Data API contorne a aplicação. Conteúdo público global não pode ser alterado pelas organizações, e preço ou plano nunca são aceitos como autoridade do navegador.
 
 ## Regras obrigatórias
 

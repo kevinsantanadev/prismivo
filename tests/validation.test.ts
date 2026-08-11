@@ -28,6 +28,7 @@ import {
 } from "../lib/validation";
 import { buildCsvDocument, escapeCsvCell } from "../lib/reports/csv";
 import { normalizeSiteLocale } from "../lib/site-locale";
+import { translateAppShellText } from "../lib/app-shell-i18n";
 
 describe("site locale", () => {
   it("accepts every supported locale and safely falls back to PT-BR", () => {
@@ -36,6 +37,12 @@ describe("site locale", () => {
     expect(normalizeSiteLocale("es")).toBe("es");
     expect(normalizeSiteLocale("../../admin")).toBe("pt-BR");
     expect(normalizeSiteLocale(null)).toBe("pt-BR");
+  });
+
+  it("translates known authenticated shell labels without changing user content", () => {
+    expect(translateAppShellText("Visão geral", "en")).toBe("Overview");
+    expect(translateAppShellText("Perfil, empresa e preferências", "es")).toBe("Perfil, empresa y preferencias");
+    expect(translateAppShellText("Projeto Aurora", "en")).toBe("Projeto Aurora");
   });
 });
 

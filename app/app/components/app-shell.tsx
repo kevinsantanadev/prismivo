@@ -19,21 +19,12 @@ import {
 } from "lucide-react";
 import { signOutPath } from "@/app/session-auth";
 import { PreferencesMenu } from "@/app/components/preferences-menu";
-
-type ActiveSection =
-  | "dashboard"
-  | "tasks"
-  | "projects"
-  | "clients"
-  | "approvals"
-  | "files"
-  | "support"
-  | "content"
-  | "billing"
-  | "notifications"
-  | "team"
-  | "admin"
-  | "settings";
+import {
+  appShellCopy,
+  translateAppShellText,
+  type AppSection,
+} from "@/lib/app-shell-i18n";
+import { getRequestLocale } from "@/lib/site-locale-server";
 
 type WorkspaceSummary = {
   organizationName: string;
@@ -43,23 +34,23 @@ type WorkspaceSummary = {
 };
 
 const navItems = [
-  ["dashboard", "Visão geral", "/app", LayoutDashboard],
-  ["tasks", "Tarefas", "/app/tarefas", ListChecks],
-  ["projects", "Projetos", "/app/projetos", FolderKanban],
-  ["clients", "Clientes", "/app/clientes", Users],
-  ["approvals", "Aprovações", "/app/aprovacoes", FileCheck2],
-  ["files", "Arquivos", "/app/arquivos", Files],
-  ["support", "Atendimento", "/app/atendimento", Headphones],
-  ["content", "Conteúdo", "/app/conteudo", Newspaper],
-  ["billing", "Planos", "/app/assinatura", ReceiptText],
-  ["notifications", "Notificações", "/app/notificacoes", Bell],
-  ["team", "Equipe", "/app/equipe", UserRoundCog],
-  ["admin", "Administração", "/app/administracao", ShieldCheck],
-  ["settings", "Configurações", "/app/configuracoes", Settings2],
+  ["dashboard", "/app", LayoutDashboard],
+  ["tasks", "/app/tarefas", ListChecks],
+  ["projects", "/app/projetos", FolderKanban],
+  ["clients", "/app/clientes", Users],
+  ["approvals", "/app/aprovacoes", FileCheck2],
+  ["files", "/app/arquivos", Files],
+  ["support", "/app/atendimento", Headphones],
+  ["content", "/app/conteudo", Newspaper],
+  ["billing", "/app/assinatura", ReceiptText],
+  ["notifications", "/app/notificacoes", Bell],
+  ["team", "/app/equipe", UserRoundCog],
+  ["admin", "/app/administracao", ShieldCheck],
+  ["settings", "/app/configuracoes", Settings2],
 ] as const;
 
 /** Shared authenticated chrome keeps every operational screen predictable. */
-export function AppShell({
+export async function AppShell({
   active,
   title,
   description,
@@ -67,13 +58,17 @@ export function AppShell({
   unreadCount,
   children,
 }: {
-  active: ActiveSection;
+  active: AppSection;
   title: string;
   description: string;
   workspace: WorkspaceSummary;
   unreadCount: number;
   children: ReactNode;
 }) {
+  const locale = await getRequestLocale();
+  const copy = appShellCopy[locale];
+  const localizedTitle = translateAppShellText(title, locale);
+  const localizedDescription = translateAppShellText(description, locale);
   const initials = workspace.userName
     .split(" ")
     .filter(Boolean)
@@ -84,42 +79,42 @@ export function AppShell({
 
   return (
     <div className="app-layout">
-      <a className="skip-link" href="#app-content">Pular para o conteúdo</a>
+      <a className="skip-link" href="#app-content">{copy.skip}</a>
       <aside className="app-sidebar">
-        <Link className="brand app-brand" href="/" aria-label="Prismivo — página inicial">
+        <Link className="brand app-brand" href="/" aria-label={copy.homeLabel}>
           <span className="brand-mark" aria-hidden="true"><span /></span>
           <span>PRISMIVO</span>
         </Link>
         <div className="workspace-switcher">
           <span><Building2 aria-hidden="true" /></span>
-          <div><small>Empresa</small><strong>{workspace.organizationName}</strong></div>
+          <div><small>{copy.company}</small><strong>{workspace.organizationName}</strong></div>
         </div>
-        <nav aria-label="Navegação do espaço">
-          {navItems.filter(([key]) => isNavigationVisible(key, workspace.role)).map(([key, label, href, Icon]) => (
+        <nav aria-label={copy.navigation}>
+          {navItems.filter(([key]) => isNavigationVisible(key, workspace.role)).map(([key, href, Icon]) => (
             <Link
               key={key}
               href={href}
               className={active === key ? "active" : ""}
               aria-current={active === key ? "page" : undefined}
             >
-              <Icon aria-hidden="true" />{label}
+              <Icon aria-hidden="true" />{copy.nav[key]}
             </Link>
           ))}
         </nav>
         <div className="sidebar-bottom">
-          <a href={signOutPath("/")}><LogOut aria-hidden="true" />Sair</a>
+          <a href={signOutPath("/")}><LogOut aria-hidden="true" />{copy.logout}</a>
         </div>
       </aside>
 
       <div className="app-workspace">
         <header className="app-topbar">
-          <div><span className="app-breadcrumb">{title}</span><small>{description}</small></div>
+          <div><span className="app-breadcrumb">{localizedTitle}</span><small>{localizedDescription}</small></div>
           <div className="app-top-actions">
             <PreferencesMenu />
             <Link
               href="/app/notificacoes"
               className="notification-button"
-              aria-label={`${unreadCount} notificações não lidas`}
+              aria-label={copy.unread(unreadCount)}
             >
               <Bell aria-hidden="true" />
               {unreadCount > 0 && <span>{unreadCount > 99 ? "99+" : unreadCount}</span>}
@@ -127,8 +122,8 @@ export function AppShell({
             <Link
               href="/app/configuracoes"
               className="user-avatar"
-              title={`Configurações de ${workspace.userName}`}
-              aria-label="Abrir configurações do perfil"
+              title={copy.settingsFor(workspace.userName)}
+              aria-label={copy.openProfile}
             >
               {workspace.avatarUrl ? <span className="user-avatar-image" style={{ backgroundImage: `url(${workspace.avatarUrl})` }} aria-hidden="true" /> : initials}
             </Link>
@@ -140,7 +135,7 @@ export function AppShell({
   );
 }
 
-function isNavigationVisible(key: ActiveSection, role?: string) {
+function isNavigationVisible(key: AppSection, role?: string) {
   if (["team", "admin", "billing"].includes(key)) return role === "owner" || role === "admin";
   if (key === "content") return role === "owner" || role === "admin" || role === "editor";
   return true;

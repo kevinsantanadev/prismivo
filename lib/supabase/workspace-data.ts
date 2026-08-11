@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "./server";
+import { getTicketAttachments } from "./ticket-attachments";
 
 type ClientRelation = { name: string | null; company?: string | null };
 type ProjectRelation = { id: string; name: string; client?: ClientRelation | ClientRelation[] | null };
@@ -160,11 +161,13 @@ export async function getSupabaseTicketDetail(organizationId: string, ticketId: 
     .eq("is_internal", false)
     .order("created_at", { ascending: true });
   if (messagesError) throw messagesError;
+  const attachments = await getTicketAttachments(organizationId, ticketId);
   const authorIds = [ticket.requester_user_id, ...(messages ?? []).map((message) => message.author_user_id)];
   const names = await profileNames(authorIds);
   return {
     ticket: { id: ticket.id, protocol: ticket.protocol, category: ticket.category, priority: ticket.priority, subject: ticket.subject, status: ticket.status, createdAt: ticket.created_at, updatedAt: ticket.updated_at, closedAt: ticket.closed_at, clientName: one(ticket.client)?.name ?? null, requesterName: names.get(ticket.requester_user_id) ?? "Usuário" },
     messages: (messages ?? []).map((message) => ({ id: message.id, body: message.body, createdAt: message.created_at, authorUserId: message.author_user_id, authorName: names.get(message.author_user_id) ?? "Usuário" })),
+    attachments,
   };
 }
 

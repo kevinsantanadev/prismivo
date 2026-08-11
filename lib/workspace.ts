@@ -186,7 +186,7 @@ export async function getTicketDetail(organizationId: string, ticketId: string) 
   const messages = await db.select({ id: ticketMessages.id, body: ticketMessages.body, createdAt: ticketMessages.createdAt, authorUserId: ticketMessages.authorUserId, authorName: users.name })
     .from(ticketMessages).innerJoin(users, eq(users.id, ticketMessages.authorUserId))
     .where(and(eq(ticketMessages.ticketId, ticketId), eq(ticketMessages.organizationId, organizationId), eq(ticketMessages.isInternal, false))).orderBy(ticketMessages.createdAt);
-  return { ticket, messages };
+  return { ticket, messages, attachments: [] };
 }
 
 export async function getApprovalsData(organizationId: string) {

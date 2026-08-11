@@ -205,6 +205,21 @@ export const billingSubscriptionSchema = z.object({
   billingCycle: z.enum(["monthly", "annual"]),
 });
 
+export const deliverableSchema = z.object({
+  title: z.string().trim().min(3, "Informe o nome do entregável.").max(140, "Use no máximo 140 caracteres."),
+  description: z.string().trim().max(1200, "Use no máximo 1.200 caracteres.").default(""),
+});
+
+export const deliverableVersionSchema = z.object({
+  summary: z.string().trim().max(1000, "Use no máximo 1.000 caracteres.").default(""),
+  requestApproval: z.enum(["true", "false"]).default("false").transform((value) => value === "true"),
+});
+
+export const deliverableCommentSchema = z.object({
+  body: z.string().trim().min(2, "Escreva um comentário.").max(3000, "Use no máximo 3.000 caracteres."),
+  versionId: z.string().trim().max(120).optional(),
+});
+
 export function zodFieldErrors(error: z.ZodError) {
   const fields: Record<string, string> = {};
   for (const issue of error.issues) {

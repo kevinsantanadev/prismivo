@@ -158,6 +158,31 @@ O navegador nunca informa `user_id`, `organization_id`, papel ou plano como auto
 - atualiza assinatura, histórico, plano da organização, atividade e notificação na mesma transação;
 - não recebe nem armazena dados de cartão e não executa uma cobrança real.
 
+### `POST /api/projects/:id/deliverables`
+
+- cria um entregável apenas em projeto pertencente à organização da sessão;
+- valida nome e descrição e deriva criador e organização no servidor;
+- exige `deliverables.write` e registra a criação na trilha operacional.
+
+### `POST /api/deliverables/:id/versions`
+
+- recebe arquivo privado de até 5 MB com validação de extensão, MIME e assinatura;
+- usa uma RPC transacional para bloquear o entregável, calcular o próximo número e impedir versões duplicadas;
+- pode criar uma aprovação vinculada à versão sem confiar em identificadores de organização enviados pelo navegador;
+- remove o arquivo enviado se o registro da versão falhar.
+
+### `POST /api/deliverables/:id/comments`
+
+- permite comentários para membros autorizados, inclusive leitores;
+- verifica novamente no banco se entregável e versão opcional pertencem à mesma organização;
+- limita o conteúdo e registra a interação no histórico.
+
+### `POST /api/tickets/:id/attachments`
+
+- reutiliza a validação binária e o bucket privado de arquivos;
+- impede anexos em atendimento encerrado;
+- exige permissão de suporte e mantém download sujeito ao escopo da organização.
+
 ## Endpoints principais planejados
 
 ### Segurança de conta
@@ -180,9 +205,9 @@ O navegador nunca informa `user_id`, `organization_id`, papel ou plano como auto
 - `GET|POST /api/v1/projects`;
 - `GET|PATCH|DELETE /api/v1/projects/:id`;
 - `GET|POST /api/v1/projects/:id/tasks`;
-- `GET|POST /api/v1/projects/:id/deliverables`;
-- `POST /api/v1/deliverables/:id/versions`;
-- `POST /api/v1/deliverable-versions/:id/approvals`.
+- `GET|PATCH|DELETE /api/v1/projects/:id/deliverables`;
+- `PATCH|DELETE /api/v1/deliverables/:id/versions`;
+- histórico avançado e comparação visual de versões.
 
 ### Arquivos
 

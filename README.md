@@ -2,7 +2,7 @@
 
 Plataforma SaaS B2B de **client operations** criada para profissionais e pequenas empresas de serviços centralizarem clientes, projetos, aprovações, arquivos, atendimento e cobranças.
 
-> Status atual: Marco 9 concluído — central de conteúdo persistente, estúdio editorial e gestão demonstrativa de planos com preços validados no servidor.
+> Status atual: Marco 10 concluído — entregáveis versionados, comentários rastreáveis e anexos privados no atendimento.
 
 ## Visão geral
 
@@ -37,7 +37,7 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Onboarding de empresa com validação cliente/servidor e aceite registrado;
 - Aceites de Termos e Privacidade separados e vinculados às respectivas versões;
 - PostgreSQL gerenciado no Supabase com migração versionada;
-- Vinte tabelas de produto com Row Level Security e isolamento por usuário e organização;
+- Vinte e quatro tabelas de produto com Row Level Security e isolamento por usuário e organização;
 - Bucket privado no Supabase Storage, limitado a 5 MB e com formatos permitidos;
 - Dashboard protegido com clientes, projetos, histórico e notificações;
 - Criação funcional de projetos com limite de plano validado no servidor;
@@ -60,13 +60,16 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Estúdio editorial autenticado para artigos, casos, serviços e ajuda, com rascunho, publicação e arquivamento;
 - Planos persistidos no banco e assinatura demonstrativa com preço, permissão e organização validados pelo servidor;
 - Histórico financeiro isolado por empresa, sem armazenar cartão nem executar cobrança real;
+- Entregáveis vinculados a projetos, com histórico de versões numerado de forma transacional;
+- Comentários rastreáveis por entregável e fluxo opcional de aprovação ao publicar uma versão;
+- Anexos privados em atendimentos, com a mesma validação de tipo, tamanho, assinatura e propriedade dos arquivos do projeto;
 - Termos, Privacidade, Cookies, Cancelamento, Acessibilidade e Segurança em rotas indexáveis próprias;
 - Páginas individuais de clientes e projetos com relacionamentos protegidos;
 - Quadro de tarefas com prioridades, prazos e atualização persistente de status;
 - Upload privado com validação de tamanho, extensão, MIME e assinatura;
 - Download autenticado, exclusão lógica e vínculo de arquivos a projetos;
 - Atendimento com protocolo, prioridade, mensagens, encerramento e reabertura;
-- Trinta e três testes unitários de validação, permissões, relatórios, conteúdo, cobrança e segurança;
+- Trinta e oito testes unitários de validação, permissões, relatórios, conteúdo, cobrança, entregáveis e segurança;
 - Builds local e Vercel validados, além de lint e tipagem estrita.
 
 ## Arquitetura planejada
@@ -166,9 +169,8 @@ Cada pessoa cria a própria conta e confirma o e-mail. No primeiro acesso, o onb
 
 ## Próximos marcos
 
-1. Adicionar versionamento de entregáveis, comentários e anexos em atendimentos;
-2. Ampliar testes E2E, rate limiting distribuído, observabilidade e CI/CD;
-3. Concluir a revisão de produção, publicação independente e inclusão no portfólio.
+1. Ampliar testes E2E, rate limiting distribuído, observabilidade e CI/CD;
+2. Concluir a revisão de produção, publicação independente e inclusão no portfólio.
 
 ## Autoria e licença
 

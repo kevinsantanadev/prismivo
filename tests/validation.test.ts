@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { isJsonRequest, isSameOriginRequest } from "../lib/api";
+import { exceedsMultipartLimit, MAX_FILE_BYTES, MAX_MULTIPART_OVERHEAD_BYTES } from "../lib/file-validation";
 import { hasPermission } from "../lib/permissions";
 import {
   adminReportQuerySchema,
@@ -9,6 +10,9 @@ import {
   clientSchema,
   contentItemSchema,
   contentStatusSchema,
+  deliverableCommentSchema,
+  deliverableSchema,
+  deliverableVersionSchema,
   invitationSchema,
   memberAccessSchema,
   notificationActionSchema,
@@ -277,5 +281,33 @@ describe("content and demonstrative billing", () => {
     expect(hasPermission("editor", "content.write")).toBe(true);
     expect(hasPermission("editor", "billing.manage")).toBe(false);
     expect(hasPermission("admin", "billing.manage")).toBe(true);
+  });
+});
+
+describe("versioned deliverables and protected attachments", () => {
+  it("accepts a bounded deliverable", () => {
+    expect(deliverableSchema.safeParse({ title: "Guia de identidade", description: "Entrega principal da marca." }).success).toBe(true);
+  });
+
+  it("rejects invalid deliverables and oversized comments", () => {
+    expect(deliverableSchema.safeParse({ title: "X", description: "" }).success).toBe(false);
+    expect(deliverableCommentSchema.safeParse({ body: "x".repeat(3001) }).success).toBe(false);
+  });
+
+  it("normalizes the server-supported approval flag", () => {
+    const result = deliverableVersionSchema.safeParse({ summary: "Ajusta contraste", requestApproval: "true" });
+    expect(result.success).toBe(true);
+    if (result.success) expect(result.data.requestApproval).toBe(true);
+  });
+
+  it("allows viewers to comment without granting version writes", () => {
+    expect(hasPermission("viewer", "comments.write")).toBe(true);
+    expect(hasPermission("viewer", "deliverables.write")).toBe(false);
+    expect(hasPermission("editor", "deliverables.write")).toBe(true);
+  });
+
+  it("rejects multipart bodies above the protected upload limit", () => {
+    const request = new Request("https://prismivo.test/upload", { headers: { "content-length": String(MAX_FILE_BYTES + MAX_MULTIPART_OVERHEAD_BYTES + 1) } });
+    expect(exceedsMultipartLimit(request)).toBe(true);
   });
 });

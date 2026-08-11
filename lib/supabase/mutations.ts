@@ -84,13 +84,26 @@ export async function createApprovalRecord(workspace: Workspace, input: { projec
 
 export async function decideApprovalRecord(workspace: Workspace, id: string, decision: "approved" | "changes_requested"): Promise<MutationResult<{ id: string; status: string }>> {
   const supabase = await createSupabaseServerClient();
-  const { data: approval, error: lookupError } = await supabase.from("approvals").select("id, title, status").eq("organization_id", workspace.organizationId).eq("id", id).maybeSingle();
+  const { data: approval, error: lookupError } = await supabase.from("approvals").select("id, title, status, deliverable_version_id").eq("organization_id", workspace.organizationId).eq("id", id).maybeSingle();
   if (lookupError) return failed();
   if (!approval) return fail("APPROVAL_NOT_FOUND", "Aprovação não encontrada.", 404);
   if (approval.status !== "pending") return fail("APPROVAL_ALREADY_DECIDED", "Essa aprovação já recebeu uma decisão.", 409);
   const approved = decision === "approved";
   const { error } = await supabase.from("approvals").update({ status: decision, decided_by_user_id: workspace.userId, decided_at: new Date().toISOString(), updated_at: new Date().toISOString() }).eq("organization_id", workspace.organizationId).eq("id", id);
   if (error) return failed("APPROVAL_DECISION_FAILED", "Não foi possível registrar a decisão agora.");
+  if (approval.deliverable_version_id) {
+    const { data: version } = await supabase
+      .from("deliverable_versions")
+      .select("deliverable_id")
+      .eq("organization_id", workspace.organizationId)
+      .eq("id", approval.deliverable_version_id)
+      .maybeSingle();
+    if (version) {
+      await supabase.from("deliverables").update({ status: decision, updated_at: new Date().toISOString() })
+        .eq("organization_id", workspace.organizationId)
+        .eq("id", version.deliverable_id);
+    }
+  }
   await recordSideEffects(workspace, {
     activity: { type: approved ? "approval.approved" : "approval.changes_requested", title: approved ? "Entrega aprovada" : "Ajustes solicitados", detail: approval.title, resourceType: "approval", resourceId: id },
     notification: { category: "approval", title: approved ? "Aprovação concluída" : "Solicitação devolvida para ajustes", body: `${approval.title} teve o status atualizado.` },

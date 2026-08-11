@@ -26,7 +26,7 @@
 | Dependência vulnerável | Lockfile, auditoria, atualização controlada e CI |
 | Redirecionamento aberto | Destinos relativos ou allowlist explícita |
 
-## Cabeçalhos previstos
+## Cabeçalhos implementados
 
 - `Content-Security-Policy`;
 - `Strict-Transport-Security` em produção;
@@ -71,6 +71,14 @@
 - políticas de inserção provam que projeto, entregável, versão, arquivo, aprovação e chamado pertencem à mesma organização;
 - numeração de versões ocorre em RPC transacional com bloqueio de linha, identidade, papel e propriedade do arquivo validados internamente;
 - anexos de atendimento reutilizam o armazenamento privado e são removidos se o vínculo persistente falhar.
+- login, cadastro e recuperação possuem limites persistentes por janela, usando combinação de identidade e origem protegida por hash com segredo do ambiente;
+- janelas expiradas são removidas automaticamente e a aplicação bloqueia de forma segura se o segredo obrigatório estiver ausente em produção;
+- CSP, HSTS, `nosniff`, bloqueio de framing, política de referenciador e permissões mínimas são enviados globalmente;
+- a exceção `unsafe-eval` existe somente no servidor de desenvolvimento para o runtime de depuração do framework e não integra o build de produção;
+- páginas privadas e APIs recebem diretivas de não indexação, e a área autenticada usa cache privado `no-store`;
+- logs operacionais usam JSON estruturado e descartam preventivamente chaves associadas a senha, token, cookie, segredo, autorização ou e-mail;
+- o health check usa resposta mínima, sem conexão, credencial, ambiente ou stack trace;
+- o service worker ignora autenticação, APIs, dashboard, convites, status e demais rotas sensíveis, evitando persistência local de dados privados.
 
 ## Privacidade
 

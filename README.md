@@ -2,7 +2,7 @@
 
 Plataforma SaaS B2B de **client operations** criada para profissionais e pequenas empresas de serviços centralizarem clientes, projetos, aprovações, arquivos, atendimento e cobranças.
 
-> Status atual: Marco 10 concluído — entregáveis versionados, comentários rastreáveis e anexos privados no atendimento.
+> Status atual: Marco 11 concluído — proteção operacional, PWA segura, observabilidade, status público e testes ponta a ponta.
 
 ## Visão geral
 
@@ -63,6 +63,12 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Entregáveis vinculados a projetos, com histórico de versões numerado de forma transacional;
 - Comentários rastreáveis por entregável e fluxo opcional de aprovação ao publicar uma versão;
 - Anexos privados em atendimentos, com a mesma validação de tipo, tamanho, assinatura e propriedade dos arquivos do projeto;
+- Rate limiting persistente nos fluxos de login, cadastro e recuperação, com identificadores combinados protegidos por hash;
+- Cabeçalhos de segurança, CSP, proteção contra framing e cache privado nas rotas autenticadas;
+- Health check sem dados sensíveis e página pública de disponibilidade dos serviços essenciais;
+- Logs estruturados com remoção preventiva de campos sensíveis;
+- PWA instalável com manifesto, atualização do service worker e experiência offline apenas para conteúdo público;
+- Páginas personalizadas de indisponibilidade, manutenção, erro e rota não encontrada;
 - Termos, Privacidade, Cookies, Cancelamento, Acessibilidade e Segurança em rotas indexáveis próprias;
 - Páginas individuais de clientes e projetos com relacionamentos protegidos;
 - Quadro de tarefas com prioridades, prazos e atualização persistente de status;
@@ -70,7 +76,8 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Download autenticado, exclusão lógica e vínculo de arquivos a projetos;
 - Atendimento com protocolo, prioridade, mensagens, encerramento e reabertura;
 - Trinta e oito testes unitários de validação, permissões, relatórios, conteúdo, cobrança, entregáveis e segurança;
-- Builds local e Vercel validados, além de lint e tipagem estrita.
+- Cinco jornadas E2E em Chromium para cadastro, preferências, proteção de rotas, responsividade e disponibilidade;
+- Pipeline de CI com testes unitários, tipagem, lint, build e Playwright antes de cada integração à branch principal.
 
 ## Arquitetura planejada
 
@@ -145,6 +152,7 @@ npm run build     # Build de produção validado
 npm run build:vercel # Build nativo para hospedagem independente
 npm test          # Testes unitários, build e verificação do artefato
 npm run test:unit # Testes rápidos de regras e validação
+npm run test:e2e  # Jornadas públicas em Chromium
 npm run db:generate # Gera migrações a partir do schema Drizzle
 ```
 
@@ -169,8 +177,9 @@ Cada pessoa cria a própria conta e confirma o e-mail. No primeiro acesso, o onb
 
 ## Próximos marcos
 
-1. Ampliar testes E2E, rate limiting distribuído, observabilidade e CI/CD;
-2. Concluir a revisão de produção, publicação independente e inclusão no portfólio.
+1. Concluir a revisão de produção e configurar o ambiente independente na Vercel;
+2. Validar domínio, autenticação e dados ponta a ponta antes da abertura pública;
+3. Publicar o estudo de caso no portfólio profissional.
 
 ## Autoria e licença
 

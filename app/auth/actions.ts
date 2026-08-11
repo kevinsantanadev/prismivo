@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { z } from "zod";
 import { safeReturnPath } from "@/app/session-auth";
+import { consumeRateLimit } from "@/lib/rate-limit";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { AuthActionState } from "@/app/auth/state";
 
@@ -21,6 +22,8 @@ export async function loginAction(
   }).safeParse(Object.fromEntries(formData));
 
   if (!parsed.success) return authError("Revise o e-mail e a senha informados.");
+  const rateLimit = await consumeRateLimit("auth.login", await rateLimitSubject(parsed.data.email));
+  if (!rateLimit.allowed) return authError("Muitas tentativas em sequência. Aguarde alguns minutos e tente novamente.");
 
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.auth.signInWithPassword({
@@ -50,6 +53,8 @@ export async function signupAction(
   if (!parsed.success) {
     return authError(parsed.error.issues[0]?.message ?? "Revise os dados informados.");
   }
+  const rateLimit = await consumeRateLimit("auth.signup", await rateLimitSubject(parsed.data.email));
+  if (!rateLimit.allowed) return authError("Muitas tentativas em sequência. Aguarde alguns minutos e tente novamente.");
 
   const supabase = await createSupabaseServerClient();
   const origin = await requestOrigin();
@@ -78,6 +83,8 @@ export async function recoveryAction(
 ): Promise<AuthActionState> {
   const parsed = emailSchema.safeParse(formData.get("email"));
   if (!parsed.success) return authError("Informe um e-mail válido.");
+  const rateLimit = await consumeRateLimit("auth.recovery", await rateLimitSubject(parsed.data));
+  if (!rateLimit.allowed) return authError("Muitas tentativas em sequência. Aguarde alguns minutos e tente novamente.");
 
   const origin = await requestOrigin();
   const supabase = await createSupabaseServerClient();
@@ -125,4 +132,13 @@ async function requestOrigin() {
   const host = requestHeaders.get("x-forwarded-host") || requestHeaders.get("host");
   const protocol = requestHeaders.get("x-forwarded-proto") || (host?.includes("localhost") ? "http" : "https");
   return host ? `${protocol}://${host}` : "http://localhost:3000";
+}
+
+async function rateLimitSubject(email: string) {
+  const requestHeaders = await headers();
+  const address = requestHeaders.get("x-vercel-forwarded-for")?.split(",")[0]?.trim()
+    || requestHeaders.get("x-forwarded-for")?.split(",")[0]?.trim()
+    || requestHeaders.get("x-real-ip")?.trim()
+    || "unknown";
+  return `${email.toLowerCase()}|${address}`;
 }

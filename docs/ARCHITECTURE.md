@@ -19,6 +19,7 @@ O Prismivo começa como um **monólito modular** em Next.js. A escolha reduz com
 - E-mail transacional com caixa local em desenvolvimento;
 - Vitest, Testing Library e Playwright;
 - GitHub Actions para lint, tipos, testes, build e migrações verificadas.
+- PWA de escopo público, com manifesto, página offline e cache explicitamente separado das rotas autenticadas.
 
 ## 3. Organização por domínio
 
@@ -131,6 +132,7 @@ Ambientes independentes:
 - `production`: banco e bucket próprios, HTTPS, backups, monitoramento e segredos gerenciados.
 
 O pipeline executa lint, verificação de tipos, testes, build e validação de migrações antes de promover uma versão.
+As jornadas E2E rodam em Chromium contra um build de produção somente depois da validação estática e cobrem entrada gratuita, preferências, proteção de rotas, responsividade e disponibilidade pública. `/api/health` fornece prontidão técnica sem dados sensíveis, enquanto `/status` comunica o estado de forma humana.
 
 ## 10. Decisões registradas
 
@@ -163,3 +165,11 @@ Os bytes ficam em bucket privado e os metadados autorizáveis permanecem no Post
 ### ADR-007 — Vercel como execução independente
 
 O build nativo do Next.js é executado na Vercel com ambientes separados e variáveis gerenciadas. O domínio só será apontado depois dos testes ponta a ponta, preservando a hospedagem anterior como rollback durante a transição.
+
+### ADR-008 — PWA pública sem cache privado
+
+O service worker melhora a resiliência somente do conteúdo público. Dashboard, autenticação, convites, APIs e a página de status nunca são interceptados ou armazenados, evitando que dados protegidos permaneçam em caches controlados pelo navegador.
+
+### ADR-009 — Rate limiting persistente e fail-closed
+
+Fluxos de autenticação consomem contadores no PostgreSQL por janelas fixas. A aplicação envia apenas um hash da combinação entre identidade e origem; o valor original e o segredo de derivação não são persistidos. Em produção, ausência do segredo ou falha do contador bloqueia a tentativa sensível em vez de liberar tráfego sem proteção.

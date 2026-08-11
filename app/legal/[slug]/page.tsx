@@ -92,7 +92,7 @@ const pages: Record<string, LegalPage> = {
       {
         title: "2. Dados tratados",
         paragraphs: [
-          "Podem ser tratados nome, e-mail, preferências de idioma e aparência, dados da empresa, clientes, projetos, tarefas, aprovações, arquivos, atendimentos, notificações, consentimentos e registros técnicos mínimos de segurança.",
+          "Podem ser tratados nome, e-mail, preferências de idioma e aparência, dados da empresa, clientes, projetos, tarefas, aprovações, arquivos, atendimentos, notificações, consentimentos e registros técnicos mínimos de segurança. Limites contra abuso utilizam identificadores efêmeros protegidos por hash, sem armazenar o endereço de origem ou o e-mail em texto legível nessa estrutura.",
           "Credenciais de acesso são tratadas pelo serviço seguro de autenticação e senhas nunca são armazenadas em texto puro pela aplicação. Dados demonstrativos são identificados e não devem conter informações pessoais reais de terceiros.",
         ],
       },
@@ -129,13 +129,14 @@ const pages: Record<string, LegalPage> = {
   cookies: {
     title: "Política de Cookies e Armazenamento Local",
     description: "Tecnologias utilizadas para sessão, preferências e funcionamento seguro do Prismivo.",
-    version: "cookies-1.0-2026-08-10",
+    version: "cookies-1.1-2026-08-11",
     sections: [
       {
         title: "1. Tecnologias necessárias",
         paragraphs: [
           "O ambiente autenticado pode utilizar cookies estritamente necessários para manter a sessão e proteger o acesso. Eles não são empregados para publicidade e não podem ser desativados sem impedir funções essenciais.",
           "Tema, idioma e outras preferências visuais são armazenados localmente no dispositivo para que a experiência seja preservada entre visitas.",
+          "O modo instalável pode manter em cache apenas páginas e recursos públicos para oferecer uma tela offline. Área autenticada, APIs, convites e dados privados são excluídos desse cache.",
         ],
       },
       {
@@ -156,7 +157,7 @@ const pages: Record<string, LegalPage> = {
   cancelamento: {
     title: "Política de Cancelamento",
     description: "Regras demonstrativas para cancelamento de planos e encerramento de conta.",
-    version: "cancellation-1.0-2026-08-10",
+    version: "cancellation-1.1-2026-08-11",
     sections: [
       {
         title: "1. Ambiente atual",
@@ -183,7 +184,7 @@ const pages: Record<string, LegalPage> = {
   acessibilidade: {
     title: "Declaração de Acessibilidade",
     description: "Compromisso do Prismivo com uma experiência inclusiva, previsível e utilizável.",
-    version: "accessibility-1.0-2026-08-10",
+    version: "accessibility-1.1-2026-08-11",
     sections: [
       {
         title: "1. Compromisso",
@@ -208,12 +209,13 @@ const pages: Record<string, LegalPage> = {
   seguranca: {
     title: "Segurança",
     description: "Princípios e controles adotados para proteger contas, organizações e arquivos.",
-    version: "security-1.0-2026-08-10",
+    version: "security-1.1-2026-08-11",
     sections: [
       {
         title: "1. Controles atuais",
         paragraphs: [
           "O Prismivo valida identidade e autorização no servidor, restringe registros por organização, usa consultas parametrizadas, limita uploads, mantém arquivos privados e evita expor mensagens técnicas aos visitantes.",
+          "Tentativas de login, cadastro e recuperação são limitadas por janelas persistentes. Cabeçalhos de segurança, cache restrito em rotas privadas e verificações de disponibilidade complementam a proteção operacional.",
           "Senhas, tokens, cookies, chaves privadas e dados financeiros completos não devem ser registrados em logs nem incluídos no repositório.",
         ],
       },

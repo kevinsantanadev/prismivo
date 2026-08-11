@@ -38,6 +38,13 @@ As rotas internas usam um envelope pequeno e previsível:
 
 ## Endpoints implementados
 
+### `GET /api/health`
+
+- confirma a disponibilidade da aplicação e do banco sem exigir autenticação;
+- responde `200` quando os serviços essenciais estão prontos e `503` quando uma dependência de produção está indisponível;
+- usa `Cache-Control: no-store`, identificador opaco de requisição e não expõe segredos, ambiente ou conexão;
+- alimenta a verificação de infraestrutura; a rota `/status` oferece a versão humana e resumida.
+
 ### Autenticação
 
 - Server Actions de cadastro, login, recuperação e redefinição validam entradas com Zod;
@@ -45,6 +52,7 @@ As rotas internas usam um envelope pequeno e previsível:
 - `GET|POST /auth/signout` encerra a sessão e retorna à página pública;
 - o Proxy renova os cookies de autenticação antes das rotas protegidas;
 - a recuperação sempre usa uma resposta uniforme, exista ou não uma conta para o e-mail.
+- login, cadastro e recuperação consomem limites persistentes por janela antes de chamar o provedor de identidade.
 
 ### `POST /api/onboarding`
 

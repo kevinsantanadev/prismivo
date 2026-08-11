@@ -43,6 +43,8 @@
 
 ## Operação
 
+- [x] Preview independente na Vercel compilado e validado em estado `READY`;
+- [x] Variáveis do Supabase e segredo de rate limit isolados no ambiente de preview;
 - [ ] HTTPS e redirecionamento para domínio principal;
 - [x] Health check e página pública de status disponíveis;
 - [ ] Ambiente de teste e produção separados;
@@ -56,8 +58,8 @@
 
 - Preservar o domínio ativo `prismivo.kevinsantanadev.com.br` e alterar o DNS apenas após validação integral do preview da Vercel;
 - Cadastrar no Supabase as URLs de callback do preview e do domínio definitivo;
-- Configurar as variáveis públicas do Supabase na Vercel;
-- Gerar e configurar `RATE_LIMIT_PEPPER` como segredo longo e exclusivo na Vercel;
+- Replicar as variáveis do Supabase no ambiente de produção somente após a validação dos callbacks;
+- Gerar um `RATE_LIMIT_PEPPER` exclusivo para produção, separado do valor usado no preview;
 - PostgreSQL e bucket privado do Prismivo já configurados no Supabase;
 - Provedor de e-mail e remetente;
 - Revisar retenção e restauração do bucket privado do Supabase antes da abertura comercial;

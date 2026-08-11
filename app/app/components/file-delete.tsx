@@ -1,0 +1,5 @@
+"use client";
+import { LoaderCircle, Trash2 } from "lucide-react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+export function FileDelete({ id, name }: { id: string; name: string }) { const router = useRouter(); const [deleting, setDeleting] = useState(false); const [message, setMessage] = useState(""); async function remove() { if (!window.confirm(`Remover “${name}”? Esta ação retira o acesso ao arquivo.`)) return; setDeleting(true); setMessage(""); try { const response = await fetch(`/api/files/${id}`, { method: "DELETE" }); const result = await response.json() as { ok: boolean; error?: { message: string } }; if (!response.ok || !result.ok) { setMessage(result.error?.message ?? "Não foi possível remover."); return; } router.refresh(); } catch { setMessage("A conexão falhou."); } finally { setDeleting(false); } } return <span className="file-delete-control"><button type="button" onClick={remove} disabled={deleting} aria-label={`Remover ${name}`}>{deleting ? <LoaderCircle className="spin" aria-hidden="true" /> : <Trash2 aria-hidden="true" />}</button>{message && <small role="alert">{message}</small>}</span>; }

@@ -1,0 +1,104 @@
+# Modelo de Segurança
+
+## Objetivos
+
+- Confidencialidade entre organizações;
+- Integridade de decisões, aprovações e pagamentos;
+- Disponibilidade adequada ao produto;
+- Rastreabilidade administrativa sem excesso de dados;
+- Privacidade por padrão.
+
+## Ameaças e controles
+
+| Ameaça | Controle principal |
+| --- | --- |
+| Injeção | ORM/prepared statements, validação tipada e consultas parametrizadas |
+| XSS | Escape padrão, sanitização de HTML rico e CSP |
+| CSRF | Cookies apropriados, validação de origem e tokens quando necessário |
+| IDOR/BOLA | Escopo por organização, propriedade e permissão no servidor |
+| Enumeração de contas | Respostas uniformes e limitação de tentativas |
+| Força bruta | Rate limit progressivo, eventos de segurança e bloqueio temporário |
+| Roubo de sessão | Cookies seguros, rotação, revogação e expiração |
+| Upload malicioso | Allowlist de MIME/extensão, limite, renomeação e verificação pós-upload |
+| Manipulação de preço | Catálogo e cálculo somente no servidor |
+| Webhook forjado | Assinatura, timestamp, idempotência e origem configurada |
+| Vazamento em logs | Redação de segredos, tokens, senhas, cartões e conteúdo sensível |
+| Dependência vulnerável | Lockfile, auditoria, atualização controlada e CI |
+| Redirecionamento aberto | Destinos relativos ou allowlist explícita |
+
+## Cabeçalhos previstos
+
+- `Content-Security-Policy`;
+- `Strict-Transport-Security` em produção;
+- `X-Content-Type-Options: nosniff`;
+- `Referrer-Policy: strict-origin-when-cross-origin`;
+- `Permissions-Policy` mínima;
+- proteção contra framing por CSP `frame-ancestors`;
+- cache privado ou `no-store` em rotas sensíveis.
+
+## Sessões e credenciais
+
+- Supabase Auth processa e armazena hashes de senha fora das tabelas de produto;
+- senhas nunca entram em logs, analytics, auditoria ou banco da aplicação;
+- tokens de confirmação e recuperação são gerenciados pelo provedor, com expiração;
+- cookies SSR são atualizados pelo Proxy e a identidade é revalidada no servidor;
+- Sessões ativas podem ser revogadas individualmente ou em conjunto;
+- Mudanças de e-mail, senha e 2FA geram notificação de segurança;
+- Segredos são rotacionáveis e nunca publicados no repositório.
+
+## Controles implementados neste marco
+
+- RLS habilitada em todas as tabelas públicas do Prismivo;
+- políticas por usuário e por participação ativa na organização;
+- bucket privado com políticas equivalentes e limite de 5 MB;
+- chave publicável no navegador, sem `service_role` na aplicação;
+- respostas uniformes na recuperação para reduzir enumeração de contas;
+- proteção contra redirecionamento aberto nos retornos de autenticação;
+- verificação de identidade em cada API de escrita;
+- validação de origem para reduzir CSRF;
+- exigência de JSON e limite de corpo no onboarding;
+- validação tipada com mensagens de campo;
+- escopo de organização resolvido exclusivamente no servidor;
+- limite do plano gratuito validado no servidor;
+- consultas parametrizadas pelo cliente PostgREST;
+- erros públicos genéricos e logs sem payload, e-mail ou segredo;
+- consentimento versionado e dados demonstrativos identificados.
+- tarefas, arquivos e chamados sempre filtrados pela organização;
+- uploads limitados a 5 MB, com allowlist de extensão/MIME e assinatura binária;
+- chaves físicas opacas, bucket privado e downloads autenticados com `no-store` e `nosniff`;
+- exclusão restrita ao proprietário da empresa ou autor do upload;
+- protocolos aleatórios, mensagens validadas e transições de atendimento controladas.
+
+## Privacidade
+
+- Consentimentos opcionais começam desmarcados;
+- Analytics só inicia conforme preferência e base aplicável;
+- Exportação é autenticada e entregue de modo seguro;
+- Exclusão usa período de segurança e anonimização quando retenção legal exigir;
+- Dados coletados possuem finalidade documentada;
+- Ambientes de demonstração usam somente dados fictícios.
+
+## Auditoria
+
+Registrar:
+
+- ator, organização, ação, recurso, resultado e horário;
+- mudanças de papel, suspensão, publicação, exclusão, reembolso e configuração;
+- contexto técnico mínimo (request ID e origem resumida).
+
+Nunca registrar:
+
+- senha ou hash de senha;
+- token, chave, segredo ou cookie;
+- cartão completo ou código de segurança;
+- corpo integral de documentos e mensagens privadas.
+
+## Processo de revisão
+
+1. Threat modeling por fluxo;
+2. Testes negativos de autorização;
+3. Revisão de dependências;
+4. Verificação de headers e cookies;
+5. Testes de upload e rate limit;
+6. Auditoria de logs;
+7. Checklist OWASP antes da produção.

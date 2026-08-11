@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1785653865371,
+      "tag": "0000_famous_dormammu",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1785818447990,
+      "tag": "0001_pale_sphinx",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1785903352575,
+      "tag": "0002_great_santa_claus",
+      "breakpoints": true
+    }
+  ]
+}

@@ -9,7 +9,7 @@ Retirar a dependência do gateway de identidade e do formato de hospedagem atuai
 - Vercel foi escolhida como ambiente independente de execução do Next.js;
 - Supabase foi escolhido para PostgreSQL, autenticação e armazenamento privado;
 - o schema PostgreSQL está aplicado por migração versionada;
-- todas as treze tabelas públicas possuem RLS e políticas por usuário ou organização;
+- todas as vinte e quatro tabelas públicas possuem RLS e políticas por usuário ou organização;
 - cadastro, confirmação de e-mail, login, logout, recuperação e troca de senha estão implementados;
 - as APIs, páginas protegidas e arquivos usam a sessão do Supabase no servidor;
 - os adaptadores do ambiente anterior permanecem temporariamente para permitir uma transição sem indisponibilidade.
@@ -41,11 +41,13 @@ Senhas nunca entram nas tabelas de produto, logs, analytics ou auditoria. Gestã
 1. Aplicar schema, RLS e bucket privado no Supabase. **Concluído.**
 2. Implementar adaptadores, autenticação e variáveis sem publicar segredos. **Concluído.**
 3. Validar lint, tipos, testes e builds para os dois ambientes. **Concluído.**
-4. Publicar e validar um preview independente na Vercel. **Em andamento.**
+4. Publicar e validar um preview independente na Vercel. **Concluído em 11 de agosto de 2026.**
 5. Configurar URLs de autenticação e remetente transacional no domínio oficial.
 6. Testar cadastro, confirmação, recuperação, permissões, uploads e exclusão ponta a ponta.
 7. Trocar o CNAME somente depois da validação integral, mantendo o ambiente anterior como rollback.
 8. Confirmar HTTPS, logs, integridade e operação antes de encerrar o ambiente anterior.
+
+O preview independente foi compilado pelo projeto Vercel do Prismivo, chegou ao estado `READY` e carregou a experiência pública, cadastro, preferências persistentes e rotas protegidas. As variáveis públicas do Supabase e o segredo de rate limiting foram configurados somente no ambiente de preview. A publicação definitiva, callbacks oficiais e DNS permanecem separados desta validação.
 
 ## Critérios obrigatórios antes da troca
 

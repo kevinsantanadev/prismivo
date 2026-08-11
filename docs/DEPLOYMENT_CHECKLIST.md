@@ -2,13 +2,13 @@
 
 ## Aplicação
 
-- [x] Lint, tipos, testes e builds Sites/Vercel aprovados;
-- [ ] Metadados, sitemap e robots revisados;
-- [ ] Rotas privadas usam `noindex` e não aparecem no sitemap;
-- [ ] Página 404, 500, manutenção e offline verificadas;
-- [ ] Tema, idioma, teclado e redução de movimento testados;
-- [ ] Nenhum botão principal sem ação funcional;
-- [ ] Conteúdo demonstrativo identificado corretamente.
+- [x] Lint, tipos, testes e build local aprovados;
+- [x] Metadados, sitemap e robots revisados;
+- [x] Rotas privadas usam `noindex` e não aparecem no sitemap;
+- [x] Página 404, erro, manutenção, status e offline implementadas;
+- [x] Tema, idioma, teclado, viewport móvel e redução de movimento revisados;
+- [x] Nenhum botão principal sem ação funcional;
+- [x] Conteúdo demonstrativo identificado corretamente.
 
 ## Banco
 
@@ -24,12 +24,12 @@
 - [ ] Segredo de autenticação forte e exclusivo;
 - [ ] Cookies `Secure`, `HttpOnly` e `SameSite` validados;
 - [ ] Verificação e recuperação de e-mail funcionando;
-- [ ] Rate limit e bloqueio temporário funcionando;
+- [x] Rate limit persistente aplicado aos fluxos sensíveis;
 - [x] RLS e permissões verificadas no servidor;
-- [ ] CSP e demais headers ativos;
+- [x] CSP e demais headers validados no build local de produção;
 - [x] Nenhum segredo no repositório ou bundle público;
 - [x] Bucket privado e políticas de upload/download configurados;
-- [ ] Logs sem dados sensíveis.
+- [x] Logs estruturados descartam campos sensíveis conhecidos.
 
 ## Integrações
 
@@ -44,7 +44,7 @@
 ## Operação
 
 - [ ] HTTPS e redirecionamento para domínio principal;
-- [ ] Health check disponível;
+- [x] Health check e página pública de status disponíveis;
 - [ ] Ambiente de teste e produção separados;
 - [ ] Plano de rollback documentado;
 - [ ] Responsáveis por incidente definidos;
@@ -57,9 +57,10 @@
 - Preservar o domínio ativo `prismivo.kevinsantanadev.com.br` e alterar o DNS apenas após validação integral do preview da Vercel;
 - Cadastrar no Supabase as URLs de callback do preview e do domínio definitivo;
 - Configurar as variáveis públicas do Supabase na Vercel;
+- Gerar e configurar `RATE_LIMIT_PEPPER` como segredo longo e exclusivo na Vercel;
 - PostgreSQL e bucket privado do Prismivo já configurados no Supabase;
 - Provedor de e-mail e remetente;
-- Bucket privado R2 já integrado; revisar retenção e restauração antes da abertura pública;
+- Revisar retenção e restauração do bucket privado do Supabase antes da abertura comercial;
 - Conta de pagamentos, quando houver cobrança real;
 - Monitoramento e analytics;
 - Endereços de suporte e dados empresariais legais.

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { SitePreferencesProvider } from "./components/site-preferences";
+import { ServiceWorkerRegistration } from "./components/service-worker-registration";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -52,6 +53,7 @@ export const metadata: Metadata = {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",
   },
+  manifest: "/manifest.webmanifest",
 };
 
 export default function RootLayout({
@@ -64,7 +66,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SitePreferencesProvider>{children}</SitePreferencesProvider>
+        <SitePreferencesProvider>{children}<ServiceWorkerRegistration /></SitePreferencesProvider>
       </body>
     </html>
   );

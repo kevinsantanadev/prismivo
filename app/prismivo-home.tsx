@@ -472,6 +472,7 @@ export default function PrismivoHome() {
             <Link href="/legal/cancelamento">{locale === "pt-BR" ? "Cancelamento" : locale === "es" ? "Cancelación" : "Cancellation"}</Link>
             <Link href="/legal/acessibilidade">{locale === "pt-BR" ? "Acessibilidade" : locale === "es" ? "Accesibilidad" : "Accessibility"}</Link>
             <Link href="/legal/seguranca">{locale === "pt-BR" ? "Segurança" : locale === "es" ? "Seguridad" : "Security"}</Link>
+            <Link href="/status">Status</Link>
           </div>
         </div>
         <div className="footer-bottom" id="legal"><span>{content.footer.rights}</span><span>{content.footer.notice}</span></div>

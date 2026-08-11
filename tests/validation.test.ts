@@ -52,6 +52,13 @@ describe("site locale", () => {
     expect(getOperationalCopy("es").notifications.markAll).toBe("Marcar todas como leídas");
     expect(getOperationalCopy("en").settings.themes.mono).toBe("Black and white");
   });
+
+  it("localizes client and project navigation while leaving entity data untouched", () => {
+    expect(getOperationalCopy("en").clients.form.newClient).toBe("New client");
+    expect(getOperationalCopy("es").clients.details).toBe("Ver detalles");
+    expect(getOperationalCopy("en").projects.progress.label).toBe("Project progress");
+    expect(getOperationalCopy("es").projects.detail.back).toBe("Volver a proyectos");
+  });
 });
 
 describe("onboarding validation", () => {

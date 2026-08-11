@@ -41,11 +41,13 @@ Senhas nunca entram nas tabelas de produto, logs, analytics ou auditoria. Gestã
 1. Aplicar schema, RLS e bucket privado no Supabase. **Concluído.**
 2. Implementar adaptadores, autenticação e variáveis sem publicar segredos. **Concluído.**
 3. Validar lint, tipos, testes e builds para os dois ambientes. **Concluído.**
-4. Publicar e validar um preview independente na Vercel. **Em andamento.**
+4. Publicar e validar um preview independente na Vercel. **Concluído em 11 de agosto de 2026.**
 5. Configurar URLs de autenticação e remetente transacional no domínio oficial.
 6. Testar cadastro, confirmação, recuperação, permissões, uploads e exclusão ponta a ponta.
 7. Trocar o CNAME somente depois da validação integral, mantendo o ambiente anterior como rollback.
 8. Confirmar HTTPS, logs, integridade e operação antes de encerrar o ambiente anterior.
+
+O preview independente foi compilado pelo projeto Vercel do Prismivo, chegou ao estado `READY` e carregou a experiência pública, cadastro, preferências persistentes e rotas protegidas. As variáveis públicas do Supabase e o segredo de rate limiting foram configurados somente no ambiente de preview. A publicação definitiva, callbacks oficiais e DNS permanecem separados desta validação.
 
 ## Critérios obrigatórios antes da troca
 

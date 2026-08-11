@@ -29,6 +29,7 @@ import {
 import { buildCsvDocument, escapeCsvCell } from "../lib/reports/csv";
 import { normalizeSiteLocale } from "../lib/site-locale";
 import { translateAppShellText } from "../lib/app-shell-i18n";
+import { getOperationalCopy } from "../lib/app-operational-i18n";
 
 describe("site locale", () => {
   it("accepts every supported locale and safely falls back to PT-BR", () => {
@@ -43,6 +44,13 @@ describe("site locale", () => {
     expect(translateAppShellText("Visão geral", "en")).toBe("Overview");
     expect(translateAppShellText("Perfil, empresa e preferências", "es")).toBe("Perfil, empresa y preferencias");
     expect(translateAppShellText("Projeto Aurora", "en")).toBe("Projeto Aurora");
+  });
+
+  it("keeps primary operational actions available in all supported languages", () => {
+    expect(getOperationalCopy("pt-BR").projectForm.newProject).toBe("Novo projeto");
+    expect(getOperationalCopy("en").tasks.form.createTask).toBe("Create task");
+    expect(getOperationalCopy("es").notifications.markAll).toBe("Marcar todas como leídas");
+    expect(getOperationalCopy("en").settings.themes.mono).toBe("Black and white");
   });
 });
 

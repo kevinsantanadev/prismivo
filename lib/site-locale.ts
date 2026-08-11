@@ -9,3 +9,7 @@ export function normalizeSiteLocale(value: unknown): SiteLocale {
     ? (value as SiteLocale)
     : "pt-BR";
 }
+
+export function toIntlLocale(locale: SiteLocale) {
+  return locale === "en" ? "en-US" : locale === "es" ? "es-ES" : "pt-BR";
+}

@@ -2,7 +2,7 @@
 
 Plataforma SaaS B2B de **client operations** criada para profissionais e pequenas empresas de serviços centralizarem clientes, projetos, aprovações, arquivos, atendimento e cobranças.
 
-> Status atual: Marco 11 concluído — proteção operacional, PWA segura, observabilidade, status público e testes ponta a ponta.
+> Status atual: Marco 12 concluído — preview independente na Vercel, ambiente de preview conectado ao Supabase do Prismivo e publicação técnica validada antes da troca de DNS.
 
 ## Visão geral
 
@@ -78,6 +78,8 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Trinta e oito testes unitários de validação, permissões, relatórios, conteúdo, cobrança, entregáveis e segurança;
 - Cinco jornadas E2E em Chromium para cadastro, preferências, proteção de rotas, responsividade e disponibilidade;
 - Pipeline de CI com testes unitários, tipagem, lint, build e Playwright antes de cada integração à branch principal.
+- Preview independente na Vercel com build nativo do Next.js, variáveis isoladas por ambiente e status `READY` validado;
+- Execução E2E configurável contra ambiente local ou URL externa por `PLAYWRIGHT_BASE_URL`.
 
 ## Arquitetura planejada
 
@@ -156,6 +158,8 @@ npm run test:e2e  # Jornadas públicas em Chromium
 npm run db:generate # Gera migrações a partir do schema Drizzle
 ```
 
+Para executar as jornadas contra um preview já publicado, defina `PLAYWRIGHT_BASE_URL` com a URL autorizada do ambiente. Nenhum servidor local será iniciado nesse modo.
+
 ## Variáveis de ambiente
 
 Use apenas `.env.local` ou o gerenciador seguro do provedor. O arquivo [`.env.example`](.env.example) documenta as chaves esperadas sem conter segredos.
@@ -177,9 +181,9 @@ Cada pessoa cria a própria conta e confirma o e-mail. No primeiro acesso, o onb
 
 ## Próximos marcos
 
-1. Concluir a revisão de produção e configurar o ambiente independente na Vercel;
-2. Validar domínio, autenticação e dados ponta a ponta antes da abertura pública;
-3. Publicar o estudo de caso no portfólio profissional.
+1. Internacionalizar integralmente autenticação, área do usuário e mensagens operacionais;
+2. Configurar callbacks oficiais, remetente transacional e validar autenticação/dados ponta a ponta;
+3. Preparar produção, rollback, backup e monitoramento antes da troca de DNS.
 
 ## Autoria e licença
 

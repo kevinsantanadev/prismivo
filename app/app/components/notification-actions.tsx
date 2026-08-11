@@ -3,9 +3,12 @@
 import { CheckCheck, LoaderCircle } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { getOperationalCopy } from "@/lib/app-operational-i18n";
+import type { SiteLocale } from "@/lib/site-locale";
 
-export function NotificationActions({ notificationId }: { notificationId?: string }) {
+export function NotificationActions({ notificationId, locale = "pt-BR" }: { notificationId?: string; locale?: SiteLocale }) {
   const router = useRouter();
+  const copy = getOperationalCopy(locale).notifications;
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -21,12 +24,12 @@ export function NotificationActions({ notificationId }: { notificationId?: strin
       });
       const result = await response.json() as { ok: boolean; error?: { message: string } };
       if (!response.ok || !result.ok) {
-        setMessage(result.error?.message ?? "Não foi possível atualizar.");
+        setMessage(locale === "pt-BR" && result.error?.message ? result.error.message : copy.updateError);
         return;
       }
       router.refresh();
     } catch {
-      setMessage("A conexão falhou.");
+      setMessage(copy.connectionError);
     } finally {
       setLoading(false);
     }
@@ -34,7 +37,7 @@ export function NotificationActions({ notificationId }: { notificationId?: strin
 
   return (
     <span className="notification-action-wrap">
-      <button className={notificationId ? "text-action" : "app-secondary-button"} type="button" onClick={markRead} disabled={loading}>{loading ? <LoaderCircle className="spin" aria-hidden="true" /> : <CheckCheck aria-hidden="true" />}{notificationId ? "Marcar como lida" : "Marcar todas como lidas"}</button>
+      <button className={notificationId ? "text-action" : "app-secondary-button"} type="button" onClick={markRead} disabled={loading}>{loading ? <LoaderCircle className="spin" aria-hidden="true" /> : <CheckCheck aria-hidden="true" />}{notificationId ? copy.markOne : copy.markAll}</button>
       {message && <small className="inline-error" role="status">{message}</small>}
     </span>
   );

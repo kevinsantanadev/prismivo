@@ -2,7 +2,7 @@
 
 Plataforma SaaS B2B de **client operations** criada para profissionais e pequenas empresas de serviços centralizarem clientes, projetos, aprovações, arquivos, atendimento e cobranças.
 
-> Status atual: Marco 14 em validação — autenticação e navegação da área do usuário acompanham o idioma persistido em PT-BR, inglês e espanhol.
+> Status atual: Marco 15 em validação — dashboard, tarefas, notificações, perfil e preferências acompanham o idioma persistido em PT-BR, inglês e espanhol.
 
 ## Visão geral
 
@@ -35,6 +35,7 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Botões “Começar grátis” conectados a uma rota real de cadastro;
 - Fluxo completo de acesso traduzido, incluindo metadados, campos, ajuda, feedback de ações e preferências disponíveis na própria tela;
 - Shell autenticado localizado, com navegação, títulos conhecidos, descrições, acessibilidade, notificações e ações de conta consistentes nos três idiomas;
+- Jornada operacional principal localizada sem modificar nomes, descrições ou históricos criados pelos usuários;
 - Cadastro, confirmação de e-mail, login, logout e recuperação de senha com Supabase Auth;
 - Onboarding de empresa com validação cliente/servidor e aceite registrado;
 - Aceites de Termos e Privacidade separados e vinculados às respectivas versões;
@@ -77,7 +78,7 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Upload privado com validação de tamanho, extensão, MIME e assinatura;
 - Download autenticado, exclusão lógica e vínculo de arquivos a projetos;
 - Atendimento com protocolo, prioridade, mensagens, encerramento e reabertura;
-- Quarenta testes unitários de validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização e segurança;
+- Quarenta e um testes unitários de validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização e segurança;
 - Cinco jornadas E2E em Chromium para cadastro, preferências, proteção de rotas, responsividade e disponibilidade;
 - Pipeline de CI com testes unitários, tipagem, lint, build e Playwright antes de cada integração à branch principal.
 - Preview independente na Vercel com build nativo do Next.js, variáveis isoladas por ambiente e status `READY` validado;
@@ -183,7 +184,7 @@ Cada pessoa cria a própria conta e confirma o e-mail. No primeiro acesso, o onb
 
 ## Próximos marcos
 
-1. Estender a localização ao conteúdo operacional de dashboards, formulários e estados vazios;
+1. Estender a localização aos módulos de clientes, projetos, aprovações, arquivos, atendimento, conteúdo, equipe, assinatura e administração;
 2. Configurar callbacks oficiais, remetente transacional e validar autenticação/dados ponta a ponta;
 3. Preparar produção, rollback, backup e monitoramento antes da troca de DNS.
 

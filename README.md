@@ -2,7 +2,7 @@
 
 Plataforma SaaS B2B de **client operations** criada para profissionais e pequenas empresas de serviços centralizarem clientes, projetos, aprovações, arquivos, atendimento e cobranças.
 
-> Status atual: Marco 12 concluído — preview independente na Vercel, ambiente de preview conectado ao Supabase do Prismivo e publicação técnica validada antes da troca de DNS.
+> Status atual: Marco 13 em validação — cadastro, login, recuperação e redefinição agora acompanham o idioma persistido em PT-BR, inglês e espanhol.
 
 ## Visão geral
 
@@ -33,6 +33,7 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Metadados básicos de SEO e compartilhamento;
 - Respeito a `prefers-reduced-motion`;
 - Botões “Começar grátis” conectados a uma rota real de cadastro;
+- Fluxo completo de acesso traduzido, incluindo metadados, campos, ajuda, feedback de ações e preferências disponíveis na própria tela;
 - Cadastro, confirmação de e-mail, login, logout e recuperação de senha com Supabase Auth;
 - Onboarding de empresa com validação cliente/servidor e aceite registrado;
 - Aceites de Termos e Privacidade separados e vinculados às respectivas versões;
@@ -75,7 +76,7 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Upload privado com validação de tamanho, extensão, MIME e assinatura;
 - Download autenticado, exclusão lógica e vínculo de arquivos a projetos;
 - Atendimento com protocolo, prioridade, mensagens, encerramento e reabertura;
-- Trinta e oito testes unitários de validação, permissões, relatórios, conteúdo, cobrança, entregáveis e segurança;
+- Trinta e nove testes unitários de validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização e segurança;
 - Cinco jornadas E2E em Chromium para cadastro, preferências, proteção de rotas, responsividade e disponibilidade;
 - Pipeline de CI com testes unitários, tipagem, lint, build e Playwright antes de cada integração à branch principal.
 - Preview independente na Vercel com build nativo do Next.js, variáveis isoladas por ambiente e status `READY` validado;
@@ -181,7 +182,7 @@ Cada pessoa cria a própria conta e confirma o e-mail. No primeiro acesso, o onb
 
 ## Próximos marcos
 
-1. Internacionalizar integralmente autenticação, área do usuário e mensagens operacionais;
+1. Estender a localização ao shell autenticado e às mensagens operacionais da área do usuário;
 2. Configurar callbacks oficiais, remetente transacional e validar autenticação/dados ponta a ponta;
 3. Preparar produção, rollback, backup e monitoramento antes da troca de DNS.
 

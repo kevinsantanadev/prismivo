@@ -4,7 +4,9 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { z } from "zod";
 import { safeReturnPath } from "@/app/session-auth";
+import { authActionCopy } from "@/lib/auth-i18n";
 import { consumeRateLimit } from "@/lib/rate-limit";
+import { normalizeSiteLocale } from "@/lib/site-locale";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { AuthActionState } from "@/app/auth/state";
 
@@ -15,15 +17,16 @@ export async function loginAction(
   _previous: AuthActionState,
   formData: FormData,
 ): Promise<AuthActionState> {
+  const copy = authActionCopy[authLocale(formData)];
   const parsed = z.object({
     email: emailSchema,
     password: z.string().min(1).max(128),
     returnTo: z.string().optional(),
   }).safeParse(Object.fromEntries(formData));
 
-  if (!parsed.success) return authError("Revise o e-mail e a senha informados.");
+  if (!parsed.success) return authError(copy.invalidLogin);
   const rateLimit = await consumeRateLimit("auth.login", await rateLimitSubject(parsed.data.email));
-  if (!rateLimit.allowed) return authError("Muitas tentativas em sequência. Aguarde alguns minutos e tente novamente.");
+  if (!rateLimit.allowed) return authError(copy.rateLimit);
 
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.auth.signInWithPassword({
@@ -31,7 +34,7 @@ export async function loginAction(
     password: parsed.data.password,
   });
 
-  if (error) return authError("Não foi possível entrar com essas credenciais.");
+  if (error) return authError(copy.invalidCredentials);
   redirect(safeReturnPath(parsed.data.returnTo, "/app"));
 }
 
@@ -39,6 +42,7 @@ export async function signupAction(
   _previous: AuthActionState,
   formData: FormData,
 ): Promise<AuthActionState> {
+  const copy = authActionCopy[authLocale(formData)];
   const values = Object.fromEntries(formData);
   const parsed = z.object({
     name: z.string().trim().min(2).max(100),
@@ -46,15 +50,15 @@ export async function signupAction(
     password: passwordSchema,
     confirmPassword: z.string(),
   }).refine((value) => value.password === value.confirmPassword, {
-    message: "As senhas devem ser iguais.",
+    message: copy.passwordsMismatch,
     path: ["confirmPassword"],
   }).safeParse(values);
 
   if (!parsed.success) {
-    return authError(parsed.error.issues[0]?.message ?? "Revise os dados informados.");
+    return authError(parsed.error.issues[0]?.message ?? copy.invalidData);
   }
   const rateLimit = await consumeRateLimit("auth.signup", await rateLimitSubject(parsed.data.email));
-  if (!rateLimit.allowed) return authError("Muitas tentativas em sequência. Aguarde alguns minutos e tente novamente.");
+  if (!rateLimit.allowed) return authError(copy.rateLimit);
 
   const supabase = await createSupabaseServerClient();
   const origin = await requestOrigin();
@@ -68,12 +72,12 @@ export async function signupAction(
   });
 
   if (error) {
-    return authError("Não foi possível concluir o cadastro. Revise os dados e tente novamente.");
+    return authError(copy.signupFailed);
   }
 
   return {
     status: "success",
-    message: "Cadastro recebido. Confira seu e-mail para confirmar a conta e continuar.",
+    message: copy.signupSuccess,
   };
 }
 
@@ -81,10 +85,11 @@ export async function recoveryAction(
   _previous: AuthActionState,
   formData: FormData,
 ): Promise<AuthActionState> {
+  const copy = authActionCopy[authLocale(formData)];
   const parsed = emailSchema.safeParse(formData.get("email"));
-  if (!parsed.success) return authError("Informe um e-mail válido.");
+  if (!parsed.success) return authError(copy.invalidEmail);
   const rateLimit = await consumeRateLimit("auth.recovery", await rateLimitSubject(parsed.data));
-  if (!rateLimit.allowed) return authError("Muitas tentativas em sequência. Aguarde alguns minutos e tente novamente.");
+  if (!rateLimit.allowed) return authError(copy.rateLimit);
 
   const origin = await requestOrigin();
   const supabase = await createSupabaseServerClient();
@@ -94,7 +99,7 @@ export async function recoveryAction(
 
   return {
     status: "success",
-    message: "Se existir uma conta válida para esse e-mail, enviaremos as instruções de recuperação.",
+    message: copy.recoverySuccess,
   };
 }
 
@@ -102,27 +107,32 @@ export async function updatePasswordAction(
   _previous: AuthActionState,
   formData: FormData,
 ): Promise<AuthActionState> {
+  const copy = authActionCopy[authLocale(formData)];
   const parsed = z.object({
     password: passwordSchema,
     confirmPassword: z.string(),
   }).refine((value) => value.password === value.confirmPassword, {
-    message: "As senhas devem ser iguais.",
+    message: copy.passwordsMismatch,
     path: ["confirmPassword"],
   }).safeParse(Object.fromEntries(formData));
 
   if (!parsed.success) {
-    return authError(parsed.error.issues[0]?.message ?? "Revise a nova senha.");
+    return authError(parsed.error.issues[0]?.message ?? copy.invalidPassword);
   }
 
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.auth.updateUser({ password: parsed.data.password });
-  if (error) return authError("O link expirou ou a sessão não pôde ser validada. Solicite uma nova recuperação.");
+  if (error) return authError(copy.resetExpired);
 
-  return { status: "success", message: "Senha alterada com segurança. Você já pode entrar." };
+  return { status: "success", message: copy.resetSuccess };
 }
 
 function authError(message: string): AuthActionState {
   return { status: "error", message };
+}
+
+function authLocale(formData: FormData) {
+  return normalizeSiteLocale(formData.get("locale"));
 }
 
 async function requestOrigin() {

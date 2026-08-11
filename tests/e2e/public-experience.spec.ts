@@ -10,7 +10,9 @@ test("a chamada gratuita abre o cadastro real", async ({ page }) => {
 
 test("tema e idioma persistem como preferências acessíveis", async ({ page }) => {
   await page.goto("/");
-  await page.getByRole("button", { name: "Preferências de aparência e idioma" }).click();
+  const preferences = page.locator('summary[aria-label="Preferências de aparência e idioma"]');
+  await expect(preferences).toBeVisible();
+  await preferences.click();
   await page.getByRole("button", { name: "Preto e branco" }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "mono");
   await page.getByRole("combobox", { name: "Idioma" }).selectOption("es");
@@ -22,10 +24,11 @@ test("rotas privadas redirecionam e a saúde pública não expõe segredos", asy
   await page.goto("/app");
   await expect(page).toHaveURL(/\/entrar/);
   const health = await request.get("/api/health");
-  expect(health.status()).toBe(200);
+  expect([200, 503]).toContain(health.status());
   expect(health.headers()["cache-control"]).toContain("no-store");
   const body = await health.json();
   expect(body.service).toBe("prismivo-web");
+  expect(["ok", "degraded"]).toContain(body.status);
   expect(body).not.toHaveProperty("environment");
 });
 

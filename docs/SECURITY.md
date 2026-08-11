@@ -74,6 +74,7 @@
 - login, cadastro e recuperação possuem limites persistentes por janela, usando combinação de identidade e origem protegida por hash com segredo do ambiente;
 - janelas expiradas são removidas automaticamente e a aplicação bloqueia de forma segura se o segredo obrigatório estiver ausente em produção;
 - CSP, HSTS, `nosniff`, bloqueio de framing, política de referenciador e permissões mínimas são enviados globalmente;
+- a exceção `unsafe-eval` existe somente no servidor de desenvolvimento para o runtime de depuração do framework e não integra o build de produção;
 - páginas privadas e APIs recebem diretivas de não indexação, e a área autenticada usa cache privado `no-store`;
 - logs operacionais usam JSON estruturado e descartam preventivamente chaves associadas a senha, token, cookie, segredo, autorização ou e-mail;
 - o health check usa resposta mínima, sem conexão, credencial, ambiente ou stack trace;

@@ -1,4 +1,5 @@
 import { redirect } from "next/navigation";
+import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 export type SessionUser = {
@@ -9,6 +10,7 @@ export type SessionUser = {
 };
 
 export async function getSessionUser(): Promise<SessionUser | null> {
+  if (!isSupabaseConfigured()) return null;
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase.auth.getUser();
   const user = data.user;

@@ -10,6 +10,8 @@ import {
   LayoutDashboard,
   ListChecks,
   LogOut,
+  Newspaper,
+  ReceiptText,
   ShieldCheck,
   Settings2,
   UserRoundCog,
@@ -26,6 +28,8 @@ type ActiveSection =
   | "approvals"
   | "files"
   | "support"
+  | "content"
+  | "billing"
   | "notifications"
   | "team"
   | "admin"
@@ -46,6 +50,8 @@ const navItems = [
   ["approvals", "Aprovações", "/app/aprovacoes", FileCheck2],
   ["files", "Arquivos", "/app/arquivos", Files],
   ["support", "Atendimento", "/app/atendimento", Headphones],
+  ["content", "Conteúdo", "/app/conteudo", Newspaper],
+  ["billing", "Planos", "/app/assinatura", ReceiptText],
   ["notifications", "Notificações", "/app/notificacoes", Bell],
   ["team", "Equipe", "/app/equipe", UserRoundCog],
   ["admin", "Administração", "/app/administracao", ShieldCheck],
@@ -89,7 +95,7 @@ export function AppShell({
           <div><small>Empresa</small><strong>{workspace.organizationName}</strong></div>
         </div>
         <nav aria-label="Navegação do espaço">
-          {navItems.filter(([key]) => !["team", "admin"].includes(key) || workspace.role === "owner" || workspace.role === "admin").map(([key, label, href, Icon]) => (
+          {navItems.filter(([key]) => isNavigationVisible(key, workspace.role)).map(([key, label, href, Icon]) => (
             <Link
               key={key}
               href={href}
@@ -132,4 +138,10 @@ export function AppShell({
       </div>
     </div>
   );
+}
+
+function isNavigationVisible(key: ActiveSection, role?: string) {
+  if (["team", "admin", "billing"].includes(key)) return role === "owner" || role === "admin";
+  if (key === "content") return role === "owner" || role === "admin" || role === "editor";
+  return true;
 }

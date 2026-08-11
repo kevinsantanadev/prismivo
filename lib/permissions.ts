@@ -9,6 +9,8 @@ export type Permission =
   | "approvals.write"
   | "files.write"
   | "support.write"
+  | "content.write"
+  | "billing.manage"
   | "organization.write"
   | "team.manage"
   | "admin.view";
@@ -22,6 +24,8 @@ const rolePermissions: Record<OrganizationRole, readonly Permission[]> = {
     "approvals.write",
     "files.write",
     "support.write",
+    "content.write",
+    "billing.manage",
     "organization.write",
     "team.manage",
     "admin.view",
@@ -34,6 +38,8 @@ const rolePermissions: Record<OrganizationRole, readonly Permission[]> = {
     "approvals.write",
     "files.write",
     "support.write",
+    "content.write",
+    "billing.manage",
     "organization.write",
     "team.manage",
     "admin.view",
@@ -46,6 +52,7 @@ const rolePermissions: Record<OrganizationRole, readonly Permission[]> = {
     "approvals.write",
     "files.write",
     "support.write",
+    "content.write",
   ],
   support: ["workspace.read", "support.write"],
   viewer: ["workspace.read"],

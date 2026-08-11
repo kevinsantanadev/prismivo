@@ -310,6 +310,7 @@ const copy = {
 const featureIcons = [Users, FolderKanban, MessageSquareText, CreditCard];
 const sidebarIcons = [LayoutDashboard, FolderKanban, FileCheck2, MessageSquareText, CircleDollarSign, BarChart3];
 const metricIcons = [Sparkles, Clock3, ShieldCheck];
+const resourceSlugs = ["operacoes-conectadas", "aprovacoes-sem-atrito", "seguranca-multitenant"];
 
 /** Public experience with device-local display preferences. */
 export default function PrismivoHome() {
@@ -436,10 +437,10 @@ export default function PrismivoHome() {
         <section className="section resources-section" id="recursos" aria-labelledby="resources-title">
           <div className="section-heading split-heading">
             <div><span className="eyebrow">{content.resources.kicker}</span><h2 id="resources-title">{content.resources.title}</h2></div>
-            <a className="text-link" href="#faq">{content.resources.action}<ArrowRight size={18} aria-hidden="true" /></a>
+            <Link className="text-link" href="/conteudo">{content.resources.action}<ArrowRight size={18} aria-hidden="true" /></Link>
           </div>
           <div className="resource-grid">
-            {content.resources.items.map(([category, title, time], index) => <article key={title}><div className={`resource-art resource-art-${index + 1}`} aria-hidden="true"><span /></div><span>{category} · {time}</span><h3>{title}</h3><a href="#faq" aria-label={`${title} — ${time}`}><ArrowRight aria-hidden="true" /></a></article>)}
+            {content.resources.items.map(([category, title, time], index) => <article key={title}><div className={`resource-art resource-art-${index + 1}`} aria-hidden="true"><span /></div><span>{category} · {time}</span><h3>{title}</h3><Link href={`/conteudo/${resourceSlugs[index]}`} aria-label={`${title} — ${time}`}><ArrowRight aria-hidden="true" /></Link></article>)}
           </div>
         </section>
 

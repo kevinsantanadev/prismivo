@@ -5,7 +5,7 @@
 | Papel | Escopo |
 | --- | --- |
 | Visitante | Conteúdo público autorizado, sem acesso ao espaço privado |
-| Leitor (`viewer`) | Consulta dados autorizados sem alterar registros |
+| Leitor (`viewer`) | Consulta dados autorizados e comenta entregáveis sem alterar a operação |
 | Editor (`editor`) | Clientes, projetos, tarefas, aprovações, arquivos e conteúdo |
 | Suporte (`support`) | Chamados, respostas e dados mínimos de atendimento |
 | Administrador (`admin`) | Gestão operacional e da equipe, sem promover outro administrador |
@@ -19,6 +19,8 @@
 | Ver dados da organização | ✓ | ✓ | ✓ | ✓ | ✓ |
 | Criar/editar clientes e projetos | — | ✓ | — | ✓ | ✓ |
 | Gerenciar tarefas, aprovações e arquivos | — | ✓ | — | ✓ | ✓ |
+| Criar entregáveis e novas versões | — | ✓ | — | ✓ | ✓ |
+| Comentar entregáveis | ✓ | ✓ | ✓ | ✓ | ✓ |
 | Responder atendimento | — | ✓ | ✓ | ✓ | ✓ |
 | Criar e publicar conteúdo da empresa | — | ✓ | — | ✓ | ✓ |
 | Alterar assinatura e consultar cobrança | — | — | — | ✓ | ✓ |
@@ -47,7 +49,8 @@ projects.read
 projects.create
 projects.update
 projects.delete
-deliverables.approve
+deliverables.write
+comments.write
 content.publish
 tickets.reply
 billing.read

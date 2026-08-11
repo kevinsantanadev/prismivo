@@ -68,6 +68,9 @@
 - chaves físicas opacas, bucket privado e downloads autenticados com `no-store` e `nosniff`;
 - exclusão restrita ao proprietário da empresa ou autor do upload;
 - protocolos aleatórios, mensagens validadas e transições de atendimento controladas.
+- políticas de inserção provam que projeto, entregável, versão, arquivo, aprovação e chamado pertencem à mesma organização;
+- numeração de versões ocorre em RPC transacional com bloqueio de linha, identidade, papel e propriedade do arquivo validados internamente;
+- anexos de atendimento reutilizam o armazenamento privado e são removidos se o vínculo persistente falhar.
 
 ## Privacidade
 

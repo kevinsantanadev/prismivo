@@ -7,6 +7,8 @@ export type Permission =
   | "projects.write"
   | "tasks.write"
   | "approvals.write"
+  | "deliverables.write"
+  | "comments.write"
   | "files.write"
   | "support.write"
   | "content.write"
@@ -22,6 +24,8 @@ const rolePermissions: Record<OrganizationRole, readonly Permission[]> = {
     "projects.write",
     "tasks.write",
     "approvals.write",
+    "deliverables.write",
+    "comments.write",
     "files.write",
     "support.write",
     "content.write",
@@ -36,6 +40,8 @@ const rolePermissions: Record<OrganizationRole, readonly Permission[]> = {
     "projects.write",
     "tasks.write",
     "approvals.write",
+    "deliverables.write",
+    "comments.write",
     "files.write",
     "support.write",
     "content.write",
@@ -50,12 +56,14 @@ const rolePermissions: Record<OrganizationRole, readonly Permission[]> = {
     "projects.write",
     "tasks.write",
     "approvals.write",
+    "deliverables.write",
+    "comments.write",
     "files.write",
     "support.write",
     "content.write",
   ],
-  support: ["workspace.read", "support.write"],
-  viewer: ["workspace.read"],
+  support: ["workspace.read", "support.write", "comments.write"],
+  viewer: ["workspace.read", "comments.write"],
 };
 
 export function isOrganizationRole(value: string): value is OrganizationRole {

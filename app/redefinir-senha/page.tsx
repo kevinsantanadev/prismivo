@@ -1,29 +1,18 @@
 import type { Metadata } from "next";
 import { AccessPage } from "@/app/components/access-page";
+import { authPageCopy } from "@/lib/auth-i18n";
+import { getRequestLocale } from "@/lib/site-locale-server";
 
-export const metadata: Metadata = {
-  title: "Definir nova senha",
-  description: "Defina uma nova senha para sua conta Prismivo.",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const copy = authPageCopy[await getRequestLocale()].reset;
+  return { title: copy.metadataTitle, description: copy.metadataDescription, robots: { index: false, follow: false } };
+}
 
-export default function RedefinirSenhaPage() {
+export default async function RedefinirSenhaPage() {
+  const locale = await getRequestLocale();
   return (
     <AccessPage
-      eyebrow="NOVA CREDENCIAL"
-      title="Escolha uma nova senha para sua conta."
-      description="Use uma combinação exclusiva, longa e diferente das senhas utilizadas em outros serviços."
-      primaryLabel="Salvar nova senha"
-      primaryHref="/recuperar-senha"
-      alternateText="O link não funciona?"
-      alternateLabel="Solicitar outro"
-      alternateHref="/recuperar-senha"
-      benefits={[
-        "Mínimo de 10 caracteres",
-        "Credencial processada pelo serviço de autenticação",
-        "Sessões protegidas por cookies seguros",
-        "Acesso liberado somente após validação",
-      ]}
+      locale={locale}
       mode="reset"
     />
   );

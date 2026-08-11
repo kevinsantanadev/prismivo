@@ -18,6 +18,11 @@ test("tema e idioma persistem como preferências acessíveis", async ({ page }) 
   await page.getByRole("combobox", { name: "Idioma" }).selectOption("es");
   await expect(page.locator("html")).toHaveAttribute("lang", "es");
   await expect(page.getByRole("heading", { level: 1, name: /Convierte cada cliente/ })).toBeVisible();
+  await page.getByRole("link", { name: "Crear cuenta gratuita" }).first().click();
+  await expect(page).toHaveURL(/\/cadastro$/);
+  await expect(page.locator("html")).toHaveAttribute("lang", "es");
+  await expect(page.getByRole("heading", { level: 1, name: /Crea el espacio/ })).toBeVisible();
+  await expect(page.getByLabel("Correo electrónico")).toBeVisible();
 });
 
 test("rotas privadas redirecionam e a saúde pública não expõe segredos", async ({ page, request }) => {

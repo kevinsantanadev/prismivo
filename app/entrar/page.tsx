@@ -1,36 +1,24 @@
 import type { Metadata } from "next";
 import { AccessPage } from "@/app/components/access-page";
-import { safeReturnPath, signInPath } from "@/app/session-auth";
+import { safeReturnPath } from "@/app/session-auth";
+import { authPageCopy } from "@/lib/auth-i18n";
+import { getRequestLocale } from "@/lib/site-locale-server";
 
-export const metadata: Metadata = {
-  title: "Entrar",
-  description: "Acesse com segurança seu espaço no Prismivo.",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const copy = authPageCopy[await getRequestLocale()].login;
+  return { title: copy.metadataTitle, description: copy.metadataDescription, robots: { index: false, follow: false } };
+}
 
 export default async function EntrarPage({
   searchParams,
 }: {
   searchParams: Promise<{ returnTo?: string }>;
 }) {
-  const { returnTo } = await searchParams;
+  const [{ returnTo }, locale] = await Promise.all([searchParams, getRequestLocale()]);
   const destination = safeReturnPath(returnTo, "/app");
   return (
     <AccessPage
-      eyebrow="BEM-VINDO DE VOLTA"
-      title="Retome sua operação do ponto certo."
-      description="Entre para consultar projetos, atividades, clientes e os próximos passos da sua empresa."
-      primaryLabel="Entrar com segurança"
-      primaryHref={signInPath(destination)}
-      alternateText="Ainda não possui uma conta?"
-      alternateLabel="Começar grátis"
-      alternateHref="/cadastro"
-      benefits={[
-        "Sessão protegida e persistente",
-        "Redirecionamento direto ao dashboard",
-        "Dados isolados por empresa",
-        "Encerramento de sessão a qualquer momento",
-      ]}
+      locale={locale}
       mode="login"
       returnTo={destination}
     />

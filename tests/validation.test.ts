@@ -27,6 +27,17 @@ import {
   ticketStatusSchema,
 } from "../lib/validation";
 import { buildCsvDocument, escapeCsvCell } from "../lib/reports/csv";
+import { normalizeSiteLocale } from "../lib/site-locale";
+
+describe("site locale", () => {
+  it("accepts every supported locale and safely falls back to PT-BR", () => {
+    expect(normalizeSiteLocale("pt-BR")).toBe("pt-BR");
+    expect(normalizeSiteLocale("en")).toBe("en");
+    expect(normalizeSiteLocale("es")).toBe("es");
+    expect(normalizeSiteLocale("../../admin")).toBe("pt-BR");
+    expect(normalizeSiteLocale(null)).toBe("pt-BR");
+  });
+});
 
 describe("onboarding validation", () => {
   it("accepts a complete free-workspace setup", () => {

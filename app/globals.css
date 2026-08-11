@@ -1900,6 +1900,12 @@ button {
   border-bottom: 1px solid var(--line);
 }
 
+.access-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .access-back,
 .legal-header > a:last-child {
   display: inline-flex;

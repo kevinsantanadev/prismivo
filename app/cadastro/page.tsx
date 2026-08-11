@@ -1,30 +1,18 @@
 import type { Metadata } from "next";
 import { AccessPage } from "@/app/components/access-page";
-import { signInPath } from "@/app/session-auth";
+import { authPageCopy } from "@/lib/auth-i18n";
+import { getRequestLocale } from "@/lib/site-locale-server";
 
-export const metadata: Metadata = {
-  title: "Criar conta gratuita",
-  description: "Crie gratuitamente o espaço operacional da sua empresa no Prismivo.",
-  robots: { index: false, follow: false },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const copy = authPageCopy[await getRequestLocale()].signup;
+  return { title: copy.metadataTitle, description: copy.metadataDescription, robots: { index: false, follow: false } };
+}
 
-export default function CadastroPage() {
+export default async function CadastroPage() {
+  const locale = await getRequestLocale();
   return (
     <AccessPage
-      eyebrow="COMECE SEM CUSTO"
-      title="Crie o espaço onde sua operação ganha clareza."
-      description="O plano Inicial permite organizar clientes e projetos reais em um banco persistente, acompanhar atividades e experimentar o fluxo do Prismivo sem cadastrar cartão."
-      primaryLabel="Criar minha conta"
-      primaryHref={signInPath("/app/onboarding")}
-      alternateText="Já possui uma conta?"
-      alternateLabel="Entrar"
-      alternateHref="/entrar"
-      benefits={[
-        "Até 3 clientes e 3 projetos ativos",
-        "Dashboard, histórico e notificações",
-        "Uma empresa com acesso de proprietário",
-        "Dados persistentes e separados por empresa",
-      ]}
+      locale={locale}
       mode="signup"
     />
   );

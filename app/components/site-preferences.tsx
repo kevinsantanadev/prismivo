@@ -10,13 +10,18 @@ import {
   type ReactNode,
 } from "react";
 
-export const supportedLocales = ["pt-BR", "en", "es"] as const;
+import {
+  SITE_LOCALE_COOKIE,
+  supportedLocales,
+  type SiteLocale,
+} from "@/lib/site-locale";
+
 export const supportedThemes = ["system", "light", "dark", "mono"] as const;
 export const supportedAccentColors = ["lime", "violet", "blue", "amber", "teal", "rose"] as const;
 export const supportedInterfaceFilters = ["none", "soft", "crisp", "grayscale"] as const;
 export const supportedColorVisionModes = ["standard", "protanopia", "deuteranopia", "tritanopia", "achromatopsia"] as const;
 
-export type SiteLocale = (typeof supportedLocales)[number];
+export { supportedLocales, type SiteLocale };
 export type SiteTheme = (typeof supportedThemes)[number];
 export type AccentColor = (typeof supportedAccentColors)[number];
 export type InterfaceFilter = (typeof supportedInterfaceFilters)[number];
@@ -99,7 +104,13 @@ export function SitePreferencesProvider({ children }: { children: ReactNode }) {
     window.localStorage.setItem("prismivo-color-vision", colorVisionMode);
   }, [accentColor, interfaceFilter, colorVisionMode]);
 
-  const setLocale = useCallback((nextLocale: SiteLocale) => updateLocale(nextLocale), []);
+  const setLocale = useCallback((nextLocale: SiteLocale) => {
+    document.documentElement.lang = nextLocale;
+    window.localStorage.setItem("prismivo-locale", nextLocale);
+    const secure = window.location.protocol === "https:" ? "; Secure" : "";
+    document.cookie = `${SITE_LOCALE_COOKIE}=${encodeURIComponent(nextLocale)}; Path=/; Max-Age=31536000; SameSite=Lax${secure}`;
+    updateLocale(nextLocale);
+  }, []);
   const setTheme = useCallback((nextTheme: SiteTheme) => updateTheme(nextTheme), []);
   const setAccentColor = useCallback((nextColor: AccentColor) => updateAccentColor(nextColor), []);
   const setInterfaceFilter = useCallback((nextFilter: InterfaceFilter) => updateInterfaceFilter(nextFilter), []);

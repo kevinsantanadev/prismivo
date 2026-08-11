@@ -1,6 +1,7 @@
 "use client";
 
 import { Contrast, Globe2, Monitor, Moon, Palette, Sun } from "lucide-react";
+import { useRouter } from "next/navigation";
 import {
   supportedLocales,
   supportedThemes,
@@ -42,6 +43,7 @@ const labels: Record<SiteLocale, {
 const themeIcons = { system: Monitor, light: Sun, dark: Moon, mono: Contrast } as const;
 
 export function PreferencesMenu({ align = "right" }: { align?: "left" | "right" }) {
+  const router = useRouter();
   const { locale, setLocale, theme, setTheme } = useSitePreferences();
   const copy = labels[locale];
 
@@ -73,7 +75,14 @@ export function PreferencesMenu({ align = "right" }: { align?: "left" | "right" 
         </fieldset>
         <label className="language-preference">
           <span><Globe2 aria-hidden="true" />{copy.language}</span>
-          <select aria-label={copy.language} value={locale} onChange={(event) => setLocale(event.target.value as SiteLocale)}>
+          <select
+            aria-label={copy.language}
+            value={locale}
+            onChange={(event) => {
+              setLocale(event.target.value as SiteLocale);
+              router.refresh();
+            }}
+          >
             {supportedLocales.map((option) => <option key={option} value={option}>{copy.locales[option]}</option>)}
           </select>
         </label>

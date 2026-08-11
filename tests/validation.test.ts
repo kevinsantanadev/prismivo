@@ -66,6 +66,13 @@ describe("site locale", () => {
     expect(getOperationalCopy("en").deliverables.version.submit).toBe("Create version");
     expect(getOperationalCopy("es").deliverables.comment.submit).toBe("Comentar");
   });
+
+  it("localizes support conversations and the content studio", () => {
+    expect(getOperationalCopy("en").support.form.protocol).toBe("Generate protocol");
+    expect(getOperationalCopy("es").support.status.reopen).toBe("Reabrir solicitud");
+    expect(getOperationalCopy("en").content.actions.publish).toBe("Publish");
+    expect(getOperationalCopy("es").content.form.save).toBe("Guardar contenido");
+  });
 });
 
 describe("onboarding validation", () => {

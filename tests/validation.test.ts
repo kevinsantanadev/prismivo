@@ -59,6 +59,13 @@ describe("site locale", () => {
     expect(getOperationalCopy("en").projects.progress.label).toBe("Project progress");
     expect(getOperationalCopy("es").projects.detail.back).toBe("Volver a proyectos");
   });
+
+  it("localizes decisions, private files, and deliverable workflows", () => {
+    expect(getOperationalCopy("en").approvals.actions.approve).toBe("Approve");
+    expect(getOperationalCopy("es").files.upload.saving).toBe("Guardar de forma segura");
+    expect(getOperationalCopy("en").deliverables.version.submit).toBe("Create version");
+    expect(getOperationalCopy("es").deliverables.comment.submit).toBe("Comentar");
+  });
 });
 
 describe("onboarding validation", () => {

@@ -2,8 +2,6 @@
 
 Plataforma SaaS B2B de **client operations** criada para profissionais e pequenas empresas de serviços centralizarem clientes, projetos, aprovações, arquivos, atendimento e cobranças.
 
-> Status atual: Marco 21 concluído — aplicação publicada de forma independente na Vercel, banco dedicado no Supabase e fluxos essenciais aprovados para testes controlados. O domínio próprio aguarda somente a atualização dos registros DNS no provedor.
-
 ## Visão geral
 
 O Prismivo transforma a prestação de serviços em uma jornada clara e rastreável. A proposta não é ser apenas um gestor de tarefas: o produto conecta o trabalho interno à experiência do cliente, mantendo decisões, entregáveis, aprovações, mensagens e cobrança dentro do mesmo contexto.

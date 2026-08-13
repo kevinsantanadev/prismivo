@@ -164,7 +164,7 @@ Os bytes ficam em bucket privado e os metadados autorizáveis permanecem no Post
 
 ### ADR-007 — Vercel como execução independente
 
-O build nativo do Next.js é executado na Vercel com ambientes separados e variáveis gerenciadas. O domínio só será apontado depois dos testes ponta a ponta, preservando a hospedagem anterior como rollback durante a transição.
+O build nativo do Next.js é executado na Vercel com ambientes separados e variáveis gerenciadas. A produção foi promovida depois dos testes automatizados e do smoke test, mantendo a hospedagem anterior como rollback até a propagação do domínio próprio.
 
 ### ADR-008 — PWA pública sem cache privado
 
@@ -172,7 +172,7 @@ O service worker melhora a resiliência somente do conteúdo público. Dashboard
 
 ### ADR-009 — Rate limiting persistente e fail-closed
 
-Fluxos de autenticação consomem contadores no PostgreSQL por janelas fixas. A aplicação envia apenas um hash da combinação entre identidade e origem; o valor original e o segredo de derivação não são persistidos. A RPC aceita execução somente pela função server-only autenticada com `service_role`, nunca pelo navegador. Em produção, ausência do segredo ou falha do contador bloqueia a tentativa sensível em vez de liberar tráfego sem proteção.
+Fluxos de autenticação consomem contadores no PostgreSQL por janelas fixas. A aplicação envia à RPC somente um hash SHA-256 derivado da identidade, origem e `RATE_LIMIT_PEPPER`; nenhum desses valores originais é persistido. A tabela privada não possui acesso direto para `anon` ou `authenticated`, tem RLS habilitada e é manipulada somente pela função transacional. Em produção, ausência do segredo ou falha do contador bloqueia a tentativa sensível em vez de liberar tráfego sem proteção.
 
 ### ADR-010 — Localização persistente com lista permitida
 

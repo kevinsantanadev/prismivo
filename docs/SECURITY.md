@@ -51,7 +51,7 @@
 - RLS habilitada em todas as tabelas públicas do Prismivo;
 - políticas por usuário e por participação ativa na organização;
 - bucket privado com políticas equivalentes e limite de 5 MB;
-- chave publicável no navegador protegida por RLS e `service_role` restrita ao processo servidor-servidor de rate limiting;
+- chave publicável no navegador protegida por RLS; o rate limiting não depende de chave administrativa no runtime;
 - respostas uniformes na recuperação para reduzir enumeração de contas;
 - proteção contra redirecionamento aberto nos retornos de autenticação;
 - verificação de identidade em cada API de escrita;
@@ -72,7 +72,7 @@
 - numeração de versões ocorre em RPC transacional com bloqueio de linha, identidade, papel e propriedade do arquivo validados internamente;
 - anexos de atendimento reutilizam o armazenamento privado e são removidos se o vínculo persistente falhar.
 - login, cadastro e recuperação possuem limites persistentes por janela, usando combinação de identidade e origem protegida por hash com segredo do ambiente;
-- a RPC do limitador revoga execução de `anon` e `authenticated`; somente o cliente server-only com segredo de serviço pode consumir contadores;
+- a RPC do limitador recebe somente identificadores com hash e pode ser executada pelas funções públicas de autenticação; a tabela privada permanece sem acesso direto para `anon` e `authenticated`, com RLS habilitada;
 - janelas expiradas são removidas automaticamente e a aplicação bloqueia de forma segura se o segredo obrigatório estiver ausente em produção;
 - CSP, HSTS, `nosniff`, bloqueio de framing, política de referenciador e permissões mínimas são enviados globalmente;
 - a exceção `unsafe-eval` existe somente no servidor de desenvolvimento para o runtime de depuração do framework e não integra o build de produção;
@@ -86,7 +86,7 @@
 - 24 de 24 tabelas públicas com RLS habilitada;
 - 73 políticas públicas de acesso por usuário, organização e papel;
 - nenhuma chave estrangeira sem índice de cobertura após o Marco 20;
-- chave de serviço ausente do bundle público e sem prefixo `NEXT_PUBLIC`;
+- nenhuma chave de serviço é exigida pela aplicação; a chave publicável permanece protegida por RLS;
 - `npm audit` sem vulnerabilidades conhecidas após atualização compatível das dependências;
 - nove avisos do advisor para RPCs `security definer` autenticadas foram revisados individualmente: todas validam `auth.uid()`, organização, papel e propriedade dentro da função antes de acessar dados;
 - `organization_invitations` permanece sem política direta por intenção: privilégios de tabela foram revogados e o acesso acontece somente pelas RPCs revisadas.

@@ -42,12 +42,13 @@ Senhas nunca entram nas tabelas de produto, logs, analytics ou auditoria. Gestã
 2. Implementar adaptadores, autenticação e variáveis sem publicar segredos. **Concluído.**
 3. Validar lint, tipos, testes e builds para os dois ambientes. **Concluído.**
 4. Publicar e validar um preview independente na Vercel. **Concluído em 11 de agosto de 2026.**
-5. Configurar URLs de autenticação e remetente transacional no domínio oficial.
-6. Testar cadastro, confirmação, recuperação, permissões, uploads e exclusão ponta a ponta.
-7. Trocar o CNAME somente depois da validação integral, mantendo o ambiente anterior como rollback.
-8. Confirmar HTTPS, logs, integridade e operação antes de encerrar o ambiente anterior.
+5. Publicar e validar a produção independente na Vercel. **Concluído em 13 de agosto de 2026.**
+6. Configurar URLs de autenticação e remetente transacional no domínio oficial.
+7. Testar cadastro, confirmação, recuperação, permissões, uploads e exclusão ponta a ponta.
+8. Trocar o DNS somente depois da validação integral, mantendo o ambiente anterior como rollback.
+9. Confirmar HTTPS, logs, integridade e operação antes de encerrar o ambiente anterior.
 
-O preview independente foi compilado pelo projeto Vercel do Prismivo, chegou ao estado `READY` e carregou a experiência pública, cadastro, preferências persistentes e rotas protegidas. As variáveis públicas do Supabase e o segredo de rate limiting foram configurados somente no ambiente de preview. A publicação definitiva, callbacks oficiais e DNS permanecem separados desta validação.
+O preview e a produção independente foram compilados pelo projeto Vercel do Prismivo, chegaram ao estado `READY` e carregaram a experiência pública, cadastro, preferências persistentes e rotas protegidas. As variáveis do Supabase e o segredo de rate limiting estão nos cofres de Preview e Production. A produção responde em `https://prismivo.vercel.app`; callbacks oficiais e a troca do DNS do domínio próprio permanecem como configuração externa do proprietário.
 
 ## Critérios obrigatórios antes da troca
 

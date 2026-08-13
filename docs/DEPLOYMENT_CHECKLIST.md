@@ -22,7 +22,7 @@
 ## Autenticação e segurança
 
 - [ ] Segredo de autenticação forte e exclusivo;
-- [ ] `SUPABASE_SERVICE_ROLE_KEY` configurada somente no ambiente do servidor;
+- [x] Autenticação não depende de chave administrativa no runtime da aplicação;
 - [ ] Cookies `Secure`, `HttpOnly` e `SameSite` validados;
 - [ ] Verificação e recuperação de e-mail funcionando;
 - [x] Rate limit persistente aplicado aos fluxos sensíveis;
@@ -34,7 +34,7 @@
 
 ## Integrações
 
-- [ ] Domínios e URLs de callback oficiais;
+- [ ] DNS do domínio próprio e URLs de callback oficiais;
 - [ ] E-mail remetente verificado;
 - [ ] Bucket privado e CORS mínimo;
 - [ ] Pagamentos em modo produção somente após revisão;
@@ -45,11 +45,13 @@
 ## Operação
 
 - [x] Preview independente na Vercel compilado e validado em estado `READY`;
-- [x] Variáveis do Supabase e segredo de rate limit isolados no ambiente de preview;
-- [ ] HTTPS e redirecionamento para domínio principal;
+- [x] Produção independente na Vercel compilada, promovida e validada em estado `READY`;
+- [x] Variáveis do Supabase e segredo de rate limit configurados nos ambientes Preview e Production;
+- [x] HTTPS validado no endereço de produção da Vercel;
+- [ ] DNS e HTTPS do domínio principal validados após propagação;
 - [x] Health check e página pública de status disponíveis;
-- [ ] Ambiente de teste e produção separados;
-- [ ] Plano de rollback documentado;
+- [x] Ambiente de teste e produção separados;
+- [x] Plano de rollback documentado;
 - [ ] Responsáveis por incidente definidos;
 - [ ] Política de backup e restauração documentada;
 - [ ] Páginas legais revisadas por profissional qualificado;
@@ -57,11 +59,10 @@
 
 ## Configurações externas pendentes do proprietário
 
-- Preservar o domínio ativo `prismivo.kevinsantanadev.com.br` e alterar o DNS apenas após validação integral do preview da Vercel;
+- Substituir no Registro.br os registros do subdomínio `prismivo` pelos valores exibidos no projeto da Vercel e aguardar a verificação;
 - Cadastrar no Supabase as URLs de callback do preview e do domínio definitivo;
-- Replicar as variáveis do Supabase no ambiente de produção somente após a validação dos callbacks;
-- Gerar um `RATE_LIMIT_PEPPER` exclusivo para produção, separado do valor usado no preview;
-- Configurar `SUPABASE_SERVICE_ROLE_KEY` diretamente no cofre da Vercel, somente para servidor e sem expor o valor em logs ou mensagens;
+- Manter as variáveis do Supabase e o `RATE_LIMIT_PEPPER` somente nos cofres de ambiente da Vercel;
+- Manter o `RATE_LIMIT_PEPPER` somente no cofre da Vercel; nenhum e-mail ou identificador é enviado ao RPC sem hash;
 - PostgreSQL e bucket privado do Prismivo já configurados no Supabase;
 - Provedor de e-mail e remetente;
 - Revisar retenção e restauração do bucket privado do Supabase antes da abertura comercial;

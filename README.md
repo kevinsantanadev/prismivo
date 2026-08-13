@@ -2,7 +2,7 @@
 
 Plataforma SaaS B2B de **client operations** criada para profissionais e pequenas empresas de serviços centralizarem clientes, projetos, aprovações, arquivos, atendimento e cobranças.
 
-> Status atual: Marco 18 em validação — atendimento, anexos, conversas e estúdio de conteúdo acompanham o idioma persistido em PT-BR, inglês e espanhol.
+> Status atual: Marco 19 em validação — toda a jornada pública e autenticada acompanha o idioma persistido em PT-BR, inglês e espanhol, incluindo equipe, assinatura, administração e onboarding.
 
 ## Visão geral
 

@@ -30,6 +30,7 @@ import { buildCsvDocument, escapeCsvCell } from "../lib/reports/csv";
 import { normalizeSiteLocale } from "../lib/site-locale";
 import { translateAppShellText } from "../lib/app-shell-i18n";
 import { getOperationalCopy } from "../lib/app-operational-i18n";
+import { getManagementCopy } from "../lib/app-management-i18n";
 
 describe("site locale", () => {
   it("accepts every supported locale and safely falls back to PT-BR", () => {
@@ -72,6 +73,13 @@ describe("site locale", () => {
     expect(getOperationalCopy("es").support.status.reopen).toBe("Reabrir solicitud");
     expect(getOperationalCopy("en").content.actions.publish).toBe("Publish");
     expect(getOperationalCopy("es").content.form.save).toBe("Guardar contenido");
+  });
+
+  it("localizes team, billing, administration, and onboarding", () => {
+    expect(getManagementCopy("en").team.createInvite).toBe("Create invitation");
+    expect(getManagementCopy("es").billing.activate).toBe("Activar demostración");
+    expect(getManagementCopy("en").admin.exportCsv).toBe("Export CSV");
+    expect(getManagementCopy("es").onboarding.create).toBe("Crear espacio gratuito");
   });
 });
 

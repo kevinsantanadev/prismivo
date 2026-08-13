@@ -2,7 +2,7 @@
 
 Plataforma SaaS B2B de **client operations** criada para profissionais e pequenas empresas de serviços centralizarem clientes, projetos, aprovações, arquivos, atendimento e cobranças.
 
-> Status atual: Marco 21 em preparação — release candidate aprovada localmente, com runbook, validação segura de variáveis e smoke test de produção prontos para a promoção definitiva.
+> Status atual: Marco 21 concluído — aplicação publicada de forma independente na Vercel, banco dedicado no Supabase e fluxos essenciais aprovados para testes controlados. O domínio próprio aguarda somente a atualização dos registros DNS no provedor.
 
 ## Visão geral
 
@@ -83,7 +83,8 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Quarenta e cinco testes unitários de validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização e segurança;
 - Cinco jornadas E2E em Chromium para cadastro, preferências, proteção de rotas, responsividade e disponibilidade;
 - Pipeline de CI com testes unitários, tipagem, lint, build e Playwright antes de cada integração à branch principal.
-- Preview independente na Vercel com build nativo do Next.js, variáveis isoladas por ambiente e status `READY` validado;
+- Preview e produção independentes na Vercel com build nativo do Next.js, variáveis isoladas por ambiente e status `READY` validado;
+- Produção acessível em `https://prismivo.vercel.app`, com health check confirmando aplicação e banco em estado `ready`;
 - Execução E2E configurável contra ambiente local ou URL externa por `PLAYWRIGHT_BASE_URL`.
 
 ## Arquitetura planejada
@@ -190,9 +191,9 @@ Cada pessoa cria a própria conta e confirma o e-mail. No primeiro acesso, o onb
 
 ## Próximos marcos
 
-1. Configurar os segredos server-only, callbacks oficiais e remetente transacional no ambiente definitivo;
-2. Validar autenticação, recuperação, isolamento de dados, backup e rollback ponta a ponta;
-3. Promover a versão aprovada, conectar o domínio e acompanhar saúde e logs após a troca de DNS.
+1. Aplicar os registros DNS fornecidos pela Vercel e validar o domínio próprio com HTTPS;
+2. Concluir callbacks oficiais, remetente transacional, backup e restauração antes da abertura comercial;
+3. Executar a beta controlada, acompanhar saúde e logs e ativar provedores de pagamento somente após revisão financeira.
 
 ## Autoria e licença
 

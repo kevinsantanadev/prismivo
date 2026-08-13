@@ -2,7 +2,7 @@
 
 Plataforma SaaS B2B de **client operations** criada para profissionais e pequenas empresas de serviços centralizarem clientes, projetos, aprovações, arquivos, atendimento e cobranças.
 
-> Status atual: Marco 20 em validação — experiência multilíngue concluída e auditoria pré-produção executada sobre aplicação, dependências, banco, permissões, acessibilidade e responsividade.
+> Status atual: Marco 21 em preparação — release candidate aprovada localmente, com runbook, validação segura de variáveis e smoke test de produção prontos para a promoção definitiva.
 
 ## Visão geral
 
@@ -80,7 +80,7 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Upload privado com validação de tamanho, extensão, MIME e assinatura;
 - Download autenticado, exclusão lógica e vínculo de arquivos a projetos;
 - Atendimento com protocolo, prioridade, mensagens, encerramento e reabertura;
-- Quarenta e três testes unitários de validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização e segurança;
+- Quarenta e cinco testes unitários de validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização e segurança;
 - Cinco jornadas E2E em Chromium para cadastro, preferências, proteção de rotas, responsividade e disponibilidade;
 - Pipeline de CI com testes unitários, tipagem, lint, build e Playwright antes de cada integração à branch principal.
 - Preview independente na Vercel com build nativo do Next.js, variáveis isoladas por ambiente e status `READY` validado;
@@ -161,6 +161,8 @@ npm test          # Testes unitários, build e verificação do artefato
 npm run test:unit # Testes rápidos de regras e validação
 npm run test:e2e  # Jornadas públicas em Chromium
 npm run db:generate # Gera migrações a partir do schema Drizzle
+npm run verify:production-env # Confere variáveis obrigatórias sem imprimir segredos
+npm run smoke:production -- https://dominio.example # Valida o ambiente publicado
 ```
 
 Para executar as jornadas contra um preview já publicado, defina `PLAYWRIGHT_BASE_URL` com a URL autorizada do ambiente. Nenhum servidor local será iniciado nesse modo.
@@ -184,6 +186,7 @@ Cada pessoa cria a própria conta e confirma o e-mail. No primeiro acesso, o onb
 - [Migração de autenticação e hospedagem](docs/AUTH_HOSTING_MIGRATION.md)
 - [Checklist de publicação](docs/DEPLOYMENT_CHECKLIST.md)
 - [Auditoria final pré-produção](docs/FINAL_AUDIT.md)
+- [Runbook de produção e rollback](docs/PRODUCTION_RUNBOOK.md)
 
 ## Próximos marcos
 

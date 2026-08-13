@@ -206,6 +206,7 @@ export const authFormCopy = {
 export const authActionCopy = {
   "pt-BR": {
     invalidLogin: "Revise o e-mail e a senha informados.", rateLimit: "Muitas tentativas em sequência. Aguarde alguns minutos e tente novamente.",
+    rateLimitUnavailable: "Não foi possível validar a tentativa agora. Aguarde um instante e tente novamente.",
     invalidCredentials: "Não foi possível entrar com essas credenciais.", passwordsMismatch: "As senhas devem ser iguais.", invalidData: "Revise os dados informados.",
     signupFailed: "Não foi possível concluir o cadastro. Revise os dados e tente novamente.", signupSuccess: "Cadastro recebido. Confira seu e-mail para confirmar a conta e continuar.",
     invalidEmail: "Informe um e-mail válido.", recoverySuccess: "Se existir uma conta válida para esse e-mail, enviaremos as instruções de recuperação.",
@@ -213,6 +214,7 @@ export const authActionCopy = {
   },
   en: {
     invalidLogin: "Review the email and password provided.", rateLimit: "Too many attempts in a short period. Wait a few minutes and try again.",
+    rateLimitUnavailable: "We could not validate this attempt right now. Wait a moment and try again.",
     invalidCredentials: "We could not sign you in with those credentials.", passwordsMismatch: "The passwords must match.", invalidData: "Review the information provided.",
     signupFailed: "We could not complete the registration. Review the information and try again.", signupSuccess: "Registration received. Check your email to confirm the account and continue.",
     invalidEmail: "Enter a valid email address.", recoverySuccess: "If a valid account exists for this email, we will send recovery instructions.",
@@ -220,6 +222,7 @@ export const authActionCopy = {
   },
   es: {
     invalidLogin: "Revisa el correo y la contraseña indicados.", rateLimit: "Demasiados intentos seguidos. Espera unos minutos e inténtalo de nuevo.",
+    rateLimitUnavailable: "No pudimos validar este intento ahora. Espera un momento e inténtalo de nuevo.",
     invalidCredentials: "No pudimos iniciar sesión con esas credenciales.", passwordsMismatch: "Las contraseñas deben coincidir.", invalidData: "Revisa la información indicada.",
     signupFailed: "No pudimos completar el registro. Revisa los datos e inténtalo de nuevo.", signupSuccess: "Registro recibido. Revisa tu correo para confirmar la cuenta y continuar.",
     invalidEmail: "Introduce un correo electrónico válido.", recoverySuccess: "Si existe una cuenta válida para este correo, enviaremos las instrucciones de recuperación.",

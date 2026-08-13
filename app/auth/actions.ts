@@ -26,7 +26,7 @@ export async function loginAction(
 
   if (!parsed.success) return authError(copy.invalidLogin);
   const rateLimit = await consumeRateLimit("auth.login", await rateLimitSubject(parsed.data.email));
-  if (!rateLimit.allowed) return authError(copy.rateLimit);
+  if (!rateLimit.allowed) return authError(rateLimit.status === "limited" ? copy.rateLimit : copy.rateLimitUnavailable);
 
   const supabase = await createSupabaseServerClient();
   const { error } = await supabase.auth.signInWithPassword({
@@ -58,7 +58,7 @@ export async function signupAction(
     return authError(parsed.error.issues[0]?.message ?? copy.invalidData);
   }
   const rateLimit = await consumeRateLimit("auth.signup", await rateLimitSubject(parsed.data.email));
-  if (!rateLimit.allowed) return authError(copy.rateLimit);
+  if (!rateLimit.allowed) return authError(rateLimit.status === "limited" ? copy.rateLimit : copy.rateLimitUnavailable);
 
   const supabase = await createSupabaseServerClient();
   const origin = await requestOrigin();
@@ -89,7 +89,7 @@ export async function recoveryAction(
   const parsed = emailSchema.safeParse(formData.get("email"));
   if (!parsed.success) return authError(copy.invalidEmail);
   const rateLimit = await consumeRateLimit("auth.recovery", await rateLimitSubject(parsed.data));
-  if (!rateLimit.allowed) return authError(copy.rateLimit);
+  if (!rateLimit.allowed) return authError(rateLimit.status === "limited" ? copy.rateLimit : copy.rateLimitUnavailable);
 
   const origin = await requestOrigin();
   const supabase = await createSupabaseServerClient();

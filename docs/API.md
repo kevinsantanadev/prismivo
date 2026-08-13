@@ -52,7 +52,8 @@ As rotas internas usam um envelope pequeno e previsível:
 - `GET|POST /auth/signout` encerra a sessão e retorna à página pública;
 - o Proxy renova os cookies de autenticação antes das rotas protegidas;
 - a recuperação sempre usa uma resposta uniforme, exista ou não uma conta para o e-mail.
-- login, cadastro e recuperação consomem limites persistentes por janela antes de chamar o provedor de identidade.
+- login, cadastro e recuperação consomem limites persistentes por janela antes de chamar o provedor de identidade;
+- o contador é acionado somente no servidor com uma credencial não pública; chaves do navegador não possuem permissão para executar a RPC.
 
 ### `POST /api/onboarding`
 

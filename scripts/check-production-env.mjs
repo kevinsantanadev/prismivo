@@ -2,7 +2,6 @@ const requiredVariables = [
   "NEXT_PUBLIC_APP_URL",
   "NEXT_PUBLIC_SUPABASE_URL",
   "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY",
-  "SUPABASE_SERVICE_ROLE_KEY",
   "SUPABASE_STORAGE_BUCKET",
   "RATE_LIMIT_PEPPER",
 ];
@@ -39,14 +38,6 @@ if (value("NEXT_PUBLIC_SUPABASE_URL") && !value("NEXT_PUBLIC_SUPABASE_URL").ends
 const publishableKey = value("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY");
 if (publishableKey && !(publishableKey.startsWith("sb_publishable_") || publishableKey.startsWith("eyJ"))) {
   errors.push("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY não possui um formato reconhecido.");
-}
-
-const serviceRoleKey = value("SUPABASE_SERVICE_ROLE_KEY");
-if (serviceRoleKey && serviceRoleKey.length < 40) {
-  errors.push("SUPABASE_SERVICE_ROLE_KEY parece incompleta.");
-}
-if (serviceRoleKey && serviceRoleKey === publishableKey) {
-  errors.push("A chave server-only não pode ser igual à chave pública.");
 }
 
 const pepper = value("RATE_LIMIT_PEPPER");

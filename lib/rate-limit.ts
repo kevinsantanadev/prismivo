@@ -1,5 +1,5 @@
 import { isSupabaseConfigured } from "./supabase/config";
-import { createSupabaseServiceClient } from "./supabase/service-server";
+import { createSupabaseServerClient } from "./supabase/server";
 
 export type RateLimitBucket = "auth.login" | "auth.signup" | "auth.recovery";
 export type RateLimitResult = { allowed: boolean; remaining: number; resetAt: string | null };
@@ -13,12 +13,7 @@ export async function consumeRateLimit(bucket: RateLimitBucket, subject: string)
   }
 
   const subjectHash = await sha256(`${pepper}:${subject.trim().toLocaleLowerCase("en-US")}`);
-  let supabase;
-  try {
-    supabase = createSupabaseServiceClient();
-  } catch {
-    return { allowed: process.env.NODE_ENV !== "production", remaining: 0, resetAt: null };
-  }
+  const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase.rpc("consume_rate_limit", {
     target_bucket: bucket,
     target_subject_hash: subjectHash,

@@ -8,7 +8,7 @@ Este documento organiza a promoção do Prismivo para o ambiente definitivo sem 
 - migrações aplicadas somente ao projeto Supabase dedicado ao Prismivo;
 - backup recente e procedimento de restauração confirmado;
 - preview da Vercel em estado `READY`;
-- chaves públicas, chave server-only e segredo de rate limiting configurados no cofre do projeto;
+- chave pública e segredo de rate limiting configurados no cofre do projeto;
 - callbacks de autenticação autorizados para preview e domínio oficial;
 - remetente e fluxo de confirmação/recuperação testados;
 - domínio antigo mantido como rollback até o encerramento da validação.
@@ -20,9 +20,8 @@ Este documento organiza a promoção do Prismivo para o ambiente definitivo sem 
 | `NEXT_PUBLIC_APP_URL` | navegador e servidor | `https://prismivo.kevinsantanadev.com.br` |
 | `NEXT_PUBLIC_SUPABASE_URL` | navegador e servidor | URL do projeto exclusivo do Prismivo |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | navegador e servidor | chave publicável ativa; acesso continua protegido por RLS |
-| `SUPABASE_SERVICE_ROLE_KEY` | somente servidor | usada pelo rate limiting; nunca prefixar com `NEXT_PUBLIC_` |
 | `SUPABASE_STORAGE_BUCKET` | servidor | bucket privado `prismivo-files` |
-| `RATE_LIMIT_PEPPER` | somente servidor | segredo aleatório exclusivo de produção |
+| `RATE_LIMIT_PEPPER` | somente servidor | transforma o identificador em hash irreversível antes do RPC; nunca prefixar com `NEXT_PUBLIC_` |
 
 Antes do deploy, execute `npm run verify:production-env` no ambiente que contém essas variáveis. O script valida presença e formato sem imprimir valores.
 

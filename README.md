@@ -2,7 +2,7 @@
 
 Plataforma SaaS B2B de **client operations** criada para profissionais e pequenas empresas de serviços centralizarem clientes, projetos, aprovações, arquivos, atendimento e cobranças.
 
-> Status atual: Marco 19 em validação — toda a jornada pública e autenticada acompanha o idioma persistido em PT-BR, inglês e espanhol, incluindo equipe, assinatura, administração e onboarding.
+> Status atual: Marco 20 em validação — experiência multilíngue concluída e auditoria pré-produção executada sobre aplicação, dependências, banco, permissões, acessibilidade e responsividade.
 
 ## Visão geral
 
@@ -183,12 +183,13 @@ Cada pessoa cria a própria conta e confirma o e-mail. No primeiro acesso, o onb
 - [Segurança](docs/SECURITY.md)
 - [Migração de autenticação e hospedagem](docs/AUTH_HOSTING_MIGRATION.md)
 - [Checklist de publicação](docs/DEPLOYMENT_CHECKLIST.md)
+- [Auditoria final pré-produção](docs/FINAL_AUDIT.md)
 
 ## Próximos marcos
 
-1. Estender a localização aos módulos de atendimento, conteúdo, equipe, assinatura, administração e onboarding;
-2. Configurar callbacks oficiais, remetente transacional e validar autenticação/dados ponta a ponta;
-3. Preparar produção, rollback, backup e monitoramento antes da troca de DNS.
+1. Configurar os segredos server-only, callbacks oficiais e remetente transacional no ambiente definitivo;
+2. Validar autenticação, recuperação, isolamento de dados, backup e rollback ponta a ponta;
+3. Promover a versão aprovada, conectar o domínio e acompanhar saúde e logs após a troca de DNS.
 
 ## Autoria e licença
 

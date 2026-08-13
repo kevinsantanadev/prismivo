@@ -16,12 +16,13 @@
 - [x] Migração PostgreSQL revisada e aplicada;
 - [ ] Backup automático e restauração testada;
 - [ ] Seed de demonstração bloqueado em produção;
-- [ ] Índices e consultas críticas analisados;
+- [x] Índices e consultas críticas analisados;
 - [ ] Retenção e exclusão configuradas.
 
 ## Autenticação e segurança
 
 - [ ] Segredo de autenticação forte e exclusivo;
+- [ ] `SUPABASE_SERVICE_ROLE_KEY` configurada somente no ambiente do servidor;
 - [ ] Cookies `Secure`, `HttpOnly` e `SameSite` validados;
 - [ ] Verificação e recuperação de e-mail funcionando;
 - [x] Rate limit persistente aplicado aos fluxos sensíveis;
@@ -60,6 +61,7 @@
 - Cadastrar no Supabase as URLs de callback do preview e do domínio definitivo;
 - Replicar as variáveis do Supabase no ambiente de produção somente após a validação dos callbacks;
 - Gerar um `RATE_LIMIT_PEPPER` exclusivo para produção, separado do valor usado no preview;
+- Configurar `SUPABASE_SERVICE_ROLE_KEY` diretamente no cofre da Vercel, somente para servidor e sem expor o valor em logs ou mensagens;
 - PostgreSQL e bucket privado do Prismivo já configurados no Supabase;
 - Provedor de e-mail e remetente;
 - Revisar retenção e restauração do bucket privado do Supabase antes da abertura comercial;

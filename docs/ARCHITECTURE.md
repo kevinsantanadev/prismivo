@@ -172,7 +172,7 @@ O service worker melhora a resiliência somente do conteúdo público. Dashboard
 
 ### ADR-009 — Rate limiting persistente e fail-closed
 
-Fluxos de autenticação consomem contadores no PostgreSQL por janelas fixas. A aplicação envia apenas um hash da combinação entre identidade e origem; o valor original e o segredo de derivação não são persistidos. Em produção, ausência do segredo ou falha do contador bloqueia a tentativa sensível em vez de liberar tráfego sem proteção.
+Fluxos de autenticação consomem contadores no PostgreSQL por janelas fixas. A aplicação envia apenas um hash da combinação entre identidade e origem; o valor original e o segredo de derivação não são persistidos. A RPC aceita execução somente pela função server-only autenticada com `service_role`, nunca pelo navegador. Em produção, ausência do segredo ou falha do contador bloqueia a tentativa sensível em vez de liberar tráfego sem proteção.
 
 ### ADR-010 — Localização persistente com lista permitida
 

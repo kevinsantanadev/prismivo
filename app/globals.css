@@ -339,25 +339,27 @@ button {
   color: var(--text);
 }
 
-.preferences-dialog {
-  position: fixed;
-  z-index: 200;
-  top: var(--preferences-top, 76px);
-  left: var(--preferences-left, auto);
-  width: min(360px, calc(100dvw - 24px));
-  max-width: none;
-  max-height: calc(100dvh - var(--preferences-top, 76px) - 12px);
-  margin: 0;
-  padding: 0;
-  overflow: visible;
-  border: 0;
-  background: transparent;
-  color: var(--text);
+body.preferences-open {
+  overflow: hidden;
 }
 
-.preferences-dialog::backdrop {
+.preferences-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
   background: color-mix(in srgb, var(--bg) 44%, transparent);
   backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.preferences-dialog-shell {
+  position: absolute;
+  top: var(--preferences-top, 76px);
+  left: var(--preferences-left, 12px);
+  width: min(360px, calc(100dvw - 24px));
+  max-height: calc(100dvh - var(--preferences-top, 76px) - 12px);
+  color: var(--text);
+  isolation: isolate;
 }
 
 .preferences-panel {
@@ -2028,14 +2030,12 @@ button {
   .preferences-menu .utility-button { display: inline-flex; }
   .locale-button { min-width: 64px; min-height: 38px; padding: 0 10px; }
   .mobile-menu-button { min-width: 38px; min-height: 38px; }
-  .preferences-dialog {
-    position: fixed;
+  .preferences-dialog-shell {
     top: max(76px, calc(env(safe-area-inset-top) + 68px));
-    right: auto;
-    left: 50%;
-    width: min(420px, calc(100dvw - 24px));
+    right: max(12px, env(safe-area-inset-right));
+    left: max(12px, env(safe-area-inset-left));
+    width: auto;
     max-height: calc(100dvh - max(76px, calc(env(safe-area-inset-top) + 68px)) - 12px);
-    transform: translateX(-50%);
   }
   .preferences-panel {
     width: 100%;

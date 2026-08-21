@@ -1,4 +1,4 @@
-const CACHE_NAME = "prismivo-public-v1";
+const CACHE_NAME = "prismivo-public-v2";
 const OFFLINE_URL = "/offline";
 const BYPASS_PREFIXES = ["/app", "/api", "/auth", "/entrar", "/cadastro", "/recuperar-senha", "/redefinir-senha", "/convite", "/status"];
 

@@ -58,7 +58,7 @@ jobs:
         run: npm ci
 
       - name: Instalar navegador de teste
-        run: npx playwright install --with-deps chromium
+        run: npx playwright install --with-deps chromium webkit
 
       - name: Executar jornadas públicas
         run: npm run test:e2e

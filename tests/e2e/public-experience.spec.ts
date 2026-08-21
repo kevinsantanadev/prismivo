@@ -93,6 +93,18 @@ for (const width of [390, 320]) {
     await page.keyboard.press("Escape");
     await expect(dialog).not.toBeVisible();
     await expect(preferences).toBeFocused();
+
+    await preferences.click();
+    await expect(dialog).toBeVisible();
+    await expect(page.getByRole("button", { name: "Automático" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Claro" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Escuro" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Preto e branco" })).toBeVisible();
+    await expect(page.getByRole("combobox", { name: "Idioma" })).toBeVisible();
+    await page.getByRole("button", { name: "Escuro" }).click();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await page.getByRole("button", { name: "Fechar preferências" }).click();
+    await expect(dialog).not.toBeVisible();
   });
 }
 

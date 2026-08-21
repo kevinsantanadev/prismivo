@@ -24,10 +24,12 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Temas claro, escuro, preto e branco e preferência automática do sistema;
 - Conteúdo público em português do Brasil, inglês e espanhol;
 - Prisma tridimensional animado com implementação leve, responsiva e compatível com redução de movimento;
+- Revelação progressiva das seções, indicador operacional e atmosfera prismática responsiva ao ponteiro, sem biblioteca pesada e com redução de movimento;
 - Navegação móvel e por teclado;
 - Seções de produto, soluções, seis casos demonstrativos, preços, conteúdo e FAQ;
 - Alternância funcional entre planos mensais e anuais;
 - Preferências de tema e idioma persistidas no dispositivo;
+- Painel de preferências implementado como diálogo nativo acessível, centralizado em celulares de 320/390 px, com fechamento por `Escape`, foco restaurado e margens seguras;
 - Metadados básicos de SEO e compartilhamento;
 - Respeito a `prefers-reduced-motion`;
 - Botões “Começar grátis” conectados a uma rota real de cadastro;
@@ -36,7 +38,8 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Jornada operacional principal localizada sem modificar nomes, descrições ou históricos criados pelos usuários;
 - Carteiras de clientes e projetos localizadas, com pesquisa regional, datas, números, progresso, estados vazios e detalhes nos três idiomas;
 - Decisões, documentos privados e entregáveis localizados, incluindo uploads, confirmações, versões e comentários sem alterar conteúdo empresarial;
-- Cadastro, confirmação de e-mail, login, logout e recuperação de senha com Supabase Auth;
+- Cadastro, confirmação de e-mail, reenvio de confirmação, login, logout e recuperação de senha com Supabase Auth;
+- SMTP transacional próprio configurado no Supabase Auth com entrega pelo Resend, sem credenciais no código ou no histórico do GitHub;
 - Onboarding de empresa com validação cliente/servidor e aceite registrado;
 - Aceites de Termos e Privacidade separados e vinculados às respectivas versões;
 - PostgreSQL gerenciado no Supabase com migração versionada;
@@ -78,8 +81,8 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Upload privado com validação de tamanho, extensão, MIME e assinatura;
 - Download autenticado, exclusão lógica e vínculo de arquivos a projetos;
 - Atendimento com protocolo, prioridade, mensagens, encerramento e reabertura;
-- Quarenta e cinco testes unitários de validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização e segurança;
-- Cinco jornadas E2E em Chromium para cadastro, preferências, proteção de rotas, responsividade e disponibilidade;
+- Quarenta e sete testes unitários de validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização e segurança;
+- Oito jornadas E2E em Chromium para cadastro, preferências, foco por teclado, proteção de rotas, responsividade em 320/390 px e disponibilidade;
 - Pipeline de CI com testes unitários, tipagem, lint, build e Playwright antes de cada integração à branch principal.
 - Preview e produção independentes na Vercel com build nativo do Next.js, variáveis isoladas por ambiente e status `READY` validado;
 - Produção acessível em `https://prismivo.vercel.app`, com health check confirmando aplicação e banco em estado `ready`;
@@ -95,7 +98,7 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 | Autenticação | Supabase Auth com e-mail/senha, confirmação, recuperação, cookies SSR e proteção de rotas |
 | Arquivos | Supabase Storage privado, políticas por organização e download autenticado |
 | Pagamentos | Adaptador para Stripe em modo teste/demonstração |
-| E-mails | Adaptador transacional com caixa de desenvolvimento local |
+| E-mails | Supabase Auth com endpoint PKCE e Resend conectado por SMTP transacional próprio |
 | Testes | Vitest, Testing Library e Playwright |
 | Operação | CI com GitHub Actions, logs estruturados, health check e monitoramento |
 
@@ -108,6 +111,8 @@ app/
 ├── api/                    # Operações autenticadas e validadas no servidor
 ├── app/                    # Dashboard e módulos operacionais autenticados
 ├── cadastro/ e entrar/     # Portas públicas de acesso
+├── auth/confirm/           # Troca segura do token de confirmação PKCE
+├── reenviar-confirmacao/   # Reenvio protegido contra enumeração e abuso
 ├── legal/                  # Documentos legais versionados e interligados
 ├── layout.tsx              # Metadados e shell global
 ├── prismivo-home.tsx       # Experiência pública
@@ -119,7 +124,7 @@ lib/
 ├── supabase/               # Clientes SSR, dados, mutações, onboarding e arquivos
 └── ...                     # Respostas de API, validação e regras de domínio
 drizzle/                    # Migração SQL da camada de compatibilidade
-supabase/migrations/        # Schema PostgreSQL, índices, RLS e Storage
+supabase/                   # Migrações PostgreSQL e templates transacionais
 docs/
 ├── PRODUCT.md              # Estratégia e escopo
 ├── ARCHITECTURE.md         # Arquitetura e decisões técnicas
@@ -127,6 +132,7 @@ docs/
 ├── PERMISSIONS.md          # Papéis e matriz RBAC
 ├── API.md                  # Contratos principais da API
 ├── SECURITY.md             # Modelo de ameaças e controles
+├── AUTH_EMAILS.md          # SMTP, templates e validação de entrega
 ├── AUTH_HOSTING_MIGRATION.md # Migração segura para identidade e hospedagem independentes
 └── DEPLOYMENT_CHECKLIST.md # Preparação para produção
 ```
@@ -182,6 +188,7 @@ Cada pessoa cria a própria conta e confirma o e-mail. No primeiro acesso, o onb
 - [Papéis e permissões](docs/PERMISSIONS.md)
 - [API](docs/API.md)
 - [Segurança](docs/SECURITY.md)
+- [E-mails de autenticação](docs/AUTH_EMAILS.md)
 - [Migração de autenticação e hospedagem](docs/AUTH_HOSTING_MIGRATION.md)
 - [Checklist de publicação](docs/DEPLOYMENT_CHECKLIST.md)
 - [Auditoria final pré-produção](docs/FINAL_AUDIT.md)
@@ -189,9 +196,9 @@ Cada pessoa cria a própria conta e confirma o e-mail. No primeiro acesso, o onb
 
 ## Próximos marcos
 
-1. Aplicar os registros DNS fornecidos pela Vercel e validar o domínio próprio com HTTPS;
-2. Concluir callbacks oficiais, remetente transacional, backup e restauração antes da abertura comercial;
-3. Executar a beta controlada, acompanhar saúde e logs e ativar provedores de pagamento somente após revisão financeira.
+1. Validar a jornada transacional completa com caixas de e-mail reais e acompanhar os primeiros registros de entrega;
+2. Concluir backup e restauração antes da abertura comercial;
+3. Executar a beta controlada, acompanhar saúde e logs e ativar pagamentos reais somente após revisão financeira.
 
 ## Autoria e licença
 

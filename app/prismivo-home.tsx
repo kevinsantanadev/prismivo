@@ -25,8 +25,10 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { AmbientPointer } from "./components/ambient-pointer";
 import { KineticPrism } from "./components/kinetic-prism";
 import { PreferencesMenu } from "./components/preferences-menu";
+import { ScrollReveal } from "./components/scroll-reveal";
 import { useSitePreferences, type SiteLocale } from "./components/site-preferences";
 
 type Locale = SiteLocale;
@@ -50,6 +52,7 @@ const copy = {
     primary: "Criar conta gratuita",
     secondary: "Ver produto em ação",
     demoLabel: "CENÁRIO DEMONSTRATIVO",
+    flow: ["Briefing recebido", "Responsável definido", "Aprovação registrada"],
     metrics: [
       ["+42%", "aprovações mais rápidas"],
       ["9,2h", "poupadas por semana"],
@@ -57,6 +60,8 @@ const copy = {
     ],
     preview: {
       project: "Projeto Aurora",
+      live: "Operação sincronizada",
+      liveDetail: "Atualizada agora",
       onboarding: "Onboarding",
       approvals: "3 aprovações",
       sla: "SLA",
@@ -198,9 +203,10 @@ const copy = {
     primary: "Create free account",
     secondary: "See the product in action",
     demoLabel: "DEMONSTRATION SCENARIO",
+    flow: ["Brief received", "Owner assigned", "Approval recorded"],
     metrics: [["+42%", "faster approvals"], ["9.2h", "saved every week"], ["100%", "traceable"]],
     preview: {
-      project: "Aurora Project", onboarding: "Onboarding", approvals: "3 approvals", sla: "SLA", target: "Target: 4h", activity: "Activity", tasks: "Recent tasks", approved: "Approved", pending: "Pending",
+      project: "Aurora Project", live: "Operation synchronized", liveDetail: "Updated now", onboarding: "Onboarding", approvals: "3 approvals", sla: "SLA", target: "Target: 4h", activity: "Activity", tasks: "Recent tasks", approved: "Approved", pending: "Pending",
       items: ["Project brief", "Scope and budget", "Contract"], taskItems: ["Review visual identity", "Send commercial proposal", "Collect client documents"],
       nav: ["Overview", "Projects", "Approvals", "Support", "Billing", "Reports"],
     },
@@ -257,9 +263,10 @@ const copy = {
     primary: "Crear cuenta gratuita",
     secondary: "Ver el producto en acción",
     demoLabel: "ESCENARIO DEMOSTRATIVO",
+    flow: ["Brief recibido", "Responsable asignado", "Aprobación registrada"],
     metrics: [["+42%", "aprobaciones más rápidas"], ["9,2 h", "ahorradas por semana"], ["100%", "rastreable"]],
     preview: {
-      project: "Proyecto Aurora", onboarding: "Incorporación", approvals: "3 aprobaciones", sla: "SLA", target: "Meta: 4 h", activity: "Actividad", tasks: "Tareas recientes", approved: "Aprobado", pending: "Pendiente",
+      project: "Proyecto Aurora", live: "Operación sincronizada", liveDetail: "Actualizada ahora", onboarding: "Incorporación", approvals: "3 aprobaciones", sla: "SLA", target: "Meta: 4 h", activity: "Actividad", tasks: "Tareas recientes", approved: "Aprobado", pending: "Pendiente",
       items: ["Brief del proyecto", "Alcance y presupuesto", "Contratación"], taskItems: ["Revisar identidad visual", "Enviar propuesta comercial", "Recopilar documentos del cliente"],
       nav: ["Resumen", "Proyectos", "Aprobaciones", "Soporte", "Cobros", "Informes"],
     },
@@ -321,6 +328,8 @@ export default function PrismivoHome() {
 
   return (
     <div className="site-shell">
+      <AmbientPointer />
+      <ScrollReveal />
       <a className="skip-link" href="#conteudo">{content.skip}</a>
 
       <header className="site-header" aria-label="Prismivo">
@@ -360,11 +369,16 @@ export default function PrismivoHome() {
               <a className="button button-secondary" href="#produto"><PlayCircle size={19} aria-hidden="true" />{content.secondary}</a>
             </div>
             <span className="demo-label"><span aria-hidden="true" />{content.demoLabel}</span>
+            <div className="hero-flow" role="list" aria-label={content.flow.join(", ")}>
+              {content.flow.map((step, index) => (
+                <span role="listitem" key={step}><i aria-hidden="true">{index + 1}</i>{step}</span>
+              ))}
+            </div>
           </div>
 
           <ProductPreview content={content.preview} />
 
-          <div className="metric-strip" aria-label="Métricas demonstrativas">
+          <div className="metric-strip" aria-label="Métricas demonstrativas" data-reveal>
             {content.metrics.map(([value, label], index) => {
               const Icon = metricIcons[index];
               return <div className="metric" key={label}><span className="metric-icon"><Icon aria-hidden="true" /></span><strong>{value}</strong><span>{label}</span></div>;
@@ -372,7 +386,7 @@ export default function PrismivoHome() {
           </div>
         </section>
 
-        <section className="section prism-showcase" id="identidade" aria-labelledby="prism-story-title">
+        <section className="section prism-showcase" id="identidade" aria-labelledby="prism-story-title" data-reveal>
           <div className="prism-story">
             <span className="eyebrow">{content.prism.kicker}</span>
             <h2 id="prism-story-title">{content.prism.title}</h2>
@@ -384,7 +398,7 @@ export default function PrismivoHome() {
           <KineticPrism />
         </section>
 
-        <section className="section product-section" id="produto" aria-labelledby="product-title">
+        <section className="section product-section" id="produto" aria-labelledby="product-title" data-reveal>
           <div className="section-heading">
             <span className="eyebrow">{content.product.kicker}</span>
             <h2 id="product-title">{content.product.title}</h2>
@@ -398,7 +412,7 @@ export default function PrismivoHome() {
           </div>
         </section>
 
-        <section className="section solutions-section" id="solucoes" aria-labelledby="solutions-title">
+        <section className="section solutions-section" id="solucoes" aria-labelledby="solutions-title" data-reveal>
           <div className="section-heading compact">
             <span className="eyebrow">{content.solutions.kicker}</span>
             <h2 id="solutions-title">{content.solutions.title}</h2>
@@ -408,7 +422,7 @@ export default function PrismivoHome() {
           </div>
         </section>
 
-        <section className="section cases-section" id="casos" aria-labelledby="cases-title">
+        <section className="section cases-section" id="casos" aria-labelledby="cases-title" data-reveal>
           <div className="section-heading">
             <span className="eyebrow">{content.cases.kicker}</span>
             <h2 id="cases-title">{content.cases.title}</h2>
@@ -419,7 +433,7 @@ export default function PrismivoHome() {
           </div>
         </section>
 
-        <section className="section pricing-section" id="precos" aria-labelledby="pricing-title">
+        <section className="section pricing-section" id="precos" aria-labelledby="pricing-title" data-reveal>
           <div className="section-heading centered">
             <span className="eyebrow">{content.pricing.kicker}</span>
             <h2 id="pricing-title">{content.pricing.title}</h2>
@@ -434,7 +448,7 @@ export default function PrismivoHome() {
           <p className="section-disclaimer">{content.pricing.disclaimer}</p>
         </section>
 
-        <section className="section resources-section" id="recursos" aria-labelledby="resources-title">
+        <section className="section resources-section" id="recursos" aria-labelledby="resources-title" data-reveal>
           <div className="section-heading split-heading">
             <div><span className="eyebrow">{content.resources.kicker}</span><h2 id="resources-title">{content.resources.title}</h2></div>
             <Link className="text-link" href="/conteudo">{content.resources.action}<ArrowRight size={18} aria-hidden="true" /></Link>
@@ -444,14 +458,14 @@ export default function PrismivoHome() {
           </div>
         </section>
 
-        <section className="section faq-section" id="faq" aria-labelledby="faq-title">
+        <section className="section faq-section" id="faq" aria-labelledby="faq-title" data-reveal>
           <div className="section-heading compact"><span className="eyebrow">{content.faq.kicker}</span><h2 id="faq-title">{content.faq.title}</h2></div>
           <div className="faq-list">
             {content.faq.items.map(([question, answer]) => <details key={question}><summary>{question}<ChevronDown aria-hidden="true" /></summary><p>{answer}</p></details>)}
           </div>
         </section>
 
-        <section className="final-cta" id="acesso" aria-labelledby="cta-title">
+        <section className="final-cta" id="acesso" aria-labelledby="cta-title" data-reveal>
           <div className="cta-prism" aria-hidden="true"><span /></div>
           <span className="eyebrow">{content.cta.eyebrow}</span>
           <h2 id="cta-title">{content.cta.title}</h2>
@@ -494,7 +508,7 @@ function ProductPreview({ content }: { content: (typeof copy)[Locale]["preview"]
           <Settings2 aria-hidden="true" />
         </aside>
         <div className="dashboard-main">
-          <div className="dashboard-top"><h2>{content.project}</h2><div><Search aria-hidden="true" /><Bell aria-hidden="true" /><span>AM</span></div></div>
+          <div className="dashboard-top"><div><h2>{content.project}</h2><span className="dashboard-live"><i aria-hidden="true" /><strong>{content.live}</strong><small>{content.liveDetail}</small></span></div><div><Search aria-hidden="true" /><Bell aria-hidden="true" /><span>AM</span></div></div>
           <div className="dashboard-cards">
             <article><span>{content.onboarding}</span><div className="progress-ring"><strong>78%</strong></div><div className="linear-progress"><span /></div></article>
             <article className="approvals-card"><span>{content.approvals}</span>{content.items.map((item, index) => <div key={item}><small>{item}</small><em className={index === 2 ? "approved" : "pending"}>{index === 2 ? content.approved : content.pending}</em></div>)}</article>

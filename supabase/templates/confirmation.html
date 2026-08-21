@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Confirme sua conta Prismivo</title>
+  </head>
+  <body style="margin:0;background:#101214;color:#f7f5ef;font-family:Arial,Helvetica,sans-serif">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#101214;padding:32px 16px">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;border:1px solid #34383f;border-radius:20px;background:#1b1e22;overflow:hidden">
+            <tr><td style="height:4px;background:linear-gradient(90deg,#b8ff3d,#65e5e0,#7c5cff)"></td></tr>
+            <tr>
+              <td style="padding:38px 34px 18px">
+                <p style="margin:0 0 30px;color:#b8ff3d;font-size:13px;font-weight:700;letter-spacing:3px">PRISMIVO</p>
+                <h1 style="margin:0 0 16px;color:#f7f5ef;font-size:30px;line-height:1.15">Confirme seu e-mail</h1>
+                <p style="margin:0;color:#b7bbc2;font-size:16px;line-height:1.65">Use o botão abaixo para concluir seu cadastro e acessar seu espaço de trabalho. O link é individual e possui validade limitada.</p>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:14px 34px 22px">
+                <a href="{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&amp;type=email&amp;next=/app/onboarding" style="display:inline-block;border-radius:999px;background:#b8ff3d;color:#142000;padding:15px 24px;font-size:15px;font-weight:700;text-decoration:none">Confirmar minha conta</a>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:0 34px 38px">
+                <p style="margin:0;color:#858b95;font-size:13px;line-height:1.6">Se você não iniciou este cadastro, ignore esta mensagem. Nenhuma conta será ativada sem a confirmação.</p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

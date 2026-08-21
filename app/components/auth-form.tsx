@@ -7,6 +7,7 @@ import Link from "next/link";
 import {
   loginAction,
   recoveryAction,
+  resendConfirmationAction,
   signupAction,
   updatePasswordAction,
 } from "@/app/auth/actions";
@@ -18,6 +19,7 @@ const actions = {
   login: loginAction,
   signup: signupAction,
   recover: recoveryAction,
+  resend: resendConfirmationAction,
   reset: updatePasswordAction,
 };
 
@@ -65,6 +67,10 @@ export function AuthForm({ mode, locale, returnTo }: { mode: AuthMode; locale: S
         <div className={`auth-message ${state.status}`} role={state.status === "error" ? "alert" : "status"}>
           {state.message}
         </div>
+      )}
+
+      {mode === "signup" && state.status === "success" && (
+        <Link className="auth-help-link" href="/reenviar-confirmacao">{copy.resendConfirmation}</Link>
       )}
 
       <SubmitButton label={copy[mode]} pendingLabel={copy.pending} />

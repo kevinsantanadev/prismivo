@@ -24,7 +24,7 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Temas claro, escuro, preto e branco e preferência automática do sistema;
 - Conteúdo público em português do Brasil, inglês e espanhol;
 - Prisma tridimensional animado com implementação leve, responsiva e compatível com redução de movimento;
-- Revelação progressiva das seções e indicador operacional animado, sem biblioteca pesada e com redução de movimento;
+- Revelação progressiva das seções, indicador operacional e atmosfera prismática responsiva ao ponteiro, sem biblioteca pesada e com redução de movimento;
 - Navegação móvel e por teclado;
 - Seções de produto, soluções, seis casos demonstrativos, preços, conteúdo e FAQ;
 - Alternância funcional entre planos mensais e anuais;
@@ -122,7 +122,7 @@ lib/
 ├── supabase/               # Clientes SSR, dados, mutações, onboarding e arquivos
 └── ...                     # Respostas de API, validação e regras de domínio
 drizzle/                    # Migração SQL da camada de compatibilidade
-supabase/migrations/        # Schema PostgreSQL, índices, RLS e Storage
+supabase/                   # Migrações PostgreSQL e templates transacionais
 docs/
 ├── PRODUCT.md              # Estratégia e escopo
 ├── ARCHITECTURE.md         # Arquitetura e decisões técnicas

@@ -46,6 +46,17 @@ test("a navegação móvel não cria rolagem horizontal", async ({ page }) => {
   expect(sizes.scroll).toBeLessThanOrEqual(sizes.client + 1);
 });
 
+test("a atmosfera prismática responde ao ponteiro e respeita redução de movimento", async ({ page }) => {
+  await page.goto("/");
+  await page.mouse.move(260, 180);
+  await expect(page.locator("html")).toHaveAttribute("data-pointer-atmosphere", "active");
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.reload();
+  await page.mouse.move(480, 260);
+  await expect(page.locator("html")).not.toHaveAttribute("data-pointer-atmosphere", "active");
+});
+
 for (const width of [390, 320]) {
   test(`as preferências permanecem inteiras em ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 844 });

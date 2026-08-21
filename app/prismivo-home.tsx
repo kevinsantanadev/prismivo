@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
+import { AmbientPointer } from "./components/ambient-pointer";
 import { KineticPrism } from "./components/kinetic-prism";
 import { PreferencesMenu } from "./components/preferences-menu";
 import { ScrollReveal } from "./components/scroll-reveal";
@@ -51,6 +52,7 @@ const copy = {
     primary: "Criar conta gratuita",
     secondary: "Ver produto em ação",
     demoLabel: "CENÁRIO DEMONSTRATIVO",
+    flow: ["Briefing recebido", "Responsável definido", "Aprovação registrada"],
     metrics: [
       ["+42%", "aprovações mais rápidas"],
       ["9,2h", "poupadas por semana"],
@@ -201,6 +203,7 @@ const copy = {
     primary: "Create free account",
     secondary: "See the product in action",
     demoLabel: "DEMONSTRATION SCENARIO",
+    flow: ["Brief received", "Owner assigned", "Approval recorded"],
     metrics: [["+42%", "faster approvals"], ["9.2h", "saved every week"], ["100%", "traceable"]],
     preview: {
       project: "Aurora Project", live: "Operation synchronized", liveDetail: "Updated now", onboarding: "Onboarding", approvals: "3 approvals", sla: "SLA", target: "Target: 4h", activity: "Activity", tasks: "Recent tasks", approved: "Approved", pending: "Pending",
@@ -260,6 +263,7 @@ const copy = {
     primary: "Crear cuenta gratuita",
     secondary: "Ver el producto en acción",
     demoLabel: "ESCENARIO DEMOSTRATIVO",
+    flow: ["Brief recibido", "Responsable asignado", "Aprobación registrada"],
     metrics: [["+42%", "aprobaciones más rápidas"], ["9,2 h", "ahorradas por semana"], ["100%", "rastreable"]],
     preview: {
       project: "Proyecto Aurora", live: "Operación sincronizada", liveDetail: "Actualizada ahora", onboarding: "Incorporación", approvals: "3 aprobaciones", sla: "SLA", target: "Meta: 4 h", activity: "Actividad", tasks: "Tareas recientes", approved: "Aprobado", pending: "Pendiente",
@@ -324,6 +328,7 @@ export default function PrismivoHome() {
 
   return (
     <div className="site-shell">
+      <AmbientPointer />
       <ScrollReveal />
       <a className="skip-link" href="#conteudo">{content.skip}</a>
 
@@ -364,6 +369,11 @@ export default function PrismivoHome() {
               <a className="button button-secondary" href="#produto"><PlayCircle size={19} aria-hidden="true" />{content.secondary}</a>
             </div>
             <span className="demo-label"><span aria-hidden="true" />{content.demoLabel}</span>
+            <div className="hero-flow" aria-label={content.flow.join(", ")}>
+              {content.flow.map((step, index) => (
+                <span key={step}><i aria-hidden="true">{index + 1}</i>{step}</span>
+              ))}
+            </div>
           </div>
 
           <ProductPreview content={content.preview} />

@@ -8,8 +8,8 @@ O provedor de e-mail padrão do Supabase existe apenas para demonstrações. Ele
 
 ## Configuração de produção
 
-1. Verifique `prismivo.kevinsantanadev.com.br` no provedor de e-mail escolhido.
-2. Publique os registros DNS SPF e DKIM fornecidos pelo provedor. DMARC é recomendado.
+1. O domínio `kevinsantanadev.com.br` deve estar verificado no Resend; o remetente transacional recomendado é `no-reply@kevinsantanadev.com.br`.
+2. Mantenha os registros DNS SPF e DKIM fornecidos pelo Resend. DMARC é recomendado.
 3. No projeto Supabase exclusivo do Prismivo, abra **Authentication > Emails > SMTP Settings**.
 4. Ative o SMTP personalizado e informe host, porta, usuário, senha, remetente e nome do remetente.
 5. Em **Authentication > URL Configuration**, use:
@@ -17,6 +17,14 @@ O provedor de e-mail padrão do Supabase existe apenas para demonstrações. Ele
    - Redirect URL: `https://prismivo.kevinsantanadev.com.br/auth/callback`
 6. Em **Authentication > Providers > Email**, mantenha a confirmação de e-mail habilitada.
 7. Ajuste os limites em **Authentication > Rate Limits** somente depois de validar a capacidade do provedor.
+
+Configuração SMTP do Resend:
+
+- host: `smtp.resend.com`;
+- porta: `587` com STARTTLS;
+- usuário: `resend`;
+- senha: uma chave exclusiva, com permissão somente de envio e limitada ao domínio;
+- nome do remetente: `Prismivo`.
 
 Nunca salve a senha SMTP ou uma API key em `.env.example`, no README, em issues ou em commits.
 
@@ -31,6 +39,8 @@ O endpoint `app/auth/confirm/route.ts` aceita o hash de uso único recomendado p
 ```
 
 O destino é validado no servidor para impedir redirecionamentos externos.
+
+Os arquivos versionados em `supabase/templates/confirmation.html` e `supabase/templates/recovery.html` contêm os modelos acessíveis e responsivos que devem ser copiados para os respectivos templates do Supabase. Eles não possuem chaves, tokens ou dados de usuários.
 
 ## Validação antes do lançamento
 

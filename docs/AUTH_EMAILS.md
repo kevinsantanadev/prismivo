@@ -8,6 +8,8 @@ O provedor de e-mail padrão do Supabase existe apenas para demonstrações. Ele
 
 ## Configuração de produção
 
+**Estado atual:** o domínio transacional está verificado no Resend e o SMTP personalizado foi salvo no projeto Supabase exclusivo do Prismivo. As credenciais permanecem somente nos cofres dos provedores e não fazem parte do repositório.
+
 1. O domínio `kevinsantanadev.com.br` deve estar verificado no Resend; o remetente transacional recomendado é `no-reply@kevinsantanadev.com.br`.
 2. Mantenha os registros DNS SPF e DKIM fornecidos pelo Resend. DMARC é recomendado.
 3. No projeto Supabase exclusivo do Prismivo, abra **Authentication > Emails > SMTP Settings**.

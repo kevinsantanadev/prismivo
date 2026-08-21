@@ -29,6 +29,7 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Seções de produto, soluções, seis casos demonstrativos, preços, conteúdo e FAQ;
 - Alternância funcional entre planos mensais e anuais;
 - Preferências de tema e idioma persistidas no dispositivo;
+- Painel de preferências implementado como diálogo nativo acessível, centralizado em celulares de 320/390 px, com fechamento por `Escape`, foco restaurado e margens seguras;
 - Metadados básicos de SEO e compartilhamento;
 - Respeito a `prefers-reduced-motion`;
 - Botões “Começar grátis” conectados a uma rota real de cadastro;
@@ -38,6 +39,7 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Carteiras de clientes e projetos localizadas, com pesquisa regional, datas, números, progresso, estados vazios e detalhes nos três idiomas;
 - Decisões, documentos privados e entregáveis localizados, incluindo uploads, confirmações, versões e comentários sem alterar conteúdo empresarial;
 - Cadastro, confirmação de e-mail, reenvio de confirmação, login, logout e recuperação de senha com Supabase Auth;
+- SMTP transacional próprio configurado no Supabase Auth com entrega pelo Resend, sem credenciais no código ou no histórico do GitHub;
 - Onboarding de empresa com validação cliente/servidor e aceite registrado;
 - Aceites de Termos e Privacidade separados e vinculados às respectivas versões;
 - PostgreSQL gerenciado no Supabase com migração versionada;
@@ -80,7 +82,7 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Download autenticado, exclusão lógica e vínculo de arquivos a projetos;
 - Atendimento com protocolo, prioridade, mensagens, encerramento e reabertura;
 - Quarenta e sete testes unitários de validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização e segurança;
-- Sete jornadas E2E em Chromium para cadastro, preferências, proteção de rotas, responsividade em 320/390 px e disponibilidade;
+- Oito jornadas E2E em Chromium para cadastro, preferências, foco por teclado, proteção de rotas, responsividade em 320/390 px e disponibilidade;
 - Pipeline de CI com testes unitários, tipagem, lint, build e Playwright antes de cada integração à branch principal.
 - Preview e produção independentes na Vercel com build nativo do Next.js, variáveis isoladas por ambiente e status `READY` validado;
 - Produção acessível em `https://prismivo.vercel.app`, com health check confirmando aplicação e banco em estado `ready`;
@@ -96,7 +98,7 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 | Autenticação | Supabase Auth com e-mail/senha, confirmação, recuperação, cookies SSR e proteção de rotas |
 | Arquivos | Supabase Storage privado, políticas por organização e download autenticado |
 | Pagamentos | Adaptador para Stripe em modo teste/demonstração |
-| E-mails | Supabase Auth com endpoint PKCE; SMTP transacional próprio obrigatório em produção |
+| E-mails | Supabase Auth com endpoint PKCE e Resend conectado por SMTP transacional próprio |
 | Testes | Vitest, Testing Library e Playwright |
 | Operação | CI com GitHub Actions, logs estruturados, health check e monitoramento |
 
@@ -194,7 +196,7 @@ Cada pessoa cria a própria conta e confirma o e-mail. No primeiro acesso, o onb
 
 ## Próximos marcos
 
-1. Conectar e validar um SMTP transacional próprio para cadastros públicos;
+1. Validar a jornada transacional completa com caixas de e-mail reais e acompanhar os primeiros registros de entrega;
 2. Concluir backup e restauração antes da abertura comercial;
 3. Executar a beta controlada, acompanhar saúde e logs e ativar pagamentos reais somente após revisão financeira.
 

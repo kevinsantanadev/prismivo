@@ -333,25 +333,41 @@ button {
   position: relative;
 }
 
-.preferences-menu > summary {
-  list-style: none;
-}
-
-.preferences-menu > summary::-webkit-details-marker {
-  display: none;
-}
-
-.preferences-menu[open] > summary {
+.preferences-menu > .utility-button[aria-expanded="true"] {
   border-color: var(--line-strong);
   background: var(--surface);
   color: var(--text);
 }
 
+.preferences-dialog {
+  position: fixed;
+  z-index: 200;
+  top: var(--preferences-top, 76px);
+  left: var(--preferences-left, auto);
+  width: min(360px, calc(100dvw - 24px));
+  max-width: none;
+  max-height: calc(100dvh - var(--preferences-top, 76px) - 12px);
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+}
+
+.preferences-dialog::backdrop {
+  background: color-mix(in srgb, var(--bg) 44%, transparent);
+  backdrop-filter: blur(3px);
+}
+
 .preferences-panel {
-  position: absolute;
-  z-index: 70;
-  top: calc(100% + 12px);
-  width: min(360px, calc(100vw - 24px));
+  position: relative;
+  width: 100%;
+  max-height: inherit;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
   border: 1px solid var(--line-strong);
   border-radius: 18px;
   background: var(--surface-raised);
@@ -360,8 +376,57 @@ button {
   box-shadow: var(--shadow);
 }
 
-.preferences-menu.align-right .preferences-panel { right: 0; }
-.preferences-menu.align-left .preferences-panel { left: 0; }
+.preferences-panel::before {
+  position: absolute;
+  top: 0;
+  right: 18px;
+  left: 18px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--lime), var(--violet), transparent);
+  content: "";
+  opacity: 0.78;
+}
+
+.preferences-panel-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.preferences-panel-header h2 {
+  max-width: 250px;
+  margin: 0;
+  color: var(--text);
+  font-size: 0.91rem;
+  line-height: 1.35;
+}
+
+.preferences-panel-header button {
+  display: inline-grid;
+  width: 36px;
+  height: 36px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface);
+  color: var(--text-soft);
+  cursor: pointer;
+  transition: border-color 160ms ease, color 160ms ease, transform 160ms ease;
+}
+
+.preferences-panel-header button:hover {
+  border-color: var(--lime);
+  color: var(--text);
+  transform: rotate(5deg);
+}
+
+.preferences-panel-header svg {
+  width: 17px;
+  height: 17px;
+}
 
 .preferences-panel fieldset {
   min-width: 0;
@@ -402,12 +467,14 @@ button {
   cursor: pointer;
   font-size: 0.76rem;
   text-align: left;
+  transition: border-color 160ms ease, color 160ms ease, background 160ms ease, transform 160ms ease;
 }
 
 .theme-options button:hover,
 .theme-options button.active {
   border-color: var(--lime);
   color: var(--text);
+  transform: translateY(-1px);
 }
 
 .theme-options button.active {
@@ -1961,15 +2028,21 @@ button {
   .preferences-menu .utility-button { display: inline-flex; }
   .locale-button { min-width: 64px; min-height: 38px; padding: 0 10px; }
   .mobile-menu-button { min-width: 38px; min-height: 38px; }
-  .preferences-panel {
+  .preferences-dialog {
     position: fixed;
-    top: 78px;
-    right: 12px !important;
-    left: 12px !important;
-    width: auto;
-    max-height: calc(100dvh - 96px);
-    overflow-y: auto;
-    overscroll-behavior: contain;
+    top: max(76px, calc(env(safe-area-inset-top) + 68px));
+    right: auto;
+    left: 50%;
+    width: min(420px, calc(100dvw - 24px));
+    max-height: calc(100dvh - max(76px, calc(env(safe-area-inset-top) + 68px)) - 12px);
+    transform: translateX(-50%);
+  }
+  .preferences-panel {
+    width: 100%;
+    padding: 16px;
+  }
+  .preferences-panel-header {
+    margin-bottom: 16px;
   }
 
   .hero { padding-top: 118px; padding-bottom: 70px; }

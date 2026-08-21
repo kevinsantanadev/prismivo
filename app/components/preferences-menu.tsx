@@ -2,6 +2,8 @@
 
 import { Contrast, Globe2, Monitor, Moon, Palette, Sun, X } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { createPortal } from "react-dom";
+import type { CSSProperties } from "react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 import {
   supportedLocales,
@@ -51,15 +53,16 @@ export function PreferencesMenu({ align = "right" }: { align?: "left" | "right" 
   const router = useRouter();
   const { locale, setLocale, theme, setTheme } = useSitePreferences();
   const copy = labels[locale];
-  const dialogRef = useRef<HTMLDialogElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const titleId = useId();
+  const panelId = useId();
   const [isOpen, setIsOpen] = useState(false);
+  const [panelPosition, setPanelPosition] = useState({ left: 12, top: 76 });
 
-  const positionDialog = useCallback(() => {
-    const dialog = dialogRef.current;
+  const positionPanel = useCallback(() => {
     const trigger = triggerRef.current;
-    if (!dialog || !trigger || window.matchMedia("(max-width: 700px)").matches) return;
+    if (!trigger || window.matchMedia("(max-width: 700px)").matches) return;
 
     const triggerBounds = trigger.getBoundingClientRect();
     const panelWidth = Math.min(360, window.innerWidth - 24);
@@ -71,68 +74,101 @@ export function PreferencesMenu({ align = "right" }: { align?: "left" | "right" 
       Math.max(12, window.innerWidth - panelWidth - 12),
     );
 
-    dialog.style.setProperty("--preferences-left", `${left}px`);
-    dialog.style.setProperty("--preferences-top", `${triggerBounds.bottom + 12}px`);
+    setPanelPosition({ left, top: triggerBounds.bottom + 12 });
   }, [align]);
 
-  const openDialog = () => {
-    const dialog = dialogRef.current;
-    if (!dialog || dialog.open) return;
-    positionDialog();
-    dialog.showModal();
+  const openPanel = () => {
+    if (isOpen) return;
+    positionPanel();
     setIsOpen(true);
   };
 
-  const closeDialog = useCallback(() => {
-    const dialog = dialogRef.current;
-    if (dialog?.open) dialog.close();
-  }, []);
+  const closePanel = useCallback(() => setIsOpen(false), []);
 
   useEffect(() => {
     if (!isOpen) return;
-    const handleViewportChange = () => positionDialog();
+    const trigger = triggerRef.current;
+    const focusableSelector = [
+      "button:not([disabled])",
+      "select:not([disabled])",
+      "a[href]",
+      "input:not([disabled])",
+      "textarea:not([disabled])",
+      "[tabindex]:not([tabindex='-1'])",
+    ].join(",");
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        closePanel();
+        return;
+      }
+
+      if (event.key !== "Tab" || !panelRef.current) return;
+      const focusableElements = Array.from(
+        panelRef.current.querySelectorAll<HTMLElement>(focusableSelector),
+      ).filter((element) => !element.hasAttribute("hidden"));
+      const firstElement = focusableElements.at(0);
+      const lastElement = focusableElements.at(-1);
+      if (!firstElement || !lastElement) return;
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
+      }
+    };
+
+    const handleViewportChange = () => positionPanel();
+    const focusFrame = window.requestAnimationFrame(() => {
+      panelRef.current?.querySelector<HTMLElement>("[data-preferences-close]")?.focus();
+    });
+
+    document.body.classList.add("preferences-open");
+    document.addEventListener("keydown", handleKeyDown);
     window.addEventListener("resize", handleViewportChange);
     window.addEventListener("orientationchange", handleViewportChange);
     return () => {
+      window.cancelAnimationFrame(focusFrame);
+      document.body.classList.remove("preferences-open");
+      document.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", handleViewportChange);
       window.removeEventListener("orientationchange", handleViewportChange);
+      trigger?.focus();
     };
-  }, [isOpen, positionDialog]);
+  }, [closePanel, isOpen, positionPanel]);
 
-  return (
-    <div className={`preferences-menu align-${align}`}>
-      <button
-        ref={triggerRef}
-        className="utility-button"
-        type="button"
-        aria-label={copy.title}
-        aria-haspopup="dialog"
-        aria-expanded={isOpen}
-        title={copy.title}
-        onClick={openDialog}
-      >
-        <Palette size={18} aria-hidden="true" />
-      </button>
-      <dialog
-        ref={dialogRef}
-        className="preferences-dialog"
+  const panel = isOpen ? createPortal(
+    <div
+      className="preferences-overlay"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) closePanel();
+      }}
+    >
+      <div
+        ref={panelRef}
+        id={panelId}
+        className="preferences-dialog-shell"
+        role="dialog"
+        aria-modal="true"
         aria-labelledby={titleId}
-        onCancel={(event) => {
-          event.preventDefault();
-          closeDialog();
-        }}
-        onClose={() => {
-          setIsOpen(false);
-          triggerRef.current?.focus();
-        }}
-        onClick={(event) => {
-          if (event.target === event.currentTarget) closeDialog();
-        }}
+        style={{
+          "--preferences-left": `${panelPosition.left}px`,
+          "--preferences-top": `${panelPosition.top}px`,
+        } as CSSProperties}
       >
         <div className="preferences-panel">
           <div className="preferences-panel-header">
             <h2 id={titleId}>{copy.title}</h2>
-            <button type="button" onClick={closeDialog} aria-label={copy.close} title={copy.close}>
+            <button
+              data-preferences-close
+              type="button"
+              onClick={closePanel}
+              aria-label={copy.close}
+              title={copy.close}
+            >
               <X aria-hidden="true" />
             </button>
           </div>
@@ -170,7 +206,27 @@ export function PreferencesMenu({ align = "right" }: { align?: "left" | "right" 
             </select>
           </label>
         </div>
-      </dialog>
+      </div>
+    </div>,
+    document.body,
+  ) : null;
+
+  return (
+    <div className={`preferences-menu align-${align}`}>
+      <button
+        ref={triggerRef}
+        className="utility-button"
+        type="button"
+        aria-label={copy.title}
+        aria-haspopup="dialog"
+        aria-expanded={isOpen}
+        aria-controls={isOpen ? panelId : undefined}
+        title={copy.title}
+        onClick={openPanel}
+      >
+        <Palette size={18} aria-hidden="true" />
+      </button>
+      {panel}
     </div>
   );
 }

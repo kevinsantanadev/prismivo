@@ -19,6 +19,8 @@ test("tema e idioma persistem como preferências acessíveis", async ({ page }) 
   await page.getByRole("combobox", { name: "Idioma" }).selectOption("es");
   await expect(page.locator("html")).toHaveAttribute("lang", "es");
   await expect(page.getByRole("heading", { level: 1, name: /Convierte cada cliente/ })).toBeVisible();
+  await page.getByRole("button", { name: "Cerrar preferencias" }).click();
+  await expect(page.getByRole("dialog", { name: "Preferencias de apariencia e idioma" })).not.toBeVisible();
   await page.getByRole("link", { name: "Crear cuenta gratuita" }).first().click();
   await expect(page).toHaveURL(/\/cadastro$/);
   await expect(page.locator("html")).toHaveAttribute("lang", "es");
@@ -49,8 +51,13 @@ test("a navegação móvel não cria rolagem horizontal", async ({ page }) => {
 
 test("a atmosfera prismática responde ao ponteiro e respeita redução de movimento", async ({ page }) => {
   await page.goto("/");
+  const supportsPrecisePointer = await page.evaluate(() => window.matchMedia("(pointer: fine)").matches);
   await page.mouse.move(260, 180);
-  await expect(page.locator("html")).toHaveAttribute("data-pointer-atmosphere", "active");
+  if (supportsPrecisePointer) {
+    await expect(page.locator("html")).toHaveAttribute("data-pointer-atmosphere", "active");
+  } else {
+    await expect(page.locator("html")).not.toHaveAttribute("data-pointer-atmosphere", "active");
+  }
 
   await page.emulateMedia({ reducedMotion: "reduce" });
   await page.reload();

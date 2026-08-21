@@ -369,9 +369,9 @@ export default function PrismivoHome() {
               <a className="button button-secondary" href="#produto"><PlayCircle size={19} aria-hidden="true" />{content.secondary}</a>
             </div>
             <span className="demo-label"><span aria-hidden="true" />{content.demoLabel}</span>
-            <div className="hero-flow" aria-label={content.flow.join(", ")}>
+            <div className="hero-flow" role="list" aria-label={content.flow.join(", ")}>
               {content.flow.map((step, index) => (
-                <span key={step}><i aria-hidden="true">{index + 1}</i>{step}</span>
+                <span role="listitem" key={step}><i aria-hidden="true">{index + 1}</i>{step}</span>
               ))}
             </div>
           </div>

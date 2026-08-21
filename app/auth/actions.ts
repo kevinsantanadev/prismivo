@@ -71,9 +71,7 @@ export async function signupAction(
     },
   });
 
-  if (error) {
-    return authError(copy.signupFailed);
-  }
+  if (error) return authError(isEmailDeliveryError(error) ? copy.signupEmailUnavailable : copy.signupFailed);
 
   return {
     status: "success",
@@ -101,6 +99,29 @@ export async function recoveryAction(
     status: "success",
     message: copy.recoverySuccess,
   };
+}
+
+export async function resendConfirmationAction(
+  _previous: AuthActionState,
+  formData: FormData,
+): Promise<AuthActionState> {
+  const copy = authActionCopy[authLocale(formData)];
+  const parsed = emailSchema.safeParse(formData.get("email"));
+  if (!parsed.success) return authError(copy.invalidEmail);
+
+  const rateLimit = await consumeRateLimit("auth.signup", await rateLimitSubject(parsed.data));
+  if (!rateLimit.allowed) return authError(rateLimit.status === "limited" ? copy.rateLimit : copy.rateLimitUnavailable);
+
+  const origin = await requestOrigin();
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.auth.resend({
+    type: "signup",
+    email: parsed.data.toLowerCase(),
+    options: { emailRedirectTo: `${origin}/auth/callback?next=/app/onboarding` },
+  });
+
+  if (error && isEmailDeliveryError(error)) return authError(copy.signupEmailUnavailable);
+  return { status: "success", message: copy.resendSuccess };
 }
 
 export async function updatePasswordAction(
@@ -151,4 +172,12 @@ async function rateLimitSubject(email: string) {
     || requestHeaders.get("x-real-ip")?.trim()
     || "unknown";
   return `${email.toLowerCase()}|${address}`;
+}
+
+function isEmailDeliveryError(error: { code?: string; message?: string }) {
+  const signature = `${error.code ?? ""} ${error.message ?? ""}`.toLowerCase();
+  return signature.includes("email_address_not_authorized")
+    || signature.includes("email_rate_limit")
+    || signature.includes("over_email_send_rate_limit")
+    || signature.includes("smtp");
 }

@@ -46,6 +46,27 @@ test("a navegação móvel não cria rolagem horizontal", async ({ page }) => {
   expect(sizes.scroll).toBeLessThanOrEqual(sizes.client + 1);
 });
 
+for (const width of [390, 320]) {
+  test(`as preferências permanecem inteiras em ${width}px`, async ({ page }) => {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto("/");
+    await page.locator('summary[aria-label="Preferências de aparência e idioma"]').click();
+
+    const panel = page.locator(".preferences-panel");
+    await expect(panel).toBeVisible();
+    const bounds = await panel.boundingBox();
+    expect(bounds).not.toBeNull();
+    expect(bounds!.x).toBeGreaterThanOrEqual(0);
+    expect(bounds!.x + bounds!.width).toBeLessThanOrEqual(width + 1);
+
+    const sizes = await page.evaluate(() => ({
+      scroll: document.documentElement.scrollWidth,
+      client: document.documentElement.clientWidth,
+    }));
+    expect(sizes.scroll).toBeLessThanOrEqual(sizes.client + 1);
+  });
+}
+
 test("a página de status comunica a disponibilidade sem detalhes internos", async ({ page }) => {
   await page.goto("/status");
   await expect(page.getByRole("heading", { level: 1 })).toContainText(/sistemas|serviços/);

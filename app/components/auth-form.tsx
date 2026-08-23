@@ -13,6 +13,7 @@ import {
 } from "@/app/auth/actions";
 import { initialAuthState } from "@/app/auth/state";
 import { authFormCopy, type AuthMode } from "@/lib/auth-i18n";
+import { PASSWORD_MAX_LENGTH, PASSWORD_MIN_LENGTH } from "@/lib/auth-password";
 import type { SiteLocale } from "@/lib/site-locale";
 
 const actions = {
@@ -49,8 +50,17 @@ export function AuthForm({ mode, locale, returnTo }: { mode: AuthMode; locale: S
       {asksPassword && (
         <div className="form-field">
           <label htmlFor="auth-password">{mode === "reset" ? copy.newPassword : copy.password}</label>
-          <input id="auth-password" name="password" type="password" autoComplete={mode === "login" ? "current-password" : "new-password"} minLength={mode === "login" ? 1 : 10} maxLength={128} required />
-          {mode !== "login" && <small>{copy.passwordHint}</small>}
+          <input
+            id="auth-password"
+            name="password"
+            type="password"
+            autoComplete={mode === "login" ? "current-password" : "new-password"}
+            minLength={mode === "login" ? 1 : PASSWORD_MIN_LENGTH}
+            maxLength={PASSWORD_MAX_LENGTH}
+            aria-describedby={mode === "login" ? undefined : "auth-password-requirements"}
+            required
+          />
+          {mode !== "login" && <small id="auth-password-requirements" className="password-requirements">{copy.passwordHint}</small>}
         </div>
       )}
       {mode === "login" && (
@@ -59,7 +69,7 @@ export function AuthForm({ mode, locale, returnTo }: { mode: AuthMode; locale: S
       {(isSignup || mode === "reset") && (
         <div className="form-field">
           <label htmlFor="auth-confirm-password">{copy.confirmPassword}</label>
-          <input id="auth-confirm-password" name="confirmPassword" type="password" autoComplete="new-password" minLength={10} maxLength={128} required />
+          <input id="auth-confirm-password" name="confirmPassword" type="password" autoComplete="new-password" minLength={PASSWORD_MIN_LENGTH} maxLength={PASSWORD_MAX_LENGTH} required />
         </div>
       )}
 

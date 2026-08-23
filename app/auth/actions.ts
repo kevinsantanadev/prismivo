@@ -4,14 +4,14 @@ import { redirect } from "next/navigation";
 import { headers } from "next/headers";
 import { z } from "zod";
 import { safeReturnPath } from "@/app/session-auth";
-import { authActionCopy } from "@/lib/auth-i18n";
+import { authActionCopy, passwordPolicyCopy } from "@/lib/auth-i18n";
+import { classifySignupError, createPasswordSchema } from "@/lib/auth-password";
 import { consumeRateLimit } from "@/lib/rate-limit";
 import { normalizeSiteLocale } from "@/lib/site-locale";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 import type { AuthActionState } from "@/app/auth/state";
 
 const emailSchema = z.string().trim().email().max(254);
-const passwordSchema = z.string().min(10).max(128);
 
 export async function loginAction(
   _previous: AuthActionState,
@@ -42,7 +42,9 @@ export async function signupAction(
   _previous: AuthActionState,
   formData: FormData,
 ): Promise<AuthActionState> {
-  const copy = authActionCopy[authLocale(formData)];
+  const locale = authLocale(formData);
+  const copy = authActionCopy[locale];
+  const passwordSchema = createPasswordSchema(passwordPolicyCopy[locale]);
   const values = Object.fromEntries(formData);
   const parsed = z.object({
     name: z.string().trim().min(2).max(100),
@@ -71,7 +73,12 @@ export async function signupAction(
     },
   });
 
-  if (error) return authError(isEmailDeliveryError(error) ? copy.signupEmailUnavailable : copy.signupFailed);
+  if (error) {
+    const failure = classifySignupError(error);
+    if (failure === "weak-password") return authError(copy.passwordRequirements);
+    if (failure === "rate-limit") return authError(copy.rateLimit);
+    return authError(failure === "email-unavailable" ? copy.signupEmailUnavailable : copy.signupFailed);
+  }
 
   return {
     status: "success",
@@ -120,7 +127,11 @@ export async function resendConfirmationAction(
     options: { emailRedirectTo: `${origin}/auth/callback?next=/app/onboarding` },
   });
 
-  if (error && isEmailDeliveryError(error)) return authError(copy.signupEmailUnavailable);
+  if (error) {
+    const failure = classifySignupError(error);
+    if (failure === "email-unavailable") return authError(copy.signupEmailUnavailable);
+    if (failure === "rate-limit") return authError(copy.rateLimit);
+  }
   return { status: "success", message: copy.resendSuccess };
 }
 
@@ -128,7 +139,9 @@ export async function updatePasswordAction(
   _previous: AuthActionState,
   formData: FormData,
 ): Promise<AuthActionState> {
-  const copy = authActionCopy[authLocale(formData)];
+  const locale = authLocale(formData);
+  const copy = authActionCopy[locale];
+  const passwordSchema = createPasswordSchema(passwordPolicyCopy[locale]);
   const parsed = z.object({
     password: passwordSchema,
     confirmPassword: z.string(),
@@ -172,12 +185,4 @@ async function rateLimitSubject(email: string) {
     || requestHeaders.get("x-real-ip")?.trim()
     || "unknown";
   return `${email.toLowerCase()}|${address}`;
-}
-
-function isEmailDeliveryError(error: { code?: string; message?: string }) {
-  const signature = `${error.code ?? ""} ${error.message ?? ""}`.toLowerCase();
-  return signature.includes("email_address_not_authorized")
-    || signature.includes("email_rate_limit")
-    || signature.includes("over_email_send_rate_limit")
-    || signature.includes("smtp");
 }

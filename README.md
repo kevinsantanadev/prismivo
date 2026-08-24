@@ -83,11 +83,12 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Upload privado com validação de tamanho, extensão, MIME e assinatura;
 - Download autenticado, exclusão lógica e vínculo de arquivos a projetos;
 - Atendimento com protocolo, prioridade, mensagens, encerramento e reabertura;
-- Sessenta e cinco testes unitários e de componentes para validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização, preferências transacionais e segurança;
-- Cinquenta e duas execuções E2E em Chromium e WebKit móvel para cadastro, preferências, contraste WCAG nos temas claro/escuro/preto e branco, foco por teclado, proteção de rotas, responsividade em 320/360/390/412/430 px e disponibilidade;
+- Setenta e dois testes unitários e de componentes para validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização, preferências transacionais, navegação móvel e segurança;
+- Cento e oito execuções E2E em Chrome desktop, Android/Chromium e iOS/WebKit para cadastro, preferências, contraste WCAG nos temas claro/escuro/preto e branco, foco por teclado, proteção de rotas, orientação retrato/paisagem e responsividade em telas compactas e atuais;
+- Matriz móvel com Galaxy S9+, Galaxy S24, Pixel 8, iPhone SE e iPhone 16, incluindo formulários, menus, áreas de toque, escala ampliada, superfícies privadas representativas e contenção de tabelas;
 - Pipeline de CI com auditoria das dependências de produção, testes unitários, tipagem, lint, build e Playwright antes de cada integração à branch principal.
 - Preview e produção independentes na Vercel com build nativo do Next.js, variáveis isoladas por ambiente e status `READY` validado;
-- Produção acessível em `https://prismivo.vercel.app`, com health check confirmando aplicação e banco em estado `ready`;
+- Produção acessível em `https://prismivo.kevinsantanadev.com.br`, com health check confirmando aplicação e banco em estado `ready`;
 - Execução E2E configurável contra ambiente local ou URL externa por `PLAYWRIGHT_BASE_URL`.
 
 ## Arquitetura planejada
@@ -166,7 +167,7 @@ npm run build     # Build de produção validado
 npm run build:vercel # Build nativo para hospedagem independente
 npm test          # Testes unitários, build e verificação do artefato
 npm run test:unit # Testes rápidos de regras e validação
-npm run test:e2e  # Jornadas públicas em Chromium
+npm run test:e2e  # Jornadas desktop, Android e iOS em Chromium/WebKit
 npm run db:generate # Gera migrações a partir do schema Drizzle
 npm run verify:production-env # Confere variáveis obrigatórias sem imprimir segredos
 npm run smoke:production -- https://dominio.example # Valida o ambiente publicado

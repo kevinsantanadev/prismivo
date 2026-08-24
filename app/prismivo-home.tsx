@@ -191,6 +191,7 @@ const copy = {
       notice: "Projeto autoral disponibilizado para avaliação profissional e estudo. Reutilização não autorizada.",
     },
     menuLabel: "Abrir menu",
+    closeMenuLabel: "Fechar menu",
   },
   en: {
     skip: "Skip to main content",
@@ -251,6 +252,7 @@ const copy = {
     cta: { eyebrow: "READY FOR A CLEARER OPERATION?", title: "Run your next client journey without losing control of the path.", primary: "Create demo workspace", secondary: "Explore the architecture" },
     footer: { text: "Client operations for service businesses that value clarity, trust and execution.", product: "Product", company: "Company", legal: "Legal", help: "Help", rights: "© 2026 Prismivo. All rights reserved.", notice: "Original project available for professional evaluation and study. Reuse is not authorized." },
     menuLabel: "Open menu",
+    closeMenuLabel: "Close menu",
   },
   es: {
     skip: "Saltar al contenido principal",
@@ -311,6 +313,7 @@ const copy = {
     cta: { eyebrow: "¿LISTO PARA UNA OPERACIÓN MÁS CLARA?", title: "Gestiona tu próximo cliente sin perder el control del camino.", primary: "Crear espacio demostrativo", secondary: "Conocer la arquitectura" },
     footer: { text: "Operaciones con clientes para empresas de servicios que valoran claridad, confianza y ejecución.", product: "Producto", company: "Empresa", legal: "Legal", help: "Ayuda", rights: "© 2026 Prismivo. Todos los derechos reservados.", notice: "Proyecto original disponible para evaluación profesional y estudio. La reutilización no está autorizada." },
     menuLabel: "Abrir menú",
+    closeMenuLabel: "Cerrar menú",
   },
 } as const;
 
@@ -346,7 +349,7 @@ export default function PrismivoHome() {
           <PreferencesMenu />
           <a className="sign-in" href="/entrar">{content.signIn}</a>
           <a className="button button-small" href="/cadastro">{content.start}</a>
-          <button className="mobile-menu-button" type="button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-controls="mobile-menu" aria-label={content.menuLabel}>
+          <button className="mobile-menu-button" type="button" onClick={() => setMenuOpen(!menuOpen)} aria-expanded={menuOpen} aria-controls="mobile-menu" aria-label={menuOpen ? content.closeMenuLabel : content.menuLabel}>
             {menuOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
           </button>
         </div>

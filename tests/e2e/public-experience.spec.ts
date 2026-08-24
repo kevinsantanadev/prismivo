@@ -40,6 +40,29 @@ test("rotas privadas redirecionam e a saúde pública não expõe segredos", asy
   expect(body).not.toHaveProperty("environment");
 });
 
+test("todas as áreas privadas exigem uma sessão válida", async ({ page }) => {
+  const privateRoutes = [
+    "/app",
+    "/app/tarefas",
+    "/app/projetos",
+    "/app/clientes",
+    "/app/aprovacoes",
+    "/app/arquivos",
+    "/app/atendimento",
+    "/app/conteudo",
+    "/app/assinatura",
+    "/app/notificacoes",
+    "/app/equipe",
+    "/app/administracao",
+    "/app/configuracoes",
+  ];
+
+  for (const route of privateRoutes) {
+    await page.goto(route);
+    await expect(page).toHaveURL(/\/entrar/);
+  }
+});
+
 test("a navegação móvel não cria rolagem horizontal", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");

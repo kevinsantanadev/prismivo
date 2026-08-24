@@ -1,22 +1,28 @@
-import type { EmailOtpType } from "@supabase/supabase-js";
-import { NextResponse, type NextRequest } from "next/server";
-import { safeReturnPath } from "@/app/session-auth";
+import { NextResponse } from "next/server";
+import {
+  confirmationDestination,
+  parseEmailOtpType,
+} from "@/lib/auth-confirmation";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-const allowedOtpTypes: EmailOtpType[] = ["email", "signup", "invite", "magiclink", "recovery", "email_change"];
-
-/** Exchanges a single-use Supabase Auth token hash for a secure session. */
-export async function GET(request: NextRequest) {
-  const tokenHash = request.nextUrl.searchParams.get("token_hash");
-  const rawType = request.nextUrl.searchParams.get("type");
-  const type = allowedOtpTypes.find((candidate) => candidate === rawType);
-  const next = safeReturnPath(request.nextUrl.searchParams.get("next"), "/app/onboarding");
+export async function GET(request: Request) {
+  const url = new URL(request.url);
+  const tokenHash = url.searchParams.get("token_hash");
+  const type = parseEmailOtpType(url.searchParams.get("type"));
 
   if (tokenHash && type) {
     const supabase = await createSupabaseServerClient();
     const { error } = await supabase.auth.verifyOtp({ token_hash: tokenHash, type });
-    if (!error) return NextResponse.redirect(new URL(next, request.nextUrl.origin));
+
+    if (!error) {
+      const destination = confirmationDestination(
+        url.searchParams.get("next"),
+        url.origin,
+        type,
+      );
+      return NextResponse.redirect(new URL(destination, url.origin));
+    }
   }
 
-  return NextResponse.redirect(new URL("/entrar?erro=confirmacao", request.nextUrl.origin));
+  return NextResponse.redirect(new URL("/entrar?erro=confirmacao", url.origin));
 }

@@ -1,12 +1,13 @@
-# Auditoria Final Pré-Produção
+# Auditoria de Qualidade — Marco 22
 
-Revisão executada no Marco 20 para consolidar segurança, qualidade, acessibilidade, desempenho e operação antes da promoção do ambiente definitivo.
+Revisão executada no Marco 22 para consolidar personalização da navegação, tema integral da barra lateral, preferências transacionais, consistência visual, responsividade, segurança multiempresa e operação antes de cada promoção.
 
 ## Evidências automatizadas
 
 | Verificação | Resultado |
 | --- | --- |
-| Testes unitários | 45 cenários aprovados |
+| Testes unitários e de componentes | 65 cenários aprovados |
+| Jornadas E2E | 52 execuções em Chromium e WebKit móvel |
 | TypeScript | Sem erros |
 | ESLint | Sem erros |
 | Build Next.js | Compilação e geração de rotas aprovadas |
@@ -14,8 +15,10 @@ Revisão executada no Marco 20 para consolidar segurança, qualidade, acessibili
 | PostgreSQL | 24/24 tabelas públicas com RLS |
 | Políticas | 73 políticas públicas ativas |
 | Chaves estrangeiras | Nenhuma sem índice de cobertura |
+| Isolamento multiempresa | Dois contextos autenticados, sem leitura ou escrita cruzada |
+| Logs recentes | 100 eventos de API e 100 de Auth sem respostas HTTP de erro; PostgreSQL sem evento severo |
 
-As jornadas Playwright também são executadas pelo GitHub Actions em Chromium após os bloqueios estáticos. Elas verificam cadastro real, persistência de tema e idioma, proteção das rotas privadas, health check, status público e ausência de rolagem horizontal em viewport móvel.
+As jornadas Playwright também são executadas pelo GitHub Actions em Chromium e WebKit móvel após os bloqueios estáticos. Elas verificam cadastro, persistência e hidratação de preferências, tema adaptável da barra lateral, proteção das rotas privadas, health check, status público, contraste automatizável nos temas claro, escuro e preto e branco, e ausência de rolagem horizontal em 320, 360, 390, 412 e 430 px.
 
 ## Autorização e isolamento
 
@@ -39,17 +42,24 @@ As jornadas Playwright também são executadas pelo GitHub Actions em Chromium a
 - HTML semântico, links de salto, hierarquia de títulos e foco visível.
 - Formulários com labels, erros associados e estados de carregamento.
 - Controles de tema claro, escuro, preto e branco e preferência do sistema.
+- Barra lateral adaptável ao tema, com escolhas explícitas clara, escura e baseada na marca.
+- Densidade, largura do conteúdo, cantos, escala de texto e movimento configuráveis.
+- Alterações de tema e idioma permanecem em rascunho até a confirmação em “Salvar”.
+- A preferência salva é aplicada a toda a área privada, incluindo a barra lateral.
+- Preferências da conta vencem valores antigos do dispositivo sem corrida durante a hidratação.
+- Quatro destinos principais podem ser escolhidos e ordenados para a barra lateral e a navegação móvel; o menu completo permanece acessível por teclado.
 - Perfis de cor para protanopia, deuteranopia, tritanopia e acromatopsia.
 - Redução de movimento respeitada e informações não dependem apenas de cor.
-- Experiência responsiva verificada em 390 px e desktop pelas jornadas E2E.
+- Controles de formulário preservam 16 px e áreas de toque mínimas em celulares para evitar zoom involuntário.
 
 ## Riscos residuais aceitos
 
 - O advisor do banco sinaliza RPCs autenticadas `security definer` por precaução. Cada função foi revisada e contém autorização interna necessária à transação multi-tabela.
 - Índices ainda sem uso não foram removidos, pois o banco não possui tráfego real suficiente para orientar essa decisão.
+- A proteção contra senhas já vazadas ainda precisa ser habilitada na configuração do Supabase Auth.
 - Cobrança permanece demonstrativa; nenhuma funcionalidade paga será liberada por retorno de navegador.
-- E-mail transacional, backup restaurado e monitoramento precisam ser confirmados no ambiente definitivo antes da abertura comercial.
+- Backup restaurado e monitoramento com alertas ainda precisam ser confirmados antes da abertura comercial.
 
 ## Critério de promoção
 
-Produção somente pode ser promovida quando variáveis server-only, callbacks do Supabase, remetente, domínio, HTTPS, recuperação de senha, backup e rollback estiverem validados no provedor definitivo.
+Cada promoção exige testes, tipagem, lint, build, jornadas E2E, advisors do banco e smoke test públicos aprovados. A abertura comercial continua condicionada ao teste de restauração de backup, monitoramento e revisão jurídica.

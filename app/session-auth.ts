@@ -64,5 +64,6 @@ function safeRelativeReturnPath(value: string): string {
 
 function isReservedAuthPath(pathname: string): boolean {
   return pathname === "/auth/callback" ||
+    pathname === "/auth/confirm" ||
     pathname === "/auth/signout";
 }

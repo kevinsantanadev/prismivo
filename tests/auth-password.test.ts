@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { classifySignupError, createPasswordSchema } from "../lib/auth-password";
+import {
+  classifySignupError,
+  createPasswordSchema,
+  evaluatePasswordRequirements,
+} from "../lib/auth-password";
 
 const messages = {
   tooShort: "too short",
@@ -15,6 +19,13 @@ describe("password policy", () => {
 
   it("accepts eight characters with every required class", () => {
     expect(schema.safeParse("Prisma1!").success).toBe(true);
+    expect(evaluatePasswordRequirements("Prisma1!")).toEqual({
+      length: true,
+      lowercase: true,
+      uppercase: true,
+      number: true,
+      symbol: true,
+    });
   });
 
   it.each(["Pri1!", "prisma1!", "PRISMA1!", "Prismivo!", "Prismivo1"])(

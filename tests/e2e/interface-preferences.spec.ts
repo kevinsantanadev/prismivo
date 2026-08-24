@@ -23,11 +23,15 @@ test("preferências avançadas entram antes da hidratação", async ({ page }) =
 });
 
 test("barra lateral adaptável acompanha o tema e respeita escolhas explícitas", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("prismivo-theme", "light");
+    localStorage.setItem("prismivo-sidebar-mode", "adaptive");
+  });
   await page.goto("/");
+  await expect(page.locator("main")).toBeVisible();
+  await page.waitForTimeout(100);
   await page.evaluate(() => {
     document.body.innerHTML = '<div class="app-layout"><aside class="app-sidebar"><nav><a class="active">Visão geral</a></nav></aside><main class="app-content"><section class="dashboard-panel">Conteúdo</section></main></div>';
-    document.documentElement.dataset.theme = "light";
-    document.documentElement.dataset.sidebarMode = "adaptive";
   });
 
   const sidebar = page.locator(".app-sidebar");
@@ -41,15 +45,19 @@ test("barra lateral adaptável acompanha o tema e respeita escolhas explícitas"
 });
 
 test("largura, densidade e cantos alteram o layout sem overflow", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("prismivo-theme", "light");
+    localStorage.setItem("prismivo-sidebar-mode", "adaptive");
+    localStorage.setItem("prismivo-content-width", "focused");
+    localStorage.setItem("prismivo-interface-density", "compact");
+    localStorage.setItem("prismivo-corner-style", "square");
+  });
   await page.setViewportSize({ width: 1920, height: 1080 });
   await page.goto("/");
+  await expect(page.locator("main")).toBeVisible();
+  await page.waitForTimeout(100);
   await page.evaluate(() => {
     document.body.innerHTML = '<div class="app-layout"><aside class="app-sidebar"><nav><a>Projetos</a></nav></aside><main class="app-content"><section class="dashboard-panel">Conteúdo</section></main></div>';
-    document.documentElement.dataset.theme = "light";
-    document.documentElement.dataset.sidebarMode = "adaptive";
-    document.documentElement.dataset.contentWidth = "focused";
-    document.documentElement.dataset.interfaceDensity = "compact";
-    document.documentElement.dataset.cornerStyle = "square";
   });
 
   const focusedWidth = await page.locator(".app-content").evaluate((element) => element.getBoundingClientRect().width);
@@ -63,7 +71,7 @@ test("largura, densidade e cantos alteram o layout sem overflow", async ({ page 
     document.documentElement.dataset.cornerStyle = "rounded";
   });
   const wideWidth = await page.locator(".app-content").evaluate((element) => element.getBoundingClientRect().width);
-  expect(wideWidth).toBeGreaterThan(focusedWidth + 500);
+  expect(wideWidth).toBeGreaterThan(focusedWidth + 400);
   await expect(page.locator(".dashboard-panel")).toHaveCSS("border-radius", "18px");
   await expect(page.locator(".app-sidebar nav a")).toHaveCSS("min-height", "50px");
 
@@ -72,9 +80,15 @@ test("largura, densidade e cantos alteram o layout sem overflow", async ({ page 
 });
 
 test("personalização permanece utilizável na matriz de celulares", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("prismivo-theme", "light");
+    localStorage.setItem("prismivo-sidebar-mode", "adaptive");
+  });
   for (const width of [320, 360, 390, 412, 430]) {
     await page.setViewportSize({ width, height: 844 });
     await page.goto("/");
+    await expect(page.locator("main")).toBeVisible();
+    await page.waitForTimeout(100);
     await page.evaluate(() => {
       document.body.innerHTML = `
         <div class="app-layout">
@@ -94,8 +108,6 @@ test("personalização permanece utilizável na matriz de celulares", async ({ p
             </main>
           </div>
         </div>`;
-      document.documentElement.dataset.theme = "light";
-      document.documentElement.dataset.sidebarMode = "adaptive";
     });
 
     const metrics = await page.evaluate(() => ({

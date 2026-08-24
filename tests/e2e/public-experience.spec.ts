@@ -21,7 +21,7 @@ test("o login mantém uma única ação de senha e hierarquia limpa", async ({ p
   expect(statusBadge).not.toBeNull();
   expect(statusLabel!.x + statusLabel!.width).toBeLessThan(statusBadge!.x);
 
-  const password = page.getByLabel("Senha");
+  const password = page.locator("#auth-password");
   const toggle = page.getByRole("button", { name: "Mostrar senha" });
   await expect(password).toBeVisible();
   await expect(toggle).toHaveCount(1);

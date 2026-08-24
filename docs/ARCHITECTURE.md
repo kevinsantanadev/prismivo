@@ -132,7 +132,7 @@ Ambientes independentes:
 - `production`: banco e bucket próprios, HTTPS, backups, monitoramento e segredos gerenciados.
 
 O pipeline executa lint, verificação de tipos, testes, build e validação de migrações antes de promover uma versão.
-As jornadas E2E rodam em Chromium contra um build de produção somente depois da validação estática e cobrem entrada gratuita, preferências, proteção de rotas, responsividade e disponibilidade pública. `/api/health` fornece prontidão técnica sem dados sensíveis, enquanto `/status` comunica o estado de forma humana.
+As jornadas E2E rodam em Chromium e WebKit móvel contra um build de produção somente depois da validação estática e cobrem entrada gratuita, preferências transacionais, tema integral da barra lateral, proteção de rotas, responsividade e disponibilidade pública. `/api/health` fornece prontidão técnica sem dados sensíveis, enquanto `/status` comunica o estado de forma humana.
 
 ## 10. Decisões registradas
 

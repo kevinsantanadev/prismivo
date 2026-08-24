@@ -2,6 +2,7 @@ import { and, desc, eq, sql } from "drizzle-orm";
 import { getDb } from "@/db";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { findSupabaseWorkspaceByEmail } from "@/lib/supabase/workspace";
+import { normalizePrimaryNavigation } from "@/lib/interface-preferences";
 import {
   getSupabaseApprovalsData,
   getSupabaseClientDetail,
@@ -51,6 +52,13 @@ export async function findWorkspaceByEmail(email: string) {
       accentColor: users.accentColor,
       interfaceFilter: users.interfaceFilter,
       colorVisionMode: users.colorVisionMode,
+      sidebarMode: users.sidebarMode,
+      interfaceDensity: users.interfaceDensity,
+      contentWidth: users.contentWidth,
+      cornerStyle: users.cornerStyle,
+      textScale: users.textScale,
+      motionMode: users.motionMode,
+      primaryNavigation: users.primaryNavigation,
       organizationId: organizations.id,
       organizationName: organizations.name,
       organizationSlug: organizations.slug,
@@ -77,6 +85,7 @@ export async function findWorkspaceByEmail(email: string) {
     avatarPath: null,
     avatarUrl: null,
     theme: workspace.theme,
+    primaryNavigation: normalizePrimaryNavigation(workspace.primaryNavigation),
   } : null;
 }
 

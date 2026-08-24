@@ -51,10 +51,12 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Gestão de projetos com pesquisa, filtros e atualização persistente de progresso;
 - Aprovações vinculadas a projetos, com aceite ou solicitação de ajustes e trilha de atividade;
 - Central de notificações com leitura individual ou em lote;
-- Configurações de perfil, empresa e idioma com permissões verificadas no servidor;
+- Configurações de perfil, empresa, idioma e navegação com permissões verificadas no servidor;
 - Foto de perfil em bucket privado, com validação de tipo, tamanho e assinatura binária;
 - Perfil profissional com biografia, cargo, telefone, localização e site;
-- Personalização por cor de destaque e acabamento visual;
+- Personalização transacional por tema, cor de destaque, acabamento visual, barra lateral, densidade, largura do conteúdo, cantos, escala de texto e movimento;
+- Barra lateral adaptável que acompanha o tema claro ou escuro, com alternativas sempre clara, sempre escura ou baseada na marca;
+- Quatro atalhos reordenáveis por pessoa, compartilhados entre o acesso rápido lateral e a navegação inferior do celular;
 - Paletas acessíveis para protanopia, deuteranopia, tritanopia e acromatopsia, sem depender apenas de cor;
 - Gestão de equipe com papéis `owner`, `admin`, `editor`, `support` e `viewer`;
 - Convites protegidos por hash, uso único, vínculo ao e-mail e expiração em sete dias;
@@ -81,9 +83,9 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Upload privado com validação de tamanho, extensão, MIME e assinatura;
 - Download autenticado, exclusão lógica e vínculo de arquivos a projetos;
 - Atendimento com protocolo, prioridade, mensagens, encerramento e reabertura;
-- Sessenta e dois testes unitários e de componentes para validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização, preferências transacionais e segurança;
-- Quarenta execuções E2E em Chromium e WebKit móvel para cadastro, preferências, WCAG automatizável, foco por teclado, proteção de rotas, responsividade em 320/360/390/412/430 px e disponibilidade;
-- Pipeline de CI com testes unitários, tipagem, lint, build e Playwright antes de cada integração à branch principal.
+- Sessenta e cinco testes unitários e de componentes para validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização, preferências transacionais e segurança;
+- Quarenta e oito execuções E2E em Chromium e WebKit móvel para cadastro, preferências, WCAG automatizável, foco por teclado, proteção de rotas, responsividade em 320/360/390/412/430 px e disponibilidade;
+- Pipeline de CI com auditoria das dependências de produção, testes unitários, tipagem, lint, build e Playwright antes de cada integração à branch principal.
 - Preview e produção independentes na Vercel com build nativo do Next.js, variáveis isoladas por ambiente e status `READY` validado;
 - Produção acessível em `https://prismivo.vercel.app`, com health check confirmando aplicação e banco em estado `ready`;
 - Execução E2E configurável contra ambiente local ou URL externa por `PLAYWRIGHT_BASE_URL`.

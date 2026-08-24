@@ -23,6 +23,13 @@ export async function updateProfileRecord(
     accentColor: string;
     interfaceFilter: string;
     colorVisionMode: string;
+    sidebarMode: string;
+    interfaceDensity: string;
+    contentWidth: string;
+    cornerStyle: string;
+    textScale: string;
+    motionMode: string;
+    primaryNavigation: string[];
     organizationName: string;
     organizationBrandColor: string;
     organizationVisualStyle: string;
@@ -41,6 +48,13 @@ export async function updateProfileRecord(
     accent_color: input.accentColor,
     interface_filter: input.interfaceFilter,
     color_vision_mode: input.colorVisionMode,
+    sidebar_mode: input.sidebarMode,
+    interface_density: input.interfaceDensity,
+    content_width: input.contentWidth,
+    corner_style: input.cornerStyle,
+    text_scale: input.textScale,
+    motion_mode: input.motionMode,
+    primary_navigation: input.primaryNavigation,
     updated_at: new Date().toISOString(),
   }).eq("id", workspace.userId);
   if (profileError) return failure("PROFILE_UPDATE_FAILED", "Não foi possível salvar o perfil.");

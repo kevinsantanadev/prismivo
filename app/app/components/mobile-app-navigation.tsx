@@ -39,8 +39,6 @@ const icons = {
   settings: Settings2,
 } satisfies Record<AppSection, typeof LayoutDashboard>;
 
-const primarySections: readonly AppSection[] = ["dashboard", "tasks", "projects", "clients"];
-
 type MobileAppNavigationProps = {
   active: AppSection;
   copy: {
@@ -51,9 +49,10 @@ type MobileAppNavigationProps = {
     nav: Record<AppSection, string>;
   };
   items: Array<{ key: AppSection; href: string }>;
+  primarySections: AppSection[];
 };
 
-export function MobileAppNavigation({ active, copy, items }: MobileAppNavigationProps) {
+export function MobileAppNavigation({ active, copy, items, primarySections }: MobileAppNavigationProps) {
   const dialogId = useId();
   const closeRef = useRef<HTMLButtonElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);

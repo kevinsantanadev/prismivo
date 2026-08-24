@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "./server";
+import { normalizePrimaryNavigation, type QuickNavigationSection } from "@/lib/interface-preferences";
 
 export type SupabaseWorkspace = {
   userId: string;
@@ -21,6 +22,13 @@ export type SupabaseWorkspace = {
   accentColor: string;
   interfaceFilter: string;
   colorVisionMode: string;
+  sidebarMode: string;
+  interfaceDensity: string;
+  contentWidth: string;
+  cornerStyle: string;
+  textScale: string;
+  motionMode: string;
+  primaryNavigation: QuickNavigationSection[];
   organizationBrandColor: string;
   organizationVisualStyle: string;
 };
@@ -30,7 +38,7 @@ export async function findSupabaseWorkspaceByEmail(email: string): Promise<Supab
   const normalizedEmail = email.trim().toLowerCase();
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("id, email, name, locale, status, avatar_path, bio, job_title, phone, location, website, theme, accent_color, interface_filter, color_vision_mode")
+    .select("id, email, name, locale, status, avatar_path, bio, job_title, phone, location, website, theme, accent_color, interface_filter, color_vision_mode, sidebar_mode, interface_density, content_width, corner_style, text_scale, motion_mode, primary_navigation")
     .eq("email", normalizedEmail)
     .eq("status", "active")
     .maybeSingle();
@@ -80,6 +88,13 @@ export async function findSupabaseWorkspaceByEmail(email: string): Promise<Supab
     accentColor: profile.accent_color,
     interfaceFilter: profile.interface_filter,
     colorVisionMode: profile.color_vision_mode,
+    sidebarMode: profile.sidebar_mode,
+    interfaceDensity: profile.interface_density,
+    contentWidth: profile.content_width,
+    cornerStyle: profile.corner_style,
+    textScale: profile.text_scale,
+    motionMode: profile.motion_mode,
+    primaryNavigation: normalizePrimaryNavigation(profile.primary_navigation),
     organizationBrandColor: organization.brand_color,
     organizationVisualStyle: organization.visual_style,
   };

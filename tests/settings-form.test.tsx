@@ -23,6 +23,13 @@ const profile = {
   accentColor: "lime",
   interfaceFilter: "none",
   colorVisionMode: "standard",
+  sidebarMode: "adaptive",
+  interfaceDensity: "comfortable",
+  contentWidth: "standard",
+  cornerStyle: "rounded",
+  textScale: "default",
+  motionMode: "system",
+  primaryNavigation: ["dashboard", "tasks", "projects", "clients"] as const,
   organizationBrandColor: "lime",
   organizationVisualStyle: "prism",
 };
@@ -79,18 +86,22 @@ describe("settings preference transaction", () => {
 
     await waitFor(() => expect(document.documentElement.dataset.theme).toBe("dark"));
     await user.selectOptions(screen.getByLabelText("Tema da conta"), "light");
+    await user.selectOptions(screen.getByLabelText("Tema da barra lateral"), "dark");
 
     expect(document.documentElement.dataset.theme).toBe("dark");
+    expect(document.documentElement.dataset.sidebarMode).toBe("adaptive");
     expect(window.localStorage.getItem("prismivo-theme")).toBe("dark");
     expect(screen.getByText("Alterações pendentes — salve para aplicá-las.")).toBeVisible();
 
     await user.click(screen.getByRole("button", { name: "Salvar alterações" }));
 
     await waitFor(() => expect(document.documentElement.dataset.theme).toBe("light"));
+    expect(document.documentElement.dataset.sidebarMode).toBe("dark");
     expect(window.localStorage.getItem("prismivo-theme")).toBe("light");
+    expect(window.localStorage.getItem("prismivo-sidebar-mode")).toBe("dark");
     expect(refreshMock).toHaveBeenCalledOnce();
     const request = fetchMock.mock.calls[0]?.[1] as RequestInit;
-    expect(JSON.parse(String(request.body))).toMatchObject({ theme: "light", locale: "pt-BR" });
+    expect(JSON.parse(String(request.body))).toMatchObject({ theme: "light", sidebarMode: "dark", locale: "pt-BR" });
   });
 
   it("does not apply a rejected preference update", async () => {
@@ -131,5 +142,20 @@ describe("settings preference transaction", () => {
     renderSettings();
     fireEvent.change(screen.getByLabelText("Cargo ou especialidade"), { target: { value: "Founder" } });
     expect(screen.getByRole("button", { name: "Salvar alterações" })).toBeEnabled();
+  });
+
+  it("keeps four unique quick-access destinations while reordering selections", async () => {
+    renderSettings();
+    const user = userEvent.setup();
+    const first = screen.getByLabelText("Atalho 1") as HTMLSelectElement;
+    const second = screen.getByLabelText("Atalho 2") as HTMLSelectElement;
+
+    expect(first.value).toBe("dashboard");
+    expect(second.value).toBe("tasks");
+    await user.selectOptions(first, "tasks");
+
+    expect(first.value).toBe("tasks");
+    expect(second.value).toBe("dashboard");
+    expect(new Set(screen.getAllByLabelText(/Atalho \d/).map((field) => (field as HTMLSelectElement).value)).size).toBe(4);
   });
 });

@@ -25,6 +25,7 @@ import {
   type AppSection,
 } from "@/lib/app-shell-i18n";
 import { getRequestLocale } from "@/lib/site-locale-server";
+import { normalizePrimaryNavigation, type QuickNavigationSection } from "@/lib/interface-preferences";
 import { MobileAppNavigation } from "./mobile-app-navigation";
 import { WorkspacePreferencesSync } from "./workspace-preferences-sync";
 
@@ -38,6 +39,13 @@ type WorkspaceSummary = {
   accentColor: string;
   interfaceFilter: string;
   colorVisionMode: string;
+  sidebarMode: string;
+  interfaceDensity: string;
+  contentWidth: string;
+  cornerStyle: string;
+  textScale: string;
+  motionMode: string;
+  primaryNavigation: QuickNavigationSection[];
 };
 
 const navItems = [
@@ -84,6 +92,15 @@ export async function AppShell({
     .join("")
     .toUpperCase();
   const visibleNavItems = navItems.filter(([key]) => isNavigationVisible(key, workspace.role));
+  const requestedQuickSections = normalizePrimaryNavigation(workspace.primaryNavigation);
+  const quickNavItems = requestedQuickSections
+    .map((key) => visibleNavItems.find(([candidate]) => candidate === key))
+    .filter((item): item is (typeof visibleNavItems)[number] => Boolean(item));
+  for (const item of visibleNavItems) {
+    if (quickNavItems.length === 4) break;
+    if (!quickNavItems.some(([key]) => key === item[0])) quickNavItems.push(item);
+  }
+  const remainingNavItems = visibleNavItems.filter(([key]) => !quickNavItems.some(([quickKey]) => quickKey === key));
 
   return (
     <div className="app-layout">
@@ -93,6 +110,12 @@ export async function AppShell({
         accentColor={workspace.accentColor}
         interfaceFilter={workspace.interfaceFilter}
         colorVisionMode={workspace.colorVisionMode}
+        sidebarMode={workspace.sidebarMode}
+        interfaceDensity={workspace.interfaceDensity}
+        contentWidth={workspace.contentWidth}
+        cornerStyle={workspace.cornerStyle}
+        textScale={workspace.textScale}
+        motionMode={workspace.motionMode}
       />
       <a className="skip-link" href="#app-content">{copy.skip}</a>
       <aside className="app-sidebar">
@@ -105,16 +128,34 @@ export async function AppShell({
           <div><small>{copy.company}</small><strong>{workspace.organizationName}</strong></div>
         </div>
         <nav aria-label={copy.navigation}>
-          {visibleNavItems.map(([key, href, Icon]) => (
-            <Link
-              key={key}
-              href={href}
-              className={active === key ? "active" : ""}
-              aria-current={active === key ? "page" : undefined}
-            >
-              <Icon aria-hidden="true" />{copy.nav[key]}
-            </Link>
-          ))}
+          <div className="sidebar-nav-group">
+            <span className="sidebar-nav-label">{copy.quickAccess}</span>
+            {quickNavItems.map(([key, href, Icon]) => (
+              <Link
+                key={key}
+                href={href}
+                className={active === key ? "active" : ""}
+                aria-current={active === key ? "page" : undefined}
+              >
+                <Icon aria-hidden="true" />{copy.nav[key]}
+              </Link>
+            ))}
+          </div>
+          {remainingNavItems.length > 0 && (
+            <div className="sidebar-nav-group secondary">
+              <span className="sidebar-nav-label">{copy.allServices}</span>
+              {remainingNavItems.map(([key, href, Icon]) => (
+                <Link
+                  key={key}
+                  href={href}
+                  className={active === key ? "active" : ""}
+                  aria-current={active === key ? "page" : undefined}
+                >
+                  <Icon aria-hidden="true" />{copy.nav[key]}
+                </Link>
+              ))}
+            </div>
+          )}
         </nav>
         <div className="sidebar-bottom">
           <a href={signOutPath("/")}><LogOut aria-hidden="true" />{copy.logout}</a>
@@ -157,6 +198,7 @@ export async function AppShell({
         active={active}
         copy={copy}
         items={visibleNavItems.map(([key, href]) => ({ key, href }))}
+        primarySections={quickNavItems.map(([key]) => key)}
       />
     </div>
   );

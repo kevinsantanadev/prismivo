@@ -48,6 +48,13 @@ export async function PATCH(request: Request) {
           accentColor: parsed.data.accentColor,
           interfaceFilter: parsed.data.interfaceFilter,
           colorVisionMode: parsed.data.colorVisionMode,
+          sidebarMode: parsed.data.sidebarMode,
+          interfaceDensity: parsed.data.interfaceDensity,
+          contentWidth: parsed.data.contentWidth,
+          cornerStyle: parsed.data.cornerStyle,
+          textScale: parsed.data.textScale,
+          motionMode: parsed.data.motionMode,
+          primaryNavigation: parsed.data.primaryNavigation.join(","),
           updatedAt: sql`CURRENT_TIMESTAMP`,
         })
         .where(eq(users.id, workspace.userId)),

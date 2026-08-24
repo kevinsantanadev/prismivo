@@ -1,12 +1,13 @@
-# Auditoria de Qualidade — Marco 21
+# Auditoria de Qualidade — Marco 22
 
-Revisão executada no Marco 21 para consolidar preferências transacionais, consistência visual, responsividade, segurança multiempresa e operação antes de cada promoção.
+Revisão executada no Marco 22 para consolidar personalização da navegação, tema integral da barra lateral, preferências transacionais, consistência visual, responsividade, segurança multiempresa e operação antes de cada promoção.
 
 ## Evidências automatizadas
 
 | Verificação | Resultado |
 | --- | --- |
-| Testes unitários e de componentes | 62 cenários aprovados |
+| Testes unitários e de componentes | 65 cenários aprovados |
+| Jornadas E2E | 48 execuções em Chromium e WebKit móvel |
 | TypeScript | Sem erros |
 | ESLint | Sem erros |
 | Build Next.js | Compilação e geração de rotas aprovadas |
@@ -17,7 +18,7 @@ Revisão executada no Marco 21 para consolidar preferências transacionais, cons
 | Isolamento multiempresa | Dois contextos autenticados, sem leitura ou escrita cruzada |
 | Logs recentes | 100 eventos de API e 100 de Auth sem respostas HTTP de erro; PostgreSQL sem evento severo |
 
-As jornadas Playwright também são executadas pelo GitHub Actions em Chromium e WebKit móvel após os bloqueios estáticos. Elas verificam cadastro, persistência de preferências, proteção das rotas privadas, health check, status público, acessibilidade automatizável e ausência de rolagem horizontal em 320, 360, 390, 412 e 430 px.
+As jornadas Playwright também são executadas pelo GitHub Actions em Chromium e WebKit móvel após os bloqueios estáticos. Elas verificam cadastro, persistência e hidratação de preferências, tema adaptável da barra lateral, proteção das rotas privadas, health check, status público, acessibilidade automatizável e ausência de rolagem horizontal em 320, 360, 390, 412 e 430 px.
 
 ## Autorização e isolamento
 
@@ -41,9 +42,12 @@ As jornadas Playwright também são executadas pelo GitHub Actions em Chromium e
 - HTML semântico, links de salto, hierarquia de títulos e foco visível.
 - Formulários com labels, erros associados e estados de carregamento.
 - Controles de tema claro, escuro, preto e branco e preferência do sistema.
+- Barra lateral adaptável ao tema, com escolhas explícitas clara, escura e baseada na marca.
+- Densidade, largura do conteúdo, cantos, escala de texto e movimento configuráveis.
 - Alterações de tema e idioma permanecem em rascunho até a confirmação em “Salvar”.
 - A preferência salva é aplicada a toda a área privada, incluindo a barra lateral.
-- Navegação móvel fixa com quatro destinos principais e menu completo acessível por teclado.
+- Preferências da conta vencem valores antigos do dispositivo sem corrida durante a hidratação.
+- Quatro destinos principais podem ser escolhidos e ordenados para a barra lateral e a navegação móvel; o menu completo permanece acessível por teclado.
 - Perfis de cor para protanopia, deuteranopia, tritanopia e acromatopsia.
 - Redução de movimento respeitada e informações não dependem apenas de cor.
 - Controles de formulário preservam 16 px e áreas de toque mínimas em celulares para evitar zoom involuntário.

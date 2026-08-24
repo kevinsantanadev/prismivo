@@ -21,6 +21,8 @@ export const appShellCopy = {
     homeLabel: "Prismivo — página inicial",
     company: "Empresa",
     navigation: "Navegação do espaço",
+    quickAccess: "Acesso rápido",
+    allServices: "Todos os serviços",
     mobileNavigation: "Navegação móvel do espaço",
     more: "Mais",
     closeMenu: "Fechar menu",
@@ -40,6 +42,8 @@ export const appShellCopy = {
     homeLabel: "Prismivo — home page",
     company: "Company",
     navigation: "Workspace navigation",
+    quickAccess: "Quick access",
+    allServices: "All services",
     mobileNavigation: "Mobile workspace navigation",
     more: "More",
     closeMenu: "Close menu",
@@ -59,6 +63,8 @@ export const appShellCopy = {
     homeLabel: "Prismivo — página de inicio",
     company: "Empresa",
     navigation: "Navegación del espacio",
+    quickAccess: "Acceso rápido",
+    allServices: "Todos los servicios",
     mobileNavigation: "Navegación móvil del espacio",
     more: "Más",
     closeMenu: "Cerrar menú",
@@ -78,6 +84,8 @@ export const appShellCopy = {
   homeLabel: string;
   company: string;
   navigation: string;
+  quickAccess: string;
+  allServices: string;
   mobileNavigation: string;
   more: string;
   closeMenu: string;

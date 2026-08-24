@@ -84,7 +84,7 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Download autenticado, exclusão lógica e vínculo de arquivos a projetos;
 - Atendimento com protocolo, prioridade, mensagens, encerramento e reabertura;
 - Sessenta e cinco testes unitários e de componentes para validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização, preferências transacionais e segurança;
-- Quarenta e oito execuções E2E em Chromium e WebKit móvel para cadastro, preferências, WCAG automatizável, foco por teclado, proteção de rotas, responsividade em 320/360/390/412/430 px e disponibilidade;
+- Cinquenta e duas execuções E2E em Chromium e WebKit móvel para cadastro, preferências, contraste WCAG nos temas claro/escuro/preto e branco, foco por teclado, proteção de rotas, responsividade em 320/360/390/412/430 px e disponibilidade;
 - Pipeline de CI com auditoria das dependências de produção, testes unitários, tipagem, lint, build e Playwright antes de cada integração à branch principal.
 - Preview e produção independentes na Vercel com build nativo do Next.js, variáveis isoladas por ambiente e status `READY` validado;
 - Produção acessível em `https://prismivo.vercel.app`, com health check confirmando aplicação e banco em estado `ready`;

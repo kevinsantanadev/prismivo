@@ -7,7 +7,7 @@ Revisão executada no Marco 22 para consolidar personalização da navegação, 
 | Verificação | Resultado |
 | --- | --- |
 | Testes unitários e de componentes | 65 cenários aprovados |
-| Jornadas E2E | 48 execuções em Chromium e WebKit móvel |
+| Jornadas E2E | 52 execuções em Chromium e WebKit móvel |
 | TypeScript | Sem erros |
 | ESLint | Sem erros |
 | Build Next.js | Compilação e geração de rotas aprovadas |
@@ -18,7 +18,7 @@ Revisão executada no Marco 22 para consolidar personalização da navegação, 
 | Isolamento multiempresa | Dois contextos autenticados, sem leitura ou escrita cruzada |
 | Logs recentes | 100 eventos de API e 100 de Auth sem respostas HTTP de erro; PostgreSQL sem evento severo |
 
-As jornadas Playwright também são executadas pelo GitHub Actions em Chromium e WebKit móvel após os bloqueios estáticos. Elas verificam cadastro, persistência e hidratação de preferências, tema adaptável da barra lateral, proteção das rotas privadas, health check, status público, acessibilidade automatizável e ausência de rolagem horizontal em 320, 360, 390, 412 e 430 px.
+As jornadas Playwright também são executadas pelo GitHub Actions em Chromium e WebKit móvel após os bloqueios estáticos. Elas verificam cadastro, persistência e hidratação de preferências, tema adaptável da barra lateral, proteção das rotas privadas, health check, status público, contraste automatizável nos temas claro, escuro e preto e branco, e ausência de rolagem horizontal em 320, 360, 390, 412 e 430 px.
 
 ## Autorização e isolamento
 

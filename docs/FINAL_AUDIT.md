@@ -6,8 +6,8 @@ Revisão executada no Marco 22 para consolidar personalização da navegação, 
 
 | Verificação | Resultado |
 | --- | --- |
-| Testes unitários e de componentes | 65 cenários aprovados |
-| Jornadas E2E | 52 execuções em Chromium e WebKit móvel |
+| Testes unitários e de componentes | 72 cenários aprovados |
+| Jornadas E2E | 108 execuções em desktop, Android e iOS |
 | TypeScript | Sem erros |
 | ESLint | Sem erros |
 | Build Next.js | Compilação e geração de rotas aprovadas |
@@ -18,7 +18,9 @@ Revisão executada no Marco 22 para consolidar personalização da navegação, 
 | Isolamento multiempresa | Dois contextos autenticados, sem leitura ou escrita cruzada |
 | Logs recentes | 100 eventos de API e 100 de Auth sem respostas HTTP de erro; PostgreSQL sem evento severo |
 
-As jornadas Playwright também são executadas pelo GitHub Actions em Chromium e WebKit móvel após os bloqueios estáticos. Elas verificam cadastro, persistência e hidratação de preferências, tema adaptável da barra lateral, proteção das rotas privadas, health check, status público, contraste automatizável nos temas claro, escuro e preto e branco, e ausência de rolagem horizontal em 320, 360, 390, 412 e 430 px.
+As jornadas Playwright também são executadas pelo GitHub Actions depois dos bloqueios estáticos. A suíte integral roda em Chrome desktop, Galaxy S24/Chromium e iPhone 16/WebKit; uma suíte móvel especializada acrescenta Galaxy S9+, Pixel 8 em paisagem, iPhone SE e iPhone 16 em paisagem. Ela verifica cadastro, persistência e hidratação de preferências, tema adaptável da barra lateral, proteção das rotas privadas, health check, status público, contraste automatizável, orientação, menus, formulários, áreas de toque, ausência de controles cortados e ausência de rolagem horizontal em 320, 360, 390, 412 e 430 px.
+
+As superfícies autenticadas são exercitadas com uma composição representativa que reutiliza o CSS real do produto, sem criar rota pública, credencial fixa ou desvio de autenticação. A composição inclui barra superior com nomes extensos, navegação inferior, métricas, tabelas contidas, tarefas, clientes, configurações e atendimento.
 
 ## Autorização e isolamento
 
@@ -51,6 +53,8 @@ As jornadas Playwright também são executadas pelo GitHub Actions em Chromium e
 - Perfis de cor para protanopia, deuteranopia, tritanopia e acromatopsia.
 - Redução de movimento respeitada e informações não dependem apenas de cor.
 - Controles de formulário preservam 16 px e áreas de toque mínimas em celulares para evitar zoom involuntário.
+- Celulares em paisagem ativam a composição móvel quando possuem ponteiro por toque e altura reduzida.
+- Títulos extensos da empresa ou do projeto são contidos sem empurrar as ações da barra superior para fora da tela.
 
 ## Riscos residuais aceitos
 

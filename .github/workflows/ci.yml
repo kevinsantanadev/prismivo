@@ -63,5 +63,5 @@ jobs:
       - name: Instalar navegador de teste
         run: npx playwright install --with-deps chromium webkit
 
-      - name: Executar jornadas públicas
+      - name: Executar matriz desktop, Android e iOS
         run: npm run test:e2e

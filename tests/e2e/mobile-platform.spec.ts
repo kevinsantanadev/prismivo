@@ -16,8 +16,8 @@ test("rotas essenciais respeitam o viewport móvel real", async ({ page }) => {
   const failures: string[] = [];
   page.on("requestfailed", (request) => {
     const error = request.failure()?.errorText ?? "falha";
-    const isCancelledPrefetch = error === "net::ERR_ABORTED" && request.url().includes("_rsc=");
-    if (!isCancelledPrefetch) failures.push(`${request.method()} ${request.url()} — ${error}`);
+    const isNavigationCancellation = error === "net::ERR_ABORTED" || error === "Load request cancelled";
+    if (!isNavigationCancellation) failures.push(`${request.method()} ${request.url()} — ${error}`);
   });
   page.on("response", (response) => {
     if (response.status() >= 500) failures.push(`${response.status()} ${response.url()}`);

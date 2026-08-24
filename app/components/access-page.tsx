@@ -1,4 +1,4 @@
-import { Activity, ArrowLeft, Check, LockKeyhole, ShieldCheck } from "lucide-react";
+import { ArrowLeft, Check, LockKeyhole, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { AuthForm } from "@/app/components/auth-form";
 import { PreferencesMenu } from "@/app/components/preferences-menu";
@@ -13,21 +13,18 @@ type AccessPageProps = {
   locale: SiteLocale;
   mode: AuthMode;
   returnTo?: string;
-  notice?: string;
 };
 
 export function AccessPage({
   locale,
   mode,
   returnTo,
-  notice,
 }: AccessPageProps) {
   const page = authPageCopy[locale][mode];
   const shared = authSharedCopy[locale];
 
   return (
     <div className="access-page" lang={locale}>
-      <div className="access-ambient" aria-hidden="true"><span /><span /><span /></div>
       <a className="skip-link" href="#conteudo-acesso">{shared.skip}</a>
       <header className="access-header">
         <Link className="brand" href="/" aria-label={shared.homeLabel}>
@@ -52,22 +49,9 @@ export function AccessPage({
         </section>
 
         <section className="access-card" aria-label={shared.cardLabel}>
-          <div className="access-card-status">
-            <Activity aria-hidden="true" />
-            <span>{shared.flowLabel}</span>
-            <small>{shared.flowStatus}</small>
-          </div>
           <span className="access-icon" aria-hidden="true"><LockKeyhole /></span>
           <h2>{shared.cardTitle}</h2>
           <p>{shared.cardDescription}</p>
-          <div className="access-flow" aria-label={shared.flowLabel}>
-            <span><b>01</b>{shared.stepData}</span>
-            <i aria-hidden="true" />
-            <span><b>02</b>{shared.stepConfirmation}</span>
-            <i aria-hidden="true" />
-            <span><b>03</b>{shared.stepAccess}</span>
-          </div>
-          {notice && <div className="auth-message error" role="alert">{notice}</div>}
           <AuthForm mode={mode} locale={locale} returnTo={returnTo} />
           <div className="access-divider"><span>{shared.noCard}</span></div>
           <p className="access-alternate">{page.alternateText} <Link href={page.alternateHref}>{page.alternateLabel}</Link></p>

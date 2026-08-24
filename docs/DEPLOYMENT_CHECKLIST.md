@@ -24,8 +24,7 @@
 - [ ] Segredo de autenticação forte e exclusivo;
 - [x] Autenticação não depende de chave administrativa no runtime da aplicação;
 - [ ] Cookies `Secure`, `HttpOnly` e `SameSite` validados;
-- [x] Verificação e recuperação de e-mail funcionando;
-- [ ] Proteção contra senhas vazadas habilitada no Supabase Auth;
+- [ ] Verificação e recuperação de e-mail funcionando;
 - [x] Rate limit persistente aplicado aos fluxos sensíveis;
 - [x] RLS e permissões verificadas no servidor;
 - [x] CSP e demais headers validados no build local de produção;
@@ -35,8 +34,8 @@
 
 ## Integrações
 
-- [x] DNS do domínio próprio e URLs de callback oficiais;
-- [x] E-mail remetente verificado;
+- [ ] DNS do domínio próprio e URLs de callback oficiais;
+- [ ] E-mail remetente verificado;
 - [ ] Bucket privado e CORS mínimo;
 - [ ] Pagamentos em modo produção somente após revisão;
 - [ ] Webhooks assinados e idempotentes;
@@ -49,7 +48,7 @@
 - [x] Produção independente na Vercel compilada, promovida e validada em estado `READY`;
 - [x] Variáveis do Supabase e segredo de rate limit configurados nos ambientes Preview e Production;
 - [x] HTTPS validado no endereço de produção da Vercel;
-- [x] DNS e HTTPS do domínio principal validados após propagação;
+- [ ] DNS e HTTPS do domínio principal validados após propagação;
 - [x] Health check e página pública de status disponíveis;
 - [x] Ambiente de teste e produção separados;
 - [x] Plano de rollback documentado;
@@ -60,8 +59,10 @@
 
 ## Configurações externas pendentes do proprietário
 
+- Substituir no Registro.br os registros do subdomínio `prismivo` pelos valores exibidos no projeto da Vercel e aguardar a verificação;
+- Cadastrar no Supabase as URLs de callback do preview e do domínio definitivo;
 - Manter as variáveis do Supabase e o `RATE_LIMIT_PEPPER` somente nos cofres de ambiente da Vercel;
-- Nenhum e-mail ou identificador deve ser enviado ao RPC de rate limit sem hash;
+- Manter o `RATE_LIMIT_PEPPER` somente no cofre da Vercel; nenhum e-mail ou identificador é enviado ao RPC sem hash;
 - PostgreSQL e bucket privado do Prismivo já configurados no Supabase;
 - Provedor de e-mail e remetente;
 - Revisar retenção e restauração do bucket privado do Supabase antes da abertura comercial;

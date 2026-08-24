@@ -85,7 +85,7 @@
 
 - 24 de 24 tabelas públicas com RLS habilitada;
 - 73 políticas públicas de acesso por usuário, organização e papel;
-- nenhuma chave estrangeira sem índice de cobertura após o Marco 21;
+- nenhuma chave estrangeira sem índice de cobertura após o Marco 20;
 - nenhuma chave de serviço é exigida pela aplicação; a chave publicável permanece protegida por RLS;
 - `npm audit` sem vulnerabilidades conhecidas após atualização compatível das dependências;
 - nove avisos do advisor para RPCs `security definer` autenticadas foram revisados individualmente: todas validam `auth.uid()`, organização, papel e propriedade dentro da função antes de acessar dados;

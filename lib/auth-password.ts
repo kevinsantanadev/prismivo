@@ -14,24 +14,6 @@ export type PasswordPolicyMessages = {
   symbol: string;
 };
 
-export type PasswordRequirementStatus = {
-  length: boolean;
-  lowercase: boolean;
-  uppercase: boolean;
-  number: boolean;
-  symbol: boolean;
-};
-
-export function evaluatePasswordRequirements(password: string): PasswordRequirementStatus {
-  return {
-    length: password.length >= PASSWORD_MIN_LENGTH,
-    lowercase: /[a-z]/.test(password),
-    uppercase: /[A-Z]/.test(password),
-    number: /[0-9]/.test(password),
-    symbol: [...password].some((character) => ALLOWED_SPECIAL_CHARACTERS.includes(character)),
-  };
-}
-
 export function createPasswordSchema(messages: PasswordPolicyMessages) {
   return z
     .string()

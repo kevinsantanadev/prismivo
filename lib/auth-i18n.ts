@@ -198,8 +198,6 @@ export const authSharedCopy = {
     noCard: "sem cartão de crédito", legalPrefix: "Ao continuar, você poderá revisar e aceitar os", terms: "Termos de Uso",
     privacyJoin: "e a", privacy: "Política de Privacidade", setupSuffix: "durante a configuração. Conheça também nossos",
     security: "controles de segurança", footer: "Todos os direitos reservados.",
-    flowLabel: "Fluxo de identidade", flowStatus: "PROTEGIDO", stepData: "Dados", stepConfirmation: "Confirmação", stepAccess: "Acesso",
-    confirmationExpired: "O link de confirmação é inválido ou expirou. Solicite um novo link para continuar.",
   },
   en: {
     skip: "Skip to content", homeLabel: "Prismivo — home page", back: "Back to website",
@@ -209,8 +207,6 @@ export const authSharedCopy = {
     noCard: "no credit card required", legalPrefix: "By continuing, you can review and accept the", terms: "Terms of Use",
     privacyJoin: "and the", privacy: "Privacy Policy", setupSuffix: "during setup. You can also review our",
     security: "security controls", footer: "All rights reserved.",
-    flowLabel: "Identity flow", flowStatus: "PROTECTED", stepData: "Details", stepConfirmation: "Confirmation", stepAccess: "Access",
-    confirmationExpired: "The confirmation link is invalid or expired. Request a new link to continue.",
   },
   es: {
     skip: "Saltar al contenido", homeLabel: "Prismivo — página de inicio", back: "Volver al sitio",
@@ -220,38 +216,27 @@ export const authSharedCopy = {
     noCard: "sin tarjeta de crédito", legalPrefix: "Al continuar, podrás revisar y aceptar los", terms: "Términos de Uso",
     privacyJoin: "y la", privacy: "Política de Privacidad", setupSuffix: "durante la configuración. Consulta también nuestros",
     security: "controles de seguridad", footer: "Todos los derechos reservados.",
-    flowLabel: "Flujo de identidad", flowStatus: "PROTEGIDO", stepData: "Datos", stepConfirmation: "Confirmación", stepAccess: "Acceso",
-    confirmationExpired: "El enlace de confirmación no es válido o ha vencido. Solicita uno nuevo para continuar.",
   },
 } satisfies Record<SiteLocale, Record<string, string>>;
 
 export const authFormCopy = {
   "pt-BR": {
     fullName: "Nome completo", email: "E-mail", password: "Senha", newPassword: "Nova senha",
-    fullNamePlaceholder: "Como devemos chamar você?", emailPlaceholder: "voce@empresa.com",
     passwordHint: "Use no mínimo 8 caracteres, com letra maiúscula, letra minúscula, número e símbolo.", forgotPassword: "Esqueci minha senha", confirmPassword: "Confirmar senha",
-    showPassword: "Mostrar senha", hidePassword: "Ocultar senha", passwordLength: "8 ou mais caracteres", passwordUppercase: "Uma letra maiúscula", passwordLowercase: "Uma letra minúscula", passwordNumber: "Um número", passwordSymbol: "Um símbolo, como ! @ # $ %", passwordsMatch: "As senhas coincidem.", passwordsDiffer: "As senhas ainda não coincidem.",
     pending: "Aguarde…", login: "Entrar", signup: "Criar conta gratuita", recover: "Enviar instruções", resend: "Reenviar confirmação", reset: "Salvar nova senha",
-    resendConfirmation: "Reenviar confirmação", signInLink: "Entrar na conta", recoverAccess: "Recuperar senha",
-    deliveryTitle: "Não encontrou a mensagem?", deliveryHelp: "Pesquise por no-reply@kevinsantanadev.com.br em Todos os e-mails, Spam e Promoções.",
+    resendConfirmation: "Não recebeu? Solicite outro e-mail de confirmação",
   },
   en: {
     fullName: "Full name", email: "Email", password: "Password", newPassword: "New password",
-    fullNamePlaceholder: "How should we address you?", emailPlaceholder: "you@company.com",
     passwordHint: "Use at least 8 characters, including uppercase, lowercase, a number, and a symbol.", forgotPassword: "I forgot my password", confirmPassword: "Confirm password",
-    showPassword: "Show password", hidePassword: "Hide password", passwordLength: "8 or more characters", passwordUppercase: "One uppercase letter", passwordLowercase: "One lowercase letter", passwordNumber: "One number", passwordSymbol: "One symbol, such as ! @ # $ %", passwordsMatch: "The passwords match.", passwordsDiffer: "The passwords do not match yet.",
     pending: "Please wait…", login: "Sign in", signup: "Create free account", recover: "Send instructions", resend: "Resend confirmation", reset: "Save new password",
-    resendConfirmation: "Resend confirmation", signInLink: "Sign in", recoverAccess: "Recover password",
-    deliveryTitle: "Cannot find the message?", deliveryHelp: "Search for no-reply@kevinsantanadev.com.br in All Mail, Spam, and Promotions.",
+    resendConfirmation: "Did not receive it? Request another confirmation email",
   },
   es: {
     fullName: "Nombre completo", email: "Correo electrónico", password: "Contraseña", newPassword: "Nueva contraseña",
-    fullNamePlaceholder: "¿Cómo debemos llamarte?", emailPlaceholder: "tu@empresa.com",
     passwordHint: "Usa al menos 8 caracteres, con mayúscula, minúscula, número y símbolo.", forgotPassword: "Olvidé mi contraseña", confirmPassword: "Confirmar contraseña",
-    showPassword: "Mostrar contraseña", hidePassword: "Ocultar contraseña", passwordLength: "8 o más caracteres", passwordUppercase: "Una letra mayúscula", passwordLowercase: "Una letra minúscula", passwordNumber: "Un número", passwordSymbol: "Un símbolo, como ! @ # $ %", passwordsMatch: "Las contraseñas coinciden.", passwordsDiffer: "Las contraseñas todavía no coinciden.",
     pending: "Espera…", login: "Iniciar sesión", signup: "Crear cuenta gratuita", recover: "Enviar instrucciones", resend: "Reenviar confirmación", reset: "Guardar nueva contraseña",
-    resendConfirmation: "Reenviar confirmación", signInLink: "Iniciar sesión", recoverAccess: "Recuperar contraseña",
-    deliveryTitle: "¿No encuentras el mensaje?", deliveryHelp: "Busca no-reply@kevinsantanadev.com.br en Todos, Spam y Promociones.",
+    resendConfirmation: "¿No lo recibiste? Solicita otro correo de confirmación",
   },
 } satisfies Record<SiteLocale, Record<string, string>>;
 
@@ -289,7 +274,7 @@ export const authActionCopy = {
     invalidCredentials: "Não foi possível entrar com essas credenciais.", passwordsMismatch: "As senhas devem ser iguais.", invalidData: "Revise os dados informados.",
     signupFailed: "Não foi possível concluir o cadastro agora. Aguarde um instante e tente novamente.", signupEmailUnavailable: "O serviço de confirmação por e-mail está temporariamente indisponível. Seus dados não foram expostos; tente novamente mais tarde.", signupSuccess: "Cadastro processado. Se este for um e-mail novo, enviaremos o link de confirmação. Se você já criou a conta antes, entre com sua senha ou use a recuperação de acesso.",
     passwordRequirements: "Use no mínimo 8 caracteres, com letra maiúscula, letra minúscula, número e símbolo.",
-    invalidEmail: "Informe um e-mail válido.", emailSendFailed: "Não foi possível enviar o e-mail agora. Aguarde alguns minutos e tente novamente.", recoverySuccess: "Se existir uma conta válida para esse e-mail, enviaremos as instruções de recuperação.", resendSuccess: "Se houver uma conta aguardando confirmação, um novo link será enviado para esse e-mail.",
+    invalidEmail: "Informe um e-mail válido.", recoverySuccess: "Se existir uma conta válida para esse e-mail, enviaremos as instruções de recuperação.", resendSuccess: "Se houver uma conta aguardando confirmação, um novo link será enviado para esse e-mail.",
     invalidPassword: "Revise a nova senha.", resetExpired: "O link expirou ou a sessão não pôde ser validada. Solicite uma nova recuperação.", resetSuccess: "Senha alterada com segurança. Você já pode entrar.",
   },
   en: {
@@ -298,7 +283,7 @@ export const authActionCopy = {
     invalidCredentials: "We could not sign you in with those credentials.", passwordsMismatch: "The passwords must match.", invalidData: "Review the information provided.",
     signupFailed: "We could not complete the registration right now. Wait a moment and try again.", signupEmailUnavailable: "The email confirmation service is temporarily unavailable. Your data was not exposed; please try again later.", signupSuccess: "Registration processed. If this is a new email address, we will send a confirmation link. If you created the account before, sign in with your password or recover access.",
     passwordRequirements: "Use at least 8 characters, including uppercase, lowercase, a number, and a symbol.",
-    invalidEmail: "Enter a valid email address.", emailSendFailed: "We could not send the email right now. Wait a few minutes and try again.", recoverySuccess: "If a valid account exists for this email, we will send recovery instructions.", resendSuccess: "If an account is awaiting confirmation, a new link will be sent to this email.",
+    invalidEmail: "Enter a valid email address.", recoverySuccess: "If a valid account exists for this email, we will send recovery instructions.", resendSuccess: "If an account is awaiting confirmation, a new link will be sent to this email.",
     invalidPassword: "Review the new password.", resetExpired: "The link expired or the session could not be validated. Request a new recovery email.", resetSuccess: "Password changed securely. You can now sign in.",
   },
   es: {
@@ -307,7 +292,7 @@ export const authActionCopy = {
     invalidCredentials: "No pudimos iniciar sesión con esas credenciales.", passwordsMismatch: "Las contraseñas deben coincidir.", invalidData: "Revisa la información indicada.",
     signupFailed: "No pudimos completar el registro ahora. Espera un momento e inténtalo de nuevo.", signupEmailUnavailable: "El servicio de confirmación por correo no está disponible temporalmente. Tus datos no fueron expuestos; inténtalo más tarde.", signupSuccess: "Registro procesado. Si este correo es nuevo, enviaremos un enlace de confirmación. Si ya creaste la cuenta, inicia sesión con tu contraseña o recupera el acceso.",
     passwordRequirements: "Usa al menos 8 caracteres, con mayúscula, minúscula, número y símbolo.",
-    invalidEmail: "Introduce un correo electrónico válido.", emailSendFailed: "No pudimos enviar el correo ahora. Espera unos minutos e inténtalo de nuevo.", recoverySuccess: "Si existe una cuenta válida para este correo, enviaremos las instrucciones de recuperación.", resendSuccess: "Si existe una cuenta pendiente de confirmación, enviaremos un nuevo enlace a este correo.",
+    invalidEmail: "Introduce un correo electrónico válido.", recoverySuccess: "Si existe una cuenta válida para este correo, enviaremos las instrucciones de recuperación.", resendSuccess: "Si existe una cuenta pendiente de confirmación, enviaremos un nuevo enlace a este correo.",
     invalidPassword: "Revisa la nueva contraseña.", resetExpired: "El enlace venció o no se pudo validar la sesión. Solicita una nueva recuperación.", resetSuccess: "Contraseña actualizada de forma segura. Ya puedes iniciar sesión.",
   },
 } satisfies Record<SiteLocale, Record<string, string>>;

@@ -1,17 +1,4 @@
 import { z } from "zod";
-import {
-  supportedAccentColors,
-  supportedColorVisionModes,
-  supportedContentWidths,
-  supportedCornerStyles,
-  supportedInterfaceDensities,
-  supportedInterfaceFilters,
-  supportedMotionModes,
-  supportedQuickNavigationSections,
-  supportedSidebarModes,
-  supportedTextScales,
-  supportedThemes,
-} from "@/lib/interface-preferences";
 
 export const onboardingSchema = z.object({
   organizationName: z
@@ -133,19 +120,9 @@ export const settingsSchema = z.object({
   phone: z.string().trim().max(32, "Use no máximo 32 caracteres."),
   location: z.string().trim().max(100, "Use no máximo 100 caracteres."),
   website: z.string().trim().max(240, "Use no máximo 240 caracteres.").refine((value) => !value || /^https?:\/\/[^\s]+$/i.test(value), "Informe um endereço iniciado por http:// ou https://."),
-  theme: z.enum(supportedThemes),
-  accentColor: z.enum(supportedAccentColors),
-  interfaceFilter: z.enum(supportedInterfaceFilters),
-  colorVisionMode: z.enum(supportedColorVisionModes),
-  sidebarMode: z.enum(supportedSidebarModes),
-  interfaceDensity: z.enum(supportedInterfaceDensities),
-  contentWidth: z.enum(supportedContentWidths),
-  cornerStyle: z.enum(supportedCornerStyles),
-  textScale: z.enum(supportedTextScales),
-  motionMode: z.enum(supportedMotionModes),
-  primaryNavigation: z.array(z.enum(supportedQuickNavigationSections))
-    .length(4, "Escolha quatro atalhos para a navegação.")
-    .refine((items) => new Set(items).size === items.length, "Cada atalho deve ser único."),
+  accentColor: z.enum(["lime", "violet", "blue", "amber", "teal", "rose"]),
+  interfaceFilter: z.enum(["none", "soft", "crisp", "grayscale"]),
+  colorVisionMode: z.enum(["standard", "protanopia", "deuteranopia", "tritanopia", "achromatopsia"]),
   organizationBrandColor: z.enum(["lime", "violet", "blue", "amber", "teal", "rose"]),
   organizationVisualStyle: z.enum(["prism", "minimal", "soft", "high-contrast"]),
 });

@@ -69,7 +69,7 @@ export async function signupAction(
     password: parsed.data.password,
     options: {
       data: { full_name: parsed.data.name },
-      emailRedirectTo: `${origin}/app/onboarding`,
+      emailRedirectTo: `${origin}/auth/callback?next=/app/onboarding`,
     },
   });
 
@@ -98,16 +98,9 @@ export async function recoveryAction(
 
   const origin = await requestOrigin();
   const supabase = await createSupabaseServerClient();
-  const { error } = await supabase.auth.resetPasswordForEmail(parsed.data.toLowerCase(), {
-    redirectTo: `${origin}/redefinir-senha`,
+  await supabase.auth.resetPasswordForEmail(parsed.data.toLowerCase(), {
+    redirectTo: `${origin}/auth/callback?next=/redefinir-senha`,
   });
-
-  if (error) {
-    const failure = classifySignupError(error);
-    if (failure === "rate-limit") return authError(copy.rateLimit);
-    if (failure === "email-unavailable") return authError(copy.signupEmailUnavailable);
-    return authError(copy.emailSendFailed);
-  }
 
   return {
     status: "success",
@@ -131,14 +124,13 @@ export async function resendConfirmationAction(
   const { error } = await supabase.auth.resend({
     type: "signup",
     email: parsed.data.toLowerCase(),
-    options: { emailRedirectTo: `${origin}/app/onboarding` },
+    options: { emailRedirectTo: `${origin}/auth/callback?next=/app/onboarding` },
   });
 
   if (error) {
     const failure = classifySignupError(error);
     if (failure === "email-unavailable") return authError(copy.signupEmailUnavailable);
     if (failure === "rate-limit") return authError(copy.rateLimit);
-    return authError(copy.emailSendFailed);
   }
   return { status: "success", message: copy.resendSuccess };
 }

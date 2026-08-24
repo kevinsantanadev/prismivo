@@ -4,8 +4,6 @@ import { SitePreferencesProvider } from "./components/site-preferences";
 import { ServiceWorkerRegistration } from "./components/service-worker-registration";
 import "./globals.css";
 
-const preferenceBootScript = `(()=>{try{const r=document.documentElement,s=localStorage,p=(k,v,d)=>{const x=s.getItem(k);return v.includes(x)?x:d};const t=p("prismivo-theme",["system","light","dark","mono"],"system"),resolved=t==="system"?(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):t;r.dataset.theme=resolved;r.style.colorScheme=resolved==="light"?"light":"dark";const l=s.getItem("prismivo-locale");if(["pt-BR","en","es"].includes(l))r.lang=l;r.dataset.accent=p("prismivo-accent",["lime","violet","blue","amber","teal","rose"],"lime");r.dataset.interfaceFilter=p("prismivo-interface-filter",["none","soft","crisp","grayscale"],"none");r.dataset.colorVision=p("prismivo-color-vision",["standard","protanopia","deuteranopia","tritanopia","achromatopsia"],"standard");r.dataset.sidebarMode=p("prismivo-sidebar-mode",["adaptive","light","dark","brand"],"adaptive");r.dataset.interfaceDensity=p("prismivo-interface-density",["compact","comfortable","spacious"],"comfortable");r.dataset.contentWidth=p("prismivo-content-width",["focused","standard","wide"],"standard");r.dataset.cornerStyle=p("prismivo-corner-style",["soft","rounded","square"],"rounded");r.dataset.textScale=p("prismivo-text-scale",["default","large","extra-large"],"default");const m=p("prismivo-motion-mode",["system","full","reduced"],"system");r.dataset.motion=m==="system"?(matchMedia("(prefers-reduced-motion: reduce)").matches?"reduced":"full"):m;}catch{}})();`;
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -65,9 +63,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
-      <head>
-        <script dangerouslySetInnerHTML={{ __html: preferenceBootScript }} />
-      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

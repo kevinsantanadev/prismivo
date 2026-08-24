@@ -520,7 +520,7 @@ body.preferences-open {
   font-size: 0.92rem;
   font-weight: 720;
   box-shadow: 0 8px 28px color-mix(in srgb, var(--lime) 14%, transparent);
-  transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+  transition: transform 180ms ease, box-shadow 180ms ease;
 }
 
 .button:hover {

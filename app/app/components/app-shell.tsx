@@ -21,6 +21,7 @@ import {
 import { signOutPath } from "@/app/session-auth";
 import {
   appShellCopy,
+  getMobileNavigationCopy,
   translateAppShellText,
   type AppSection,
 } from "@/lib/app-shell-i18n";
@@ -82,6 +83,7 @@ export async function AppShell({
 }) {
   const locale = await getRequestLocale();
   const copy = appShellCopy[locale];
+  const mobileCopy = getMobileNavigationCopy(locale);
   const localizedTitle = translateAppShellText(title, locale);
   const localizedDescription = translateAppShellText(description, locale);
   const initials = workspace.userName
@@ -196,7 +198,7 @@ export async function AppShell({
       </div>
       <MobileAppNavigation
         active={active}
-        copy={copy}
+        copy={mobileCopy}
         items={visibleNavItems.map(([key, href]) => ({ key, href }))}
         primarySections={quickNavItems.map(([key]) => key)}
       />

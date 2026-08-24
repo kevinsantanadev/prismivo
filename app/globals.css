@@ -5495,3 +5495,208 @@ body.preferences-open {
     min-height: 44px;
   }
 }
+
+/* Marco 22 — acabamento visual do produto, sem alterar fluxos ou conteúdo. */
+.app-layout {
+  --app-panel-highlight: color-mix(in srgb, var(--app-elevated) 88%, var(--lime) 12%);
+  --app-depth-soft: 0 12px 32px rgba(24, 35, 27, 0.055);
+  --app-depth-raised: 0 22px 58px rgba(24, 35, 27, 0.09);
+  background:
+    radial-gradient(circle at 94% 2%, color-mix(in srgb, var(--lime) 9%, transparent), transparent 25rem),
+    radial-gradient(circle at 58% 38%, color-mix(in srgb, var(--violet) 4%, transparent), transparent 34rem),
+    var(--app-bg);
+}
+
+:root[data-theme="dark"] .app-layout,
+:root[data-theme="mono"] .app-layout {
+  --app-depth-soft: 0 14px 38px rgba(0, 0, 0, 0.2);
+  --app-depth-raised: 0 24px 68px rgba(0, 0, 0, 0.28);
+}
+
+.app-workspace {
+  position: relative;
+  isolation: isolate;
+}
+
+.app-topbar {
+  border-bottom-color: color-mix(in srgb, var(--app-line) 82%, var(--lime) 18%);
+  background: color-mix(in srgb, var(--app-header) 94%, transparent);
+  box-shadow: 0 12px 36px color-mix(in srgb, var(--app-bg) 74%, transparent);
+  backdrop-filter: blur(22px) saturate(145%);
+  -webkit-backdrop-filter: blur(22px) saturate(145%);
+}
+
+.app-topbar::after {
+  position: absolute;
+  right: clamp(24px, 4vw, 56px);
+  bottom: -1px;
+  left: clamp(24px, 4vw, 56px);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, color-mix(in srgb, var(--lime) 42%, transparent), transparent);
+  content: "";
+  pointer-events: none;
+}
+
+.app-sidebar {
+  background:
+    radial-gradient(circle at 18% 0, color-mix(in srgb, var(--app-sidebar-accent) 10%, transparent), transparent 15rem),
+    linear-gradient(180deg, color-mix(in srgb, var(--app-sidebar-accent) 3%, transparent), transparent 42%),
+    var(--app-sidebar-bg);
+  box-shadow: 14px 0 42px rgba(13, 22, 15, 0.055);
+}
+
+.workspace-switcher {
+  background: linear-gradient(145deg, color-mix(in srgb, var(--app-sidebar-accent) 8%, var(--app-sidebar-bg)), var(--app-sidebar-bg));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--app-sidebar-ink) 8%, transparent), var(--app-depth-soft);
+}
+
+.workspace-switcher > span {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--app-sidebar-accent) 18%, transparent);
+}
+
+.app-sidebar nav a,
+.sidebar-bottom a,
+.notification-button,
+.user-avatar,
+.app-primary-button {
+  transition: transform 170ms ease, border-color 170ms ease, background-color 170ms ease, color 170ms ease, box-shadow 170ms ease;
+}
+
+.app-sidebar nav a:hover,
+.sidebar-bottom a:hover {
+  transform: translateX(2px);
+}
+
+.app-sidebar nav a.active {
+  background: linear-gradient(90deg, color-mix(in srgb, var(--app-sidebar-accent) 15%, transparent), color-mix(in srgb, var(--app-sidebar-accent) 5%, transparent));
+  box-shadow: inset 3px 0 0 var(--app-sidebar-accent), inset 0 0 0 1px color-mix(in srgb, var(--app-sidebar-accent) 10%, transparent);
+}
+
+.notification-button {
+  background: linear-gradient(145deg, var(--app-elevated), color-mix(in srgb, var(--app-surface) 88%, var(--lime) 12%));
+  box-shadow: var(--app-depth-soft);
+}
+
+.notification-button:hover,
+.user-avatar:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--lime) 34%, var(--app-line));
+  box-shadow: var(--app-depth-raised);
+}
+
+.user-avatar {
+  border: 1px solid color-mix(in srgb, var(--lime) 32%, transparent);
+  background: linear-gradient(145deg, #172019, color-mix(in srgb, #172019 78%, var(--lime)));
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--lime) 13%, transparent);
+}
+
+.app-welcome h1,
+.app-page-intro h1 {
+  text-wrap: balance;
+}
+
+.app-welcome p,
+.app-page-intro p {
+  max-width: 68ch;
+}
+
+.app-welcome .eyebrow,
+.panel-kicker {
+  color: color-mix(in srgb, var(--lime) 62%, var(--app-ink));
+}
+
+.app-primary-button {
+  border-color: color-mix(in srgb, var(--lime) 68%, var(--app-ink));
+  background: linear-gradient(135deg, var(--lime), color-mix(in srgb, var(--lime) 76%, var(--app-ink)));
+  color: var(--lime-ink);
+  box-shadow: 0 12px 30px color-mix(in srgb, var(--lime) 18%, transparent);
+}
+
+.app-primary-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 17px 38px color-mix(in srgb, var(--lime) 24%, transparent);
+}
+
+.app-metrics > article,
+.dashboard-panel {
+  background: linear-gradient(145deg, var(--app-elevated), var(--app-panel-highlight));
+  box-shadow: var(--app-depth-soft);
+}
+
+.app-metrics > article {
+  position: relative;
+  overflow: hidden;
+  border-color: color-mix(in srgb, var(--app-line) 82%, var(--lime) 18%);
+}
+
+.app-metrics > article::after {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 2px;
+  background: linear-gradient(90deg, var(--lime), color-mix(in srgb, var(--violet) 68%, var(--lime)), transparent 88%);
+  content: "";
+  opacity: 0.72;
+}
+
+.app-metrics > article:hover,
+.dashboard-panel:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--lime) 30%, var(--app-line));
+  box-shadow: var(--app-depth-raised);
+}
+
+.app-metrics > article,
+.dashboard-panel {
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+
+.metric-card-icon {
+  border: 1px solid color-mix(in srgb, var(--lime) 20%, transparent);
+  background: color-mix(in srgb, var(--lime) 12%, var(--app-elevated));
+  color: color-mix(in srgb, var(--lime) 58%, var(--app-ink));
+  box-shadow: inset 0 1px 0 color-mix(in srgb, var(--app-elevated) 72%, transparent);
+}
+
+.prismivo-pulse {
+  border-color: color-mix(in srgb, var(--lime) 22%, rgba(255, 255, 255, 0.1));
+  background:
+    radial-gradient(circle at 78% 8%, color-mix(in srgb, var(--lime) 15%, transparent), transparent 12rem),
+    linear-gradient(145deg, #1b221c, #111512);
+  box-shadow: 0 24px 62px rgba(9, 15, 10, 0.22);
+}
+
+.pulse-score {
+  box-shadow: 0 18px 48px color-mix(in srgb, var(--lime) 15%, transparent);
+}
+
+.responsive-table tbody tr,
+.activity-list li,
+.notification-list li {
+  transition: background-color 150ms ease;
+}
+
+.responsive-table tbody tr:hover,
+.activity-list li:hover,
+.notification-list li:hover {
+  background: color-mix(in srgb, var(--lime) 5%, transparent);
+}
+
+@media (max-width: 760px) {
+  .app-topbar {
+    box-shadow: 0 10px 28px color-mix(in srgb, var(--app-bg) 78%, transparent);
+  }
+
+  .mobile-app-navigation {
+    border-top-color: color-mix(in srgb, var(--app-sidebar-line) 78%, var(--app-sidebar-accent) 22%);
+    box-shadow: 0 -14px 40px rgba(8, 14, 9, 0.12);
+  }
+
+  .mobile-app-navigation :is(a, button).active {
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--app-sidebar-accent) 16%, transparent);
+  }
+
+  .app-metrics > article:hover,
+  .dashboard-panel:hover {
+    transform: none;
+  }
+}

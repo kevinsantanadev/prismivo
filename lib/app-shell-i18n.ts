@@ -97,6 +97,21 @@ export const appShellCopy = {
   nav: Record<AppSection, string>;
 }>;
 
+export type MobileNavigationCopy = Pick<
+  (typeof appShellCopy)[SiteLocale],
+  "mobileNavigation" | "more" | "closeMenu" | "logout" | "nav"
+>;
+
+/**
+ * Keeps the Server Component -> Client Component boundary JSON-serializable.
+ * The complete shell dictionary also contains formatter functions and must
+ * never be passed directly to a Client Component.
+ */
+export function getMobileNavigationCopy(locale: SiteLocale): MobileNavigationCopy {
+  const { mobileNavigation, more, closeMenu, logout, nav } = appShellCopy[locale];
+  return { mobileNavigation, more, closeMenu, logout, nav };
+}
+
 const translatedShellText: Record<Exclude<SiteLocale, "pt-BR">, Record<string, string>> = {
   en: {
     "Visão geral": "Overview",

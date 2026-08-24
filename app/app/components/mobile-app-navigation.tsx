@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
 import { signOutPath } from "@/lib/auth-paths";
-import type { AppSection } from "@/lib/app-shell-i18n";
+import type { AppSection, MobileNavigationCopy } from "@/lib/app-shell-i18n";
 
 const icons = {
   dashboard: LayoutDashboard,
@@ -41,13 +41,7 @@ const icons = {
 
 type MobileAppNavigationProps = {
   active: AppSection;
-  copy: {
-    mobileNavigation: string;
-    more: string;
-    closeMenu: string;
-    logout: string;
-    nav: Record<AppSection, string>;
-  };
+  copy: MobileNavigationCopy;
   items: Array<{ key: AppSection; href: string }>;
   primarySections: AppSection[];
 };

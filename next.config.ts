@@ -39,9 +39,11 @@ const nextConfig: NextConfig = {
       { source: "/app/:path*", headers: privateHeaders },
       { source: "/api/:path*", headers: [{ key: "X-Robots-Tag", value: "noindex, nofollow, noarchive" }] },
       { source: "/status", headers: [{ key: "Cache-Control", value: "no-store, max-age=0" }] },
+      { source: "/sw.js", headers: [{ key: "Cache-Control", value: "no-store, no-cache, must-revalidate" }] },
       { source: "/entrar", headers: privateHeaders },
       { source: "/cadastro", headers: privateHeaders },
       { source: "/recuperar-senha", headers: privateHeaders },
+      { source: "/reenviar-confirmacao", headers: privateHeaders },
       { source: "/redefinir-senha", headers: privateHeaders },
       { source: "/convite/:path*", headers: privateHeaders },
     ];

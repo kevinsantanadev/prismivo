@@ -1,6 +1,9 @@
 import { redirect } from "next/navigation";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
+import { signInPath } from "@/lib/auth-paths";
+
+export { safeReturnPath, signInPath, signOutPath } from "@/lib/auth-paths";
 
 export type SessionUser = {
   id: string | null;
@@ -32,37 +35,4 @@ export async function requireSessionUser(returnTo: string): Promise<SessionUser>
   const user = await getSessionUser();
   if (user) return user;
   redirect(signInPath(returnTo));
-}
-
-export function signInPath(returnTo: string): string {
-  const safeReturnTo = safeRelativeReturnPath(returnTo);
-  return `/entrar?returnTo=${encodeURIComponent(safeReturnTo)}`;
-}
-
-export function signOutPath(returnTo = "/"): string {
-  const safeReturnTo = safeRelativeReturnPath(returnTo);
-  return `/auth/signout?returnTo=${encodeURIComponent(safeReturnTo)}`;
-}
-
-export function safeReturnPath(value: string | null | undefined, fallback = "/app"): string {
-  return value ? safeRelativeReturnPath(value) : fallback;
-}
-
-function safeRelativeReturnPath(value: string): string {
-  if (!value.startsWith("/") || value.startsWith("//")) return "/";
-
-  let url: URL;
-  try {
-    url = new URL(value, "https://app.local");
-  } catch {
-    return "/";
-  }
-  if (url.origin !== "https://app.local") return "/";
-  if (isReservedAuthPath(url.pathname)) return "/";
-  return `${url.pathname}${url.search}${url.hash}`;
-}
-
-function isReservedAuthPath(pathname: string): boolean {
-  return pathname === "/auth/callback" ||
-    pathname === "/auth/signout";
 }

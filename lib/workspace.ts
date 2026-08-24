@@ -2,6 +2,7 @@ import { and, desc, eq, sql } from "drizzle-orm";
 import { getDb } from "@/db";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { findSupabaseWorkspaceByEmail } from "@/lib/supabase/workspace";
+import { normalizePrimaryNavigation } from "@/lib/interface-preferences";
 import {
   getSupabaseApprovalsData,
   getSupabaseClientDetail,
@@ -42,10 +43,28 @@ export async function findWorkspaceByEmail(email: string) {
       userName: users.name,
       userEmail: users.email,
       userLocale: users.locale,
+      bio: users.bio,
+      jobTitle: users.jobTitle,
+      phone: users.phone,
+      location: users.location,
+      website: users.website,
+      theme: users.theme,
+      accentColor: users.accentColor,
+      interfaceFilter: users.interfaceFilter,
+      colorVisionMode: users.colorVisionMode,
+      sidebarMode: users.sidebarMode,
+      interfaceDensity: users.interfaceDensity,
+      contentWidth: users.contentWidth,
+      cornerStyle: users.cornerStyle,
+      textScale: users.textScale,
+      motionMode: users.motionMode,
+      primaryNavigation: users.primaryNavigation,
       organizationId: organizations.id,
       organizationName: organizations.name,
       organizationSlug: organizations.slug,
       plan: organizations.plan,
+      organizationBrandColor: organizations.brandColor,
+      organizationVisualStyle: organizations.visualStyle,
       role: memberships.role,
     })
     .from(users)
@@ -65,16 +84,8 @@ export async function findWorkspaceByEmail(email: string) {
     ...workspace,
     avatarPath: null,
     avatarUrl: null,
-    bio: "",
-    jobTitle: "",
-    phone: "",
-    location: "",
-    website: "",
-    accentColor: "lime",
-    interfaceFilter: "none",
-    colorVisionMode: "standard",
-    organizationBrandColor: "lime",
-    organizationVisualStyle: "prism",
+    theme: workspace.theme,
+    primaryNavigation: normalizePrimaryNavigation(workspace.primaryNavigation),
   } : null;
 }
 

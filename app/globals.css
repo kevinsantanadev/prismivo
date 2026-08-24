@@ -5504,11 +5504,11 @@ body.preferences-open {
 }
 
 @media (max-width: 760px), (max-height: 500px) and (hover: none) and (pointer: coarse) {
-  :is(.access-page, .onboarding-page, .app-layout) :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
+  :is(.site-shell, .access-page, .onboarding-page, .legal-page, .content-site-shell, .app-layout) :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea) {
     font-size: 16px;
   }
 
-  :is(.access-page, .onboarding-page, .app-layout) :is(button, input, select) {
+  :is(.site-shell, .access-page, .onboarding-page, .legal-page, .content-site-shell, .app-layout) :is(button, input, select) {
     min-height: 44px;
   }
 }

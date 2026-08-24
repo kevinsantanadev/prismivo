@@ -1,4 +1,4 @@
-import { ArrowLeft, Check, LockKeyhole, ShieldCheck } from "lucide-react";
+import { Activity, ArrowLeft, Check, LockKeyhole, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 import { AuthForm } from "@/app/components/auth-form";
 import { PreferencesMenu } from "@/app/components/preferences-menu";
@@ -13,18 +13,21 @@ type AccessPageProps = {
   locale: SiteLocale;
   mode: AuthMode;
   returnTo?: string;
+  notice?: string;
 };
 
 export function AccessPage({
   locale,
   mode,
   returnTo,
+  notice,
 }: AccessPageProps) {
   const page = authPageCopy[locale][mode];
   const shared = authSharedCopy[locale];
 
   return (
     <div className="access-page" lang={locale}>
+      <div className="access-ambient" aria-hidden="true"><span /><span /><span /></div>
       <a className="skip-link" href="#conteudo-acesso">{shared.skip}</a>
       <header className="access-header">
         <Link className="brand" href="/" aria-label={shared.homeLabel}>
@@ -49,9 +52,17 @@ export function AccessPage({
         </section>
 
         <section className="access-card" aria-label={shared.cardLabel}>
+          <div className="access-card-status">
+            <span className="access-card-status-label">
+              <Activity aria-hidden="true" />
+              <span>{shared.flowLabel}</span>
+            </span>
+            <small className="access-status-badge">{shared.flowStatus}</small>
+          </div>
           <span className="access-icon" aria-hidden="true"><LockKeyhole /></span>
           <h2>{shared.cardTitle}</h2>
           <p>{shared.cardDescription}</p>
+          {notice && <div className="auth-message error" role="alert">{notice}</div>}
           <AuthForm mode={mode} locale={locale} returnTo={returnTo} />
           <div className="access-divider"><span>{shared.noCard}</span></div>
           <p className="access-alternate">{page.alternateText} <Link href={page.alternateHref}>{page.alternateLabel}</Link></p>

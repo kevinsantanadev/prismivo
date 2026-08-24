@@ -21,6 +21,12 @@ export const appShellCopy = {
     homeLabel: "Prismivo — página inicial",
     company: "Empresa",
     navigation: "Navegação do espaço",
+    quickAccess: "Acesso rápido",
+    allServices: "Todos os serviços",
+    mobileNavigation: "Navegação móvel do espaço",
+    more: "Mais",
+    closeMenu: "Fechar menu",
+    appearance: "Abrir preferências de aparência",
     logout: "Sair",
     unread: (count: number) => `${count} notificações não lidas`,
     settingsFor: (name: string) => `Configurações de ${name}`,
@@ -36,6 +42,12 @@ export const appShellCopy = {
     homeLabel: "Prismivo — home page",
     company: "Company",
     navigation: "Workspace navigation",
+    quickAccess: "Quick access",
+    allServices: "All services",
+    mobileNavigation: "Mobile workspace navigation",
+    more: "More",
+    closeMenu: "Close menu",
+    appearance: "Open appearance preferences",
     logout: "Sign out",
     unread: (count: number) => `${count} unread notifications`,
     settingsFor: (name: string) => `Settings for ${name}`,
@@ -51,6 +63,12 @@ export const appShellCopy = {
     homeLabel: "Prismivo — página de inicio",
     company: "Empresa",
     navigation: "Navegación del espacio",
+    quickAccess: "Acceso rápido",
+    allServices: "Todos los servicios",
+    mobileNavigation: "Navegación móvil del espacio",
+    more: "Más",
+    closeMenu: "Cerrar menú",
+    appearance: "Abrir preferencias de apariencia",
     logout: "Cerrar sesión",
     unread: (count: number) => `${count} notificaciones sin leer`,
     settingsFor: (name: string) => `Configuración de ${name}`,
@@ -66,12 +84,33 @@ export const appShellCopy = {
   homeLabel: string;
   company: string;
   navigation: string;
+  quickAccess: string;
+  allServices: string;
+  mobileNavigation: string;
+  more: string;
+  closeMenu: string;
+  appearance: string;
   logout: string;
   unread: (count: number) => string;
   settingsFor: (name: string) => string;
   openProfile: string;
   nav: Record<AppSection, string>;
 }>;
+
+export type MobileNavigationCopy = Pick<
+  (typeof appShellCopy)[SiteLocale],
+  "mobileNavigation" | "more" | "closeMenu" | "logout" | "nav"
+>;
+
+/**
+ * Keeps the Server Component -> Client Component boundary JSON-serializable.
+ * The complete shell dictionary also contains formatter functions and must
+ * never be passed directly to a Client Component.
+ */
+export function getMobileNavigationCopy(locale: SiteLocale): MobileNavigationCopy {
+  const { mobileNavigation, more, closeMenu, logout, nav } = appShellCopy[locale];
+  return { mobileNavigation, more, closeMenu, logout, nav };
+}
 
 const translatedShellText: Record<Exclude<SiteLocale, "pt-BR">, Record<string, string>> = {
   en: {

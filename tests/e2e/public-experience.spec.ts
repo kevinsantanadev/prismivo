@@ -8,6 +8,53 @@ test("a chamada gratuita abre o cadastro real", async ({ page }) => {
   await expect(page.getByRole("heading", { level: 1, name: /Crie o espaço/ })).toBeVisible();
 });
 
+test("o login mantém uma única ação de senha e hierarquia limpa", async ({ page }) => {
+  await page.goto("/entrar");
+
+  await expect(page.locator(".access-flow")).toHaveCount(0);
+  await expect(page.locator(".access-card-status-label")).toContainText("Fluxo de identidade");
+  await expect(page.locator(".access-status-badge")).toHaveText("PROTEGIDO");
+
+  const statusLabel = await page.locator(".access-card-status-label").boundingBox();
+  const statusBadge = await page.locator(".access-status-badge").boundingBox();
+  expect(statusLabel).not.toBeNull();
+  expect(statusBadge).not.toBeNull();
+  expect(statusLabel!.x + statusLabel!.width).toBeLessThan(statusBadge!.x);
+
+  const password = page.locator("#auth-password");
+  const toggle = page.getByRole("button", { name: "Mostrar senha" });
+  await expect(password).toBeVisible();
+  await expect(toggle).toHaveCount(1);
+  await expect(page.getByRole("link", { name: "Esqueci minha senha" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Reenviar confirmação" })).toHaveCount(0);
+
+  const field = await page.locator(".password-input-wrap").boundingBox();
+  const action = await toggle.boundingBox();
+  expect(field).not.toBeNull();
+  expect(action).not.toBeNull();
+  expect(action!.x).toBeGreaterThanOrEqual(field!.x);
+  expect(action!.x + action!.width).toBeLessThanOrEqual(field!.x + field!.width);
+  expect(action!.y).toBeGreaterThanOrEqual(field!.y);
+  expect(action!.y + action!.height).toBeLessThanOrEqual(field!.y + field!.height);
+});
+
+test("o cadastro usa um indicador de senha compacto", async ({ page }) => {
+  await page.goto("/cadastro");
+
+  await expect(page.locator(".password-checklist")).toHaveCount(0);
+  const strength = page.locator(".password-strength");
+  await expect(strength).toBeVisible();
+  await expect(strength.locator(".password-strength-meter span")).toHaveCount(5);
+  await page.getByLabel("Senha", { exact: true }).fill("Prisma1!");
+  await expect(strength).toContainText("Forte");
+  await expect(strength).toContainText("8 caracteres");
+
+  const strengthBounds = await strength.boundingBox();
+  expect(strengthBounds).not.toBeNull();
+  expect(strengthBounds!.height).toBeLessThanOrEqual(96);
+  await expect(page.getByRole("button", { name: "Mostrar senha" })).toHaveCount(2);
+});
+
 test("tema e idioma persistem como preferências acessíveis", async ({ page }) => {
   await page.goto("/");
   const preferences = page.getByRole("button", { name: "Preferências de aparência e idioma" });
@@ -38,6 +85,33 @@ test("rotas privadas redirecionam e a saúde pública não expõe segredos", asy
   expect(body.service).toBe("prismivo-web");
   expect(["ok", "degraded"]).toContain(body.status);
   expect(body).not.toHaveProperty("environment");
+
+  const serviceWorker = await request.get("/sw.js");
+  expect(serviceWorker.ok()).toBe(true);
+  expect(serviceWorker.headers()["cache-control"]).toContain("no-store");
+});
+
+test("todas as áreas privadas exigem uma sessão válida", async ({ page }) => {
+  const privateRoutes = [
+    "/app",
+    "/app/tarefas",
+    "/app/projetos",
+    "/app/clientes",
+    "/app/aprovacoes",
+    "/app/arquivos",
+    "/app/atendimento",
+    "/app/conteudo",
+    "/app/assinatura",
+    "/app/notificacoes",
+    "/app/equipe",
+    "/app/administracao",
+    "/app/configuracoes",
+  ];
+
+  for (const route of privateRoutes) {
+    await page.goto(route);
+    await expect(page).toHaveURL(/\/entrar/);
+  }
 });
 
 test("a navegação móvel não cria rolagem horizontal", async ({ page }) => {

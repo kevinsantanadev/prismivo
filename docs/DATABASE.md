@@ -18,6 +18,8 @@ Todas têm Row Level Security habilitada. Funções privadas verificam participa
 
 Essa fatia sustenta cadastro, isolamento por organização, colaboração, convites, perfis profissionais, avatares privados, clientes, projetos, tarefas, entregáveis versionados, aprovações, comentários, arquivos, atendimentos com anexos, histórico, notificações, preferências, consentimentos, conteúdo publicável e cobrança demonstrativa.
 
+As preferências pessoais da interface ficam em `profiles`: tema, destaque, filtro visual, percepção de cores, modo da barra lateral, densidade, largura, cantos, escala de texto, movimento e quatro atalhos únicos. Defaults e restrições `check` protegem valores legados ou inválidos, enquanto a política `profiles_update_own` limita a alteração ao próprio usuário autenticado.
+
 Conteúdos globais só podem ser lidos anonimamente quando estão publicados e dentro da data de publicação. Conteúdos de empresa permanecem vinculados a `organization_id` e apenas `owner`, `admin` ou `editor` podem alterá-los. Planos são públicos para consulta; assinaturas e eventos financeiros são privados, e mudanças passam por uma RPC que valida sessão, papel, plano e preço no banco.
 
 ## Entidades por domínio

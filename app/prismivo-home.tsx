@@ -515,7 +515,7 @@ function ProductPreview({ content }: { content: (typeof copy)[Locale]["preview"]
             <article><span>{content.sla}</span><div className="gauge"><Clock3 aria-hidden="true" /></div><strong className="sla-value">2h 14min</strong><small>{content.target}</small></article>
           </div>
           <div className="dashboard-lower">
-            <article><span>{content.activity}</span><div className="chart" aria-label="Gráfico demonstrativo de atividade"><i /><i /><i /><i /><i /><i /><i /></div></article>
+            <article><span>{content.activity}</span><div className="chart" role="img" aria-label="Gráfico demonstrativo de atividade"><i /><i /><i /><i /><i /><i /><i /></div></article>
             <article><span>{content.tasks}</span>{content.taskItems.map((item, index) => <div className="task-row" key={item}><CheckCircle2 className={index === 2 ? "done" : ""} aria-hidden="true" /><small>{item}</small><em>{index === 2 ? "✓" : ""}</em></div>)}</article>
           </div>
         </div>

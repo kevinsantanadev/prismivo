@@ -1555,7 +1555,7 @@ body.preferences-open {
   top: 20px;
   right: 20px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--lime) 14%, transparent);
+  background: color-mix(in srgb, var(--lime) 5%, transparent);
   color: var(--lime);
   padding: 7px 10px;
   font-size: 0.68rem;

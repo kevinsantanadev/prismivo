@@ -120,6 +120,7 @@ export const settingsSchema = z.object({
   phone: z.string().trim().max(32, "Use no máximo 32 caracteres."),
   location: z.string().trim().max(100, "Use no máximo 100 caracteres."),
   website: z.string().trim().max(240, "Use no máximo 240 caracteres.").refine((value) => !value || /^https?:\/\/[^\s]+$/i.test(value), "Informe um endereço iniciado por http:// ou https://."),
+  theme: z.enum(["system", "light", "dark", "mono"]),
   accentColor: z.enum(["lime", "violet", "blue", "amber", "teal", "rose"]),
   interfaceFilter: z.enum(["none", "soft", "crisp", "grayscale"]),
   colorVisionMode: z.enum(["standard", "protanopia", "deuteranopia", "tritanopia", "achromatopsia"]),

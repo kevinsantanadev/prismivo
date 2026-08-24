@@ -4,6 +4,8 @@ import { SitePreferencesProvider } from "./components/site-preferences";
 import { ServiceWorkerRegistration } from "./components/service-worker-registration";
 import "./globals.css";
 
+const preferenceBootScript = `(()=>{try{const r=document.documentElement,s=localStorage;const t=s.getItem("prismivo-theme");const v=["system","light","dark","mono"].includes(t)?t:"system";const resolved=v==="system"?(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"):v;r.dataset.theme=resolved;r.style.colorScheme=resolved==="light"?"light":"dark";const l=s.getItem("prismivo-locale");if(["pt-BR","en","es"].includes(l))r.lang=l;const a=s.getItem("prismivo-accent");if(["lime","violet","blue","amber","teal","rose"].includes(a))r.dataset.accent=a;const f=s.getItem("prismivo-interface-filter");if(["none","soft","crisp","grayscale"].includes(f))r.dataset.interfaceFilter=f;const c=s.getItem("prismivo-color-vision");if(["standard","protanopia","deuteranopia","tritanopia","achromatopsia"].includes(c))r.dataset.colorVision=c;}catch{}})();`;
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -63,6 +65,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: preferenceBootScript }} />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >

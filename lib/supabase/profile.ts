@@ -19,6 +19,7 @@ export async function updateProfileRecord(
     phone: string;
     location: string;
     website: string;
+    theme: string;
     accentColor: string;
     interfaceFilter: string;
     colorVisionMode: string;
@@ -36,6 +37,7 @@ export async function updateProfileRecord(
     phone: input.phone,
     location: input.location,
     website: input.website,
+    theme: input.theme,
     accent_color: input.accentColor,
     interface_filter: input.interfaceFilter,
     color_vision_mode: input.colorVisionMode,

@@ -21,6 +21,10 @@ export const appShellCopy = {
     homeLabel: "Prismivo — página inicial",
     company: "Empresa",
     navigation: "Navegação do espaço",
+    mobileNavigation: "Navegação móvel do espaço",
+    more: "Mais",
+    closeMenu: "Fechar menu",
+    appearance: "Abrir preferências de aparência",
     logout: "Sair",
     unread: (count: number) => `${count} notificações não lidas`,
     settingsFor: (name: string) => `Configurações de ${name}`,
@@ -36,6 +40,10 @@ export const appShellCopy = {
     homeLabel: "Prismivo — home page",
     company: "Company",
     navigation: "Workspace navigation",
+    mobileNavigation: "Mobile workspace navigation",
+    more: "More",
+    closeMenu: "Close menu",
+    appearance: "Open appearance preferences",
     logout: "Sign out",
     unread: (count: number) => `${count} unread notifications`,
     settingsFor: (name: string) => `Settings for ${name}`,
@@ -51,6 +59,10 @@ export const appShellCopy = {
     homeLabel: "Prismivo — página de inicio",
     company: "Empresa",
     navigation: "Navegación del espacio",
+    mobileNavigation: "Navegación móvil del espacio",
+    more: "Más",
+    closeMenu: "Cerrar menú",
+    appearance: "Abrir preferencias de apariencia",
     logout: "Cerrar sesión",
     unread: (count: number) => `${count} notificaciones sin leer`,
     settingsFor: (name: string) => `Configuración de ${name}`,
@@ -66,6 +78,10 @@ export const appShellCopy = {
   homeLabel: string;
   company: string;
   navigation: string;
+  mobileNavigation: string;
+  more: string;
+  closeMenu: string;
+  appearance: string;
   logout: string;
   unread: (count: number) => string;
   settingsFor: (name: string) => string;

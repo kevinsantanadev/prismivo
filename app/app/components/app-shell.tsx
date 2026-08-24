@@ -11,6 +11,7 @@ import {
   ListChecks,
   LogOut,
   Newspaper,
+  Palette,
   ReceiptText,
   ShieldCheck,
   Settings2,
@@ -18,19 +19,25 @@ import {
   Users,
 } from "lucide-react";
 import { signOutPath } from "@/app/session-auth";
-import { PreferencesMenu } from "@/app/components/preferences-menu";
 import {
   appShellCopy,
   translateAppShellText,
   type AppSection,
 } from "@/lib/app-shell-i18n";
 import { getRequestLocale } from "@/lib/site-locale-server";
+import { MobileAppNavigation } from "./mobile-app-navigation";
+import { WorkspacePreferencesSync } from "./workspace-preferences-sync";
 
 type WorkspaceSummary = {
   organizationName: string;
   userName: string;
   role?: string;
   avatarUrl?: string | null;
+  userLocale: string;
+  theme: string;
+  accentColor: string;
+  interfaceFilter: string;
+  colorVisionMode: string;
 };
 
 const navItems = [
@@ -76,9 +83,17 @@ export async function AppShell({
     .map((part) => part[0])
     .join("")
     .toUpperCase();
+  const visibleNavItems = navItems.filter(([key]) => isNavigationVisible(key, workspace.role));
 
   return (
     <div className="app-layout">
+      <WorkspacePreferencesSync
+        locale={workspace.userLocale}
+        theme={workspace.theme}
+        accentColor={workspace.accentColor}
+        interfaceFilter={workspace.interfaceFilter}
+        colorVisionMode={workspace.colorVisionMode}
+      />
       <a className="skip-link" href="#app-content">{copy.skip}</a>
       <aside className="app-sidebar">
         <Link className="brand app-brand" href="/" aria-label={copy.homeLabel}>
@@ -90,7 +105,7 @@ export async function AppShell({
           <div><small>{copy.company}</small><strong>{workspace.organizationName}</strong></div>
         </div>
         <nav aria-label={copy.navigation}>
-          {navItems.filter(([key]) => isNavigationVisible(key, workspace.role)).map(([key, href, Icon]) => (
+          {visibleNavItems.map(([key, href, Icon]) => (
             <Link
               key={key}
               href={href}
@@ -110,7 +125,14 @@ export async function AppShell({
         <header className="app-topbar">
           <div><span className="app-breadcrumb">{localizedTitle}</span><small>{localizedDescription}</small></div>
           <div className="app-top-actions">
-            <PreferencesMenu />
+            <Link
+              href="/app/configuracoes#appearance-settings-title"
+              className="notification-button app-appearance-button"
+              aria-label={copy.appearance}
+              title={copy.appearance}
+            >
+              <Palette aria-hidden="true" />
+            </Link>
             <Link
               href="/app/notificacoes"
               className="notification-button"
@@ -131,6 +153,11 @@ export async function AppShell({
         </header>
         <main id="app-content" className="app-content">{children}</main>
       </div>
+      <MobileAppNavigation
+        active={active}
+        copy={copy}
+        items={visibleNavItems.map(([key, href]) => ({ key, href }))}
+      />
     </div>
   );
 }

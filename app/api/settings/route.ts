@@ -36,7 +36,20 @@ export async function PATCH(request: Request) {
   try {
     const statements: BatchItem<"sqlite">[] = [
       db.update(users)
-        .set({ name: parsed.data.name, locale: parsed.data.locale, updatedAt: sql`CURRENT_TIMESTAMP` })
+        .set({
+          name: parsed.data.name,
+          locale: parsed.data.locale,
+          bio: parsed.data.bio,
+          jobTitle: parsed.data.jobTitle,
+          phone: parsed.data.phone,
+          location: parsed.data.location,
+          website: parsed.data.website,
+          theme: parsed.data.theme,
+          accentColor: parsed.data.accentColor,
+          interfaceFilter: parsed.data.interfaceFilter,
+          colorVisionMode: parsed.data.colorVisionMode,
+          updatedAt: sql`CURRENT_TIMESTAMP`,
+        })
         .where(eq(users.id, workspace.userId)),
       db.insert(activities).values({
         id: `act_${crypto.randomUUID()}`,
@@ -52,7 +65,12 @@ export async function PATCH(request: Request) {
     if (canEditOrganization) {
       statements.push(
         db.update(organizations)
-          .set({ name: parsed.data.organizationName, updatedAt: sql`CURRENT_TIMESTAMP` })
+          .set({
+            name: parsed.data.organizationName,
+            brandColor: parsed.data.organizationBrandColor,
+            visualStyle: parsed.data.organizationVisualStyle,
+            updatedAt: sql`CURRENT_TIMESTAMP`,
+          })
           .where(and(eq(organizations.id, workspace.organizationId), eq(organizations.status, "active"))),
       );
     }

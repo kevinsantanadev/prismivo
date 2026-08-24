@@ -17,6 +17,7 @@ export type SupabaseWorkspace = {
   phone: string;
   location: string;
   website: string;
+  theme: string;
   accentColor: string;
   interfaceFilter: string;
   colorVisionMode: string;
@@ -29,7 +30,7 @@ export async function findSupabaseWorkspaceByEmail(email: string): Promise<Supab
   const normalizedEmail = email.trim().toLowerCase();
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("id, email, name, locale, status, avatar_path, bio, job_title, phone, location, website, accent_color, interface_filter, color_vision_mode")
+    .select("id, email, name, locale, status, avatar_path, bio, job_title, phone, location, website, theme, accent_color, interface_filter, color_vision_mode")
     .eq("email", normalizedEmail)
     .eq("status", "active")
     .maybeSingle();
@@ -75,6 +76,7 @@ export async function findSupabaseWorkspaceByEmail(email: string): Promise<Supab
     phone: profile.phone,
     location: profile.location,
     website: profile.website,
+    theme: profile.theme,
     accentColor: profile.accent_color,
     interfaceFilter: profile.interface_filter,
     colorVisionMode: profile.color_vision_mode,

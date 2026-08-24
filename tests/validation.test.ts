@@ -254,9 +254,10 @@ describe("operational module validation", () => {
   });
 
   it("validates supported account locales", () => {
-    const profile = { name: "Kevin Reis", locale: "pt-BR", organizationName: "Prismivo Lab", bio: "", jobTitle: "", phone: "", location: "", website: "https://example.test", accentColor: "lime", interfaceFilter: "none", colorVisionMode: "standard", organizationBrandColor: "lime", organizationVisualStyle: "prism" };
+    const profile = { name: "Kevin Reis", locale: "pt-BR", organizationName: "Prismivo Lab", bio: "", jobTitle: "", phone: "", location: "", website: "https://example.test", theme: "system", accentColor: "lime", interfaceFilter: "none", colorVisionMode: "standard", organizationBrandColor: "lime", organizationVisualStyle: "prism" };
     expect(settingsSchema.safeParse(profile).success).toBe(true);
     expect(settingsSchema.safeParse({ ...profile, locale: "xx" }).success).toBe(false);
+    expect(settingsSchema.safeParse({ ...profile, theme: "transparent" }).success).toBe(false);
   });
 });
 

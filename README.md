@@ -81,8 +81,8 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Upload privado com validação de tamanho, extensão, MIME e assinatura;
 - Download autenticado, exclusão lógica e vínculo de arquivos a projetos;
 - Atendimento com protocolo, prioridade, mensagens, encerramento e reabertura;
-- Quarenta e sete testes unitários de validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização e segurança;
-- Oito jornadas E2E executadas em Chromium e WebKit móvel para cadastro, preferências, foco por teclado, proteção de rotas, responsividade em 320/390 px e disponibilidade;
+- Sessenta e dois testes unitários e de componentes para validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização, preferências transacionais e segurança;
+- Quarenta execuções E2E em Chromium e WebKit móvel para cadastro, preferências, WCAG automatizável, foco por teclado, proteção de rotas, responsividade em 320/360/390/412/430 px e disponibilidade;
 - Pipeline de CI com testes unitários, tipagem, lint, build e Playwright antes de cada integração à branch principal.
 - Preview e produção independentes na Vercel com build nativo do Next.js, variáveis isoladas por ambiente e status `READY` validado;
 - Produção acessível em `https://prismivo.vercel.app`, com health check confirmando aplicação e banco em estado `ready`;
@@ -196,8 +196,8 @@ Cada pessoa cria a própria conta e confirma o e-mail. No primeiro acesso, o onb
 
 ## Próximos marcos
 
-1. Validar a jornada transacional completa com caixas de e-mail reais e acompanhar os primeiros registros de entrega;
-2. Concluir backup e restauração antes da abertura comercial;
+1. Habilitar a proteção contra senhas vazadas no Supabase Auth;
+2. Concluir e comprovar a restauração de backup antes da abertura comercial;
 3. Executar a beta controlada, acompanhar saúde e logs e ativar pagamentos reais somente após revisão financeira.
 
 ## Autoria e licença

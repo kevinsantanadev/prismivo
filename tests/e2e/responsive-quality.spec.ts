@@ -30,7 +30,14 @@ for (const width of [320, 360, 390, 412, 430]) {
 
 test("rotas públicas críticas não falham silenciosamente na rede", async ({ page }) => {
   const failures: string[] = [];
-  page.on("requestfailed", (request) => failures.push(`${request.method()} ${request.url()} — ${request.failure()?.errorText ?? "falha"}`));
+  page.on("requestfailed", (request) => {
+    const error = request.failure()?.errorText ?? "falha";
+    const isCancelledPrefetch = error === "net::ERR_ABORTED" && request.url().includes("_rsc=");
+    if (!isCancelledPrefetch) failures.push(`${request.method()} ${request.url()} — ${error}`);
+  });
+  page.on("response", (response) => {
+    if (response.status() >= 500) failures.push(`${response.status()} ${response.url()}`);
+  });
 
   for (const route of routes) {
     await page.goto(route);

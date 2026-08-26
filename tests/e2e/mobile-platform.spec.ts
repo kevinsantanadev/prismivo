@@ -90,7 +90,9 @@ test("superfícies internas permanecem legíveis sem expor uma rota de teste", a
     document.documentElement.dataset.theme = "light";
     document.documentElement.dataset.textScale = "extra-large";
     document.documentElement.dataset.sidebarMode = "adaptive";
-    document.body.innerHTML = fixture;
+    const stableBody = document.body.cloneNode(false) as HTMLBodyElement;
+    stableBody.innerHTML = fixture;
+    document.documentElement.replaceChild(stableBody, document.body);
   }, authenticatedMobileFixture);
 
   await expect(page.locator(".app-sidebar")).toBeHidden();
@@ -106,9 +108,14 @@ test("superfícies internas permanecem legíveis sem expor uma rota de teste", a
     const content = document.querySelector<HTMLElement>(".app-content")!;
     const table = document.querySelector<HTMLElement>(".responsive-table")!;
     const breadcrumb = document.querySelector<HTMLElement>(".app-breadcrumb")!;
+    const actions = document.querySelector<HTMLElement>(".app-top-actions")!;
+    const breadcrumbStyle = getComputedStyle(breadcrumb);
     return {
       breadcrumbContained: breadcrumb.getBoundingClientRect().right <= document.documentElement.clientWidth + 1,
-      breadcrumbTruncated: breadcrumb.scrollWidth > breadcrumb.clientWidth,
+      breadcrumbDoesNotOverlapActions: breadcrumb.getBoundingClientRect().right <= actions.getBoundingClientRect().left - 7,
+      breadcrumbHasSafeOverflow: breadcrumbStyle.overflow === "hidden"
+        && breadcrumbStyle.textOverflow === "ellipsis"
+        && breadcrumbStyle.whiteSpace === "nowrap",
       contentBottomPadding: Number.parseFloat(getComputedStyle(content).paddingBottom),
       entityColumns: columns(".entity-grid"),
       metricsColumns: columns(".app-metrics"),
@@ -123,7 +130,8 @@ test("superfícies internas permanecem legíveis sem expor uma rota de teste", a
   expect(responsive.taskColumns).toBe(1);
   expect(responsive.tableContainsItsOverflow).toBe(true);
   expect(responsive.breadcrumbContained).toBe(true);
-  expect(responsive.breadcrumbTruncated).toBe(true);
+  expect(responsive.breadcrumbDoesNotOverlapActions).toBe(true);
+  expect(responsive.breadcrumbHasSafeOverflow).toBe(true);
   expect(responsive.contentBottomPadding).toBeGreaterThan(responsive.navigationHeight + 20);
 });
 

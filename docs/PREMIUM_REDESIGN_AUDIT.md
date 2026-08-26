@@ -27,6 +27,15 @@ Também permanecem preservadas as preferências existentes:
 | Mobile | Regras responsivas existentes | UX específica, menos efeitos e partículas, alvos de 44 px |
 | Movimento | Várias animações independentes | Curvas e durações normalizadas, transform/opacity e redução |
 
+## Tradução das referências visuais
+
+As referências finais enviadas para o prisma e para o vazio roxo foram usadas como direção de arte, sem incorporar ou reproduzir literalmente os arquivos no produto:
+
+- o prisma passou a ter silhueta vertical de dupla pirâmide, faces escuras, núcleo frio e luz concentrada nas arestas, com reflexos magenta pontuais nos ombros;
+- o vazio roxo foi traduzido para um campo vetorial em camadas, com partículas de escalas e profundidades diferentes e uma rotação ambiente muito lenta;
+- o GIF e a imagem de referência não são entregues ao navegador: a solução permanece em SVG e CSS, sem dependência visual nova;
+- no mobile, as camadas distantes e parte das partículas são removidas; com redução de movimento, todas as animações relacionadas ficam estáticas.
+
 ## Design system
 
 A camada premium centraliza:

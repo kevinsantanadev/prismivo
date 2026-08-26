@@ -164,18 +164,30 @@ body {
 .site-shell::after {
   position: absolute;
   z-index: 0;
-  inset: 0 0 auto;
-  height: min(980px, 100vh);
+  inset: -3% -2% auto;
+  height: min(1060px, 106vh);
   background-image:
-    radial-gradient(circle, color-mix(in srgb, var(--premium-blue-bright) 44%, transparent) 0 1px, transparent 1.6px),
-    radial-gradient(circle, color-mix(in srgb, var(--premium-violet) 42%, transparent) 0 1.2px, transparent 2px),
-    radial-gradient(circle, color-mix(in srgb, var(--premium-magenta) 32%, transparent) 0 0.8px, transparent 1.5px);
+    radial-gradient(circle, color-mix(in srgb, var(--premium-blue-bright) 46%, transparent) 0 0.7px, transparent 1.35px),
+    radial-gradient(circle, color-mix(in srgb, var(--premium-violet) 54%, transparent) 0 1.05px, transparent 1.8px),
+    radial-gradient(circle, color-mix(in srgb, var(--premium-magenta) 42%, transparent) 0 1.4px, transparent 2.4px);
   background-position: 3% 18%, 61% 7%, 88% 34%;
-  background-size: 137px 149px, 211px 197px, 283px 241px;
+  background-size: 59px 67px, 97px 89px, 157px 139px;
   content: "";
   mask-image: linear-gradient(to bottom, black, transparent 92%);
-  opacity: 0.38;
+  opacity: 0.3;
   pointer-events: none;
+  transform: translate3d(0, 0, 0) scale(1.03);
+  animation: premium-ambient-drift 34s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+:root[data-theme="light"] .site-shell::after {
+  mix-blend-mode: multiply;
+  opacity: 0.17;
+}
+
+:root[data-theme="mono"] .site-shell::after {
+  filter: grayscale(1);
 }
 
 .site-header {
@@ -510,7 +522,7 @@ body {
   width: 100%;
   height: 100%;
   transform-style: preserve-3d;
-  animation: premium-prism-float 9s var(--premium-ease-soft) infinite;
+  animation: premium-prism-float 10.5s var(--premium-ease-soft) infinite;
   will-change: transform;
 }
 
@@ -519,18 +531,22 @@ body {
   width: 100%;
   height: 100%;
   overflow: visible;
-  filter: drop-shadow(0 34px 42px rgba(0, 0, 0, 0.42));
+  filter: saturate(1.08) drop-shadow(0 34px 42px rgba(0, 0, 0, 0.48));
+}
+
+:root[data-theme="mono"] .prism-svg {
+  filter: grayscale(1) contrast(1.08) drop-shadow(0 34px 42px rgba(0, 0, 0, 0.42));
 }
 
 .prism-crystal {
   transform-box: fill-box;
   transform-origin: center;
-  animation: premium-prism-turn 15s var(--premium-ease-soft) infinite;
+  animation: premium-prism-turn 19s var(--premium-ease-soft) infinite;
 }
 
 .prism-facet {
-  stroke: rgba(187, 207, 255, 0.16);
-  stroke-width: 1;
+  stroke: rgba(189, 213, 255, 0.2);
+  stroke-width: 0.9;
 }
 
 .prism-facet-center,
@@ -547,8 +563,8 @@ body {
 }
 
 .prism-edge-bright {
-  stroke-width: 2.1;
-  opacity: 0.72;
+  stroke-width: 3;
+  opacity: 0.88;
   animation: premium-edge-pulse 5.4s ease-in-out infinite;
 }
 
@@ -562,13 +578,22 @@ body {
   stroke-width: 0.8;
 }
 
+.prism-energy-line {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 4.4;
+  opacity: 0.84;
+  animation: premium-energy-travel 7.4s ease-in-out infinite;
+}
+
 .prism-inner-light {
   opacity: 0.75;
   animation: premium-core-breathe 5.8s ease-in-out infinite;
 }
 
 .prism-svg-halo {
-  opacity: 0.4;
+  opacity: 0.48;
   animation: premium-halo-breathe 6.4s ease-in-out infinite;
 }
 
@@ -580,6 +605,67 @@ body {
   animation-delay: -2.4s;
 }
 
+.prism-flare-tip {
+  animation-delay: -1.1s;
+}
+
+.prism-star {
+  fill: color-mix(in srgb, var(--premium-violet) 72%, white);
+  opacity: 0.42;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: premium-star-twinkle 5.8s ease-in-out infinite;
+}
+
+.prism-star:nth-child(2n) { animation-delay: -2.1s; }
+.prism-star:nth-child(3n) { fill: var(--premium-blue-bright); animation-delay: -3.7s; }
+.prism-star:nth-child(5n) { fill: var(--premium-magenta); animation-delay: -4.8s; }
+
+.prism-vortex {
+  position: absolute;
+  z-index: 0;
+  inset: 2% -11% 5%;
+  overflow: hidden;
+  border-radius: 50%;
+  opacity: 0.42;
+  transform: rotate(-12deg) scaleX(1.12);
+  animation: premium-vortex-turn 72s linear infinite;
+  pointer-events: none;
+}
+
+.prism-vortex::before,
+.prism-vortex::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  content: "";
+  pointer-events: none;
+}
+
+.prism-vortex::before {
+  background-image:
+    radial-gradient(circle, color-mix(in srgb, var(--premium-violet) 76%, transparent) 0 0.8px, transparent 1.4px),
+    radial-gradient(circle, color-mix(in srgb, var(--premium-magenta) 68%, transparent) 0 1.25px, transparent 2px),
+    radial-gradient(circle, color-mix(in srgb, var(--premium-blue-bright) 58%, transparent) 0 0.65px, transparent 1.2px);
+  background-position: 7% 13%, 62% 37%, 31% 82%;
+  background-size: 19px 23px, 37px 31px, 53px 47px;
+  mask-image: repeating-conic-gradient(from 16deg, transparent 0 9deg, black 12deg 25deg, transparent 29deg 43deg);
+  transform: scale(1.08);
+}
+
+.prism-vortex::after {
+  inset: 8%;
+  background-image:
+    radial-gradient(circle, color-mix(in srgb, var(--premium-violet) 82%, transparent) 0 1.8px, transparent 3px),
+    radial-gradient(ellipse, color-mix(in srgb, var(--premium-magenta) 68%, transparent) 0 2px, transparent 4px);
+  background-position: 15% 32%, 78% 66%;
+  background-size: 73px 61px, 109px 97px;
+  filter: blur(1.2px);
+  mask-image: radial-gradient(circle, transparent 0 18%, black 31% 68%, transparent 84%);
+  opacity: 0.72;
+  animation: premium-vortex-depth 18s ease-in-out infinite alternate;
+}
+
 .prism-aura {
   position: absolute;
   z-index: 0;
@@ -589,8 +675,8 @@ body {
   aspect-ratio: 1;
   border-radius: 50%;
   background:
-    radial-gradient(circle at 42% 42%, color-mix(in srgb, var(--premium-blue-bright) 22%, transparent), transparent 36%),
-    radial-gradient(circle at 66% 58%, color-mix(in srgb, var(--premium-violet) 24%, transparent), transparent 60%);
+    radial-gradient(circle at 48% 36%, color-mix(in srgb, var(--premium-blue-bright) 28%, transparent), transparent 34%),
+    radial-gradient(circle at 58% 60%, color-mix(in srgb, var(--premium-violet) 32%, transparent), transparent 58%);
   filter: blur(34px);
   opacity: 0.72;
   animation: premium-aura 7.2s ease-in-out infinite;
@@ -598,8 +684,9 @@ body {
 
 .prism-orbit {
   z-index: 1;
-  border-color: rgba(156, 179, 255, 0.17);
-  background: linear-gradient(90deg, transparent 12%, rgba(118, 146, 255, 0.08), transparent 88%);
+  border-color: rgba(156, 179, 255, 0.09);
+  background: linear-gradient(90deg, transparent 12%, rgba(118, 146, 255, 0.035), transparent 88%);
+  opacity: 0.3;
 }
 
 .prism-orbit::after {
@@ -627,7 +714,7 @@ body {
 .prism-orbit-two {
   width: 70%;
   height: 28%;
-  opacity: 0.58;
+  opacity: 0.16;
   transform: rotateX(72deg) rotateZ(59deg);
   animation: premium-orbit-reverse 31s linear infinite;
 }
@@ -639,8 +726,8 @@ body {
   height: 3px;
   border-radius: 50%;
   background: var(--premium-violet);
-  box-shadow: 0 0 12px color-mix(in srgb, var(--premium-violet) 78%, transparent);
-  opacity: 0.6;
+  box-shadow: 0 0 14px color-mix(in srgb, var(--premium-violet) 82%, transparent);
+  opacity: 0.66;
   animation: premium-particle-drift 9s ease-in-out infinite;
 }
 
@@ -658,7 +745,7 @@ body {
   bottom: 4%;
   width: 48%;
   height: 5%;
-  background: rgba(0, 0, 0, 0.52);
+  background: color-mix(in srgb, var(--premium-violet) 12%, rgba(0, 0, 0, 0.58));
   filter: blur(15px);
   animation: premium-prism-shadow 9s var(--premium-ease-soft) infinite;
 }
@@ -885,14 +972,19 @@ body {
   to { opacity: 1; transform: translate3d(0, 0, 0); }
 }
 
+@keyframes premium-ambient-drift {
+  0% { opacity: 0.24; transform: translate3d(-1.2%, -0.6%, 0) scale(1.03); }
+  100% { opacity: 0.34; transform: translate3d(1.2%, 0.8%, 0) scale(1.045); }
+}
+
 @keyframes premium-prism-float {
   0%, 100% { transform: translate3d(0, 5px, 0) rotateX(-3deg) rotateY(-7deg) rotateZ(-1deg); }
   50% { transform: translate3d(0, -13px, 0) rotateX(3deg) rotateY(7deg) rotateZ(1deg); }
 }
 
 @keyframes premium-prism-turn {
-  0%, 100% { transform: perspective(900px) rotateY(-5deg) rotateZ(-0.7deg); }
-  50% { transform: perspective(900px) rotateY(6deg) rotateZ(0.7deg); }
+  0%, 100% { transform: perspective(900px) rotateY(-8deg) rotateZ(-0.6deg); }
+  50% { transform: perspective(900px) rotateY(9deg) rotateZ(0.6deg); }
 }
 
 @keyframes premium-prism-reflect {
@@ -903,6 +995,12 @@ body {
 @keyframes premium-edge-pulse {
   0%, 100% { opacity: 0.52; }
   50% { opacity: 0.9; }
+}
+
+@keyframes premium-energy-travel {
+  0%, 100% { opacity: 0.56; }
+  46% { opacity: 0.96; }
+  68% { opacity: 0.74; }
 }
 
 @keyframes premium-core-breathe {
@@ -918,6 +1016,21 @@ body {
 @keyframes premium-flare {
   0%, 100% { opacity: 0.5; transform: scale(0.82); }
   50% { opacity: 1; transform: scale(1.25); }
+}
+
+@keyframes premium-star-twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.72); }
+  52% { opacity: 0.88; transform: scale(1.24); }
+}
+
+@keyframes premium-vortex-turn {
+  from { transform: rotate(-12deg) scaleX(1.12); }
+  to { transform: rotate(348deg) scaleX(1.12); }
+}
+
+@keyframes premium-vortex-depth {
+  0% { opacity: 0.48; transform: translate3d(-1.5%, 1%, 0) scale(0.96); }
+  100% { opacity: 0.78; transform: translate3d(1.5%, -1%, 0) scale(1.04); }
 }
 
 @keyframes premium-aura {
@@ -1990,7 +2103,8 @@ body {
 @media (max-width: 760px), (max-height: 500px) and (hover: none) and (pointer: coarse) {
   .site-shell::after {
     background-size: 173px 181px, 257px 241px, 337px 293px;
-    opacity: 0.24;
+    opacity: 0.2;
+    animation: none;
   }
 
   .site-shell::before {
@@ -2088,9 +2202,26 @@ body {
     display: none;
   }
 
+  .prism-vortex {
+    inset: 7% -4% 8%;
+    opacity: 0.2;
+    transform: rotate(-12deg) scaleX(1.06);
+    animation: none;
+  }
+
+  .prism-vortex::after,
+  .prism-star:nth-child(n + 6) {
+    display: none;
+  }
+
   .prism-edge-bright,
-  .prism-flare {
+  .prism-flare,
+  .prism-energy-line {
     filter: none;
+  }
+
+  .prism-energy-line {
+    stroke-width: 3.4;
   }
 
   .prism-aura {
@@ -2410,10 +2541,15 @@ body {
   .prism-inner-light,
   .prism-svg-halo,
   .prism-flare,
+  .prism-energy-line,
+  .prism-star,
+  .prism-vortex,
+  .prism-vortex::after,
   .prism-aura,
   .prism-orbit,
   .prism-particle,
   .prism-shadow,
+  .site-shell::after,
   .upload-progress span::after,
   .linear-progress span::after,
   .table-progress span::after {
@@ -2433,10 +2569,15 @@ body {
 :root[data-motion="reduced"] .prism-inner-light,
 :root[data-motion="reduced"] .prism-svg-halo,
 :root[data-motion="reduced"] .prism-flare,
+:root[data-motion="reduced"] .prism-energy-line,
+:root[data-motion="reduced"] .prism-star,
+:root[data-motion="reduced"] .prism-vortex,
+:root[data-motion="reduced"] .prism-vortex::after,
 :root[data-motion="reduced"] .prism-aura,
 :root[data-motion="reduced"] .prism-orbit,
 :root[data-motion="reduced"] .prism-particle,
 :root[data-motion="reduced"] .prism-shadow,
+:root[data-motion="reduced"] .site-shell::after,
 :root[data-motion="reduced"] .upload-progress span::after,
 :root[data-motion="reduced"] .linear-progress span::after,
 :root[data-motion="reduced"] .table-progress span::after {
@@ -2455,6 +2596,8 @@ body {
   .prism-aura,
   .prism-orbit,
   .prism-particle,
+  .prism-star,
+  .prism-vortex,
   .site-shell::after,
   .section.prism-showcase::before {
     display: none;

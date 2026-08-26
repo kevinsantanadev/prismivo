@@ -10,6 +10,8 @@ test("o prisma premium é vetorial, visível e não cria uma dependência de can
   await expect(prism.locator("svg.prism-svg")).toHaveCount(1);
   await expect(prism.locator("canvas")).toHaveCount(0);
   await expect(prism.locator(".prism-facet")).toHaveCount(7);
+  await expect(prism.locator(".prism-star")).toHaveCount(8);
+  await expect(prism.locator(".prism-vortex")).toHaveCount(1);
 
   const metrics = await prism.evaluate((element) => {
     const rect = element.getBoundingClientRect();
@@ -34,11 +36,21 @@ test("a preferência interna de movimento reduz animações do prisma", async ({
 
   const motion = await page.locator(".kinetic-prism-hero").evaluate((element) => ({
     crystal: getComputedStyle(element.querySelector(".prism-crystal")!).animationName,
+    energy: getComputedStyle(element.querySelector(".prism-energy-line")!).animationName,
     object: getComputedStyle(element.querySelector(".kinetic-prism")!).animationName,
     particle: getComputedStyle(element.querySelector(".prism-particle")!).animationName,
+    star: getComputedStyle(element.querySelector(".prism-star")!).animationName,
+    vortex: getComputedStyle(element.querySelector(".prism-vortex")!).animationName,
   }));
 
-  expect(motion).toEqual({ crystal: "none", object: "none", particle: "none" });
+  expect(motion).toEqual({
+    crystal: "none",
+    energy: "none",
+    object: "none",
+    particle: "none",
+    star: "none",
+    vortex: "none",
+  });
 });
 
 test("temas público e interno continuam distintos e legíveis", async ({ page }) => {

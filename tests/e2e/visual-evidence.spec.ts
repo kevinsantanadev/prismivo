@@ -1,6 +1,6 @@
 import { expect, type Page, type TestInfo, test } from "@playwright/test";
 
-async function captureFullPageInSafeSegments(page: Page, testInfo: TestInfo, name: string) {
+async function captureResponsiveEvidence(page: Page, testInfo: TestInfo, name: string) {
   const viewport = page.viewportSize();
   expect(viewport).not.toBeNull();
 
@@ -14,17 +14,26 @@ async function captureFullPageInSafeSegments(page: Page, testInfo: TestInfo, nam
       document.documentElement.offsetHeight,
     ),
   }));
-  const maximumSegmentHeight = Math.max(viewport!.height, Math.floor(28_000 / devicePixelRatio));
-  const segmentCount = Math.ceil(height / maximumSegmentHeight);
-
-  for (let index = 0; index < segmentCount; index += 1) {
-    const y = index * maximumSegmentHeight;
-    const segmentHeight = Math.min(maximumSegmentHeight, height - y);
-    const suffix = segmentCount === 1 ? "" : `-${index + 1}`;
+  if (height * devicePixelRatio <= 28_000) {
     await page.screenshot({
       animations: "disabled",
-      clip: { x: 0, y, width: viewport!.width, height: segmentHeight },
-      path: testInfo.outputPath(`${name}${suffix}.png`),
+      fullPage: true,
+      path: testInfo.outputPath(`${name}.png`),
+    });
+    return;
+  }
+
+  const maximumScroll = Math.max(0, height - viewport!.height);
+  const positions = [...new Set([0, Math.round(maximumScroll / 2), maximumScroll])];
+
+  for (let index = 0; index < positions.length; index += 1) {
+    await page.evaluate((y) => window.scrollTo(0, y), positions[index]);
+    await page.evaluate(() => new Promise<void>((resolve) => {
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+    }));
+    await page.screenshot({
+      animations: "disabled",
+      path: testInfo.outputPath(`${name}-${index + 1}.png`),
     });
   }
 }
@@ -39,9 +48,9 @@ test("registra evidências estáveis da landing e da autenticação", async ({ p
   await page.goto("/");
   await expect(page.locator(".hero h1")).toBeVisible();
   await expect(page.locator(".kinetic-prism-hero svg")).toBeVisible();
-  await captureFullPageInSafeSegments(page, testInfo, "landing-premium");
+  await captureResponsiveEvidence(page, testInfo, "landing-premium");
 
   await page.goto("/entrar");
   await expect(page.locator(".access-card")).toBeVisible();
-  await captureFullPageInSafeSegments(page, testInfo, "autenticacao-premium");
+  await captureResponsiveEvidence(page, testInfo, "autenticacao-premium");
 });

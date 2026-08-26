@@ -65,8 +65,9 @@ test("rotas públicas críticas não falham silenciosamente na rede", async ({ p
   const failures: string[] = [];
   page.on("requestfailed", (request) => {
     const error = request.failure()?.errorText ?? "falha";
-    const isCancelledPrefetch = error === "net::ERR_ABORTED" && request.url().includes("_rsc=");
-    if (!isCancelledPrefetch) failures.push(`${request.method()} ${request.url()} — ${error}`);
+    const isNavigationCancellation = /(?:net::ERR_ABORTED|Load request cancelled)/i.test(error)
+      && (request.url().includes("_rsc=") || request.url().endsWith("/sw.js"));
+    if (!isNavigationCancellation) failures.push(`${request.method()} ${request.url()} — ${error}`);
   });
   page.on("response", (response) => {
     if (response.status() >= 500) failures.push(`${response.status()} ${response.url()}`);

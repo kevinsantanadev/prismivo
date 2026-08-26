@@ -90,7 +90,9 @@ test("superfícies internas permanecem legíveis sem expor uma rota de teste", a
     document.documentElement.dataset.theme = "light";
     document.documentElement.dataset.textScale = "extra-large";
     document.documentElement.dataset.sidebarMode = "adaptive";
-    document.body.innerHTML = fixture;
+    const stableBody = document.body.cloneNode(false) as HTMLBodyElement;
+    stableBody.innerHTML = fixture;
+    document.documentElement.replaceChild(stableBody, document.body);
   }, authenticatedMobileFixture);
 
   await expect(page.locator(".app-sidebar")).toBeHidden();

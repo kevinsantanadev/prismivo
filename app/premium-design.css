@@ -38,6 +38,8 @@
   --premium-blue-bright: #7de2ff;
   --premium-violet: #8d6dff;
   --premium-magenta: #ec64c7;
+  --premium-action: #5166dc;
+  --premium-action-end: #654ad1;
   --premium-navy: #0b1020;
   --premium-navy-soft: #11182a;
   --premium-white: #f7f9ff;
@@ -94,6 +96,8 @@
   --premium-blue-bright: #0e789e;
   --premium-violet: #7656ed;
   --premium-magenta: #bd3e97;
+  --premium-action: #3f56d0;
+  --premium-action-end: #6546c7;
   --premium-navy: #111a32;
   --premium-navy-soft: #18243f;
   --premium-white: #ffffff;
@@ -109,6 +113,8 @@
   --premium-blue-bright: #ffffff;
   --premium-violet: #bcbcbc;
   --premium-magenta: #e6e6e6;
+  --premium-action: #2d2d2d;
+  --premium-action-end: #111111;
   --premium-navy: #090909;
   --premium-navy-soft: #111111;
 }
@@ -259,7 +265,7 @@ body {
   min-height: 48px;
   border-color: color-mix(in srgb, var(--premium-blue) 78%, white 12%);
   border-radius: var(--premium-radius-sm);
-  background: linear-gradient(135deg, var(--premium-blue), color-mix(in srgb, var(--premium-violet) 72%, var(--premium-blue)));
+  background: linear-gradient(135deg, var(--premium-action), var(--premium-action-end));
   color: #fff;
   box-shadow: 0 12px 30px color-mix(in srgb, var(--premium-blue) 21%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.22);
   transition:
@@ -1156,9 +1162,12 @@ body {
 }
 
 .onboarding-bar span,
-.onboarding-progress span.active,
-.onboarding-submit {
+.onboarding-progress span.active {
   background: linear-gradient(90deg, var(--premium-blue), var(--premium-violet));
+}
+
+.onboarding-submit {
+  background: linear-gradient(135deg, var(--premium-action), var(--premium-action-end));
 }
 
 .legal-page,
@@ -1446,7 +1455,7 @@ body {
 .project-form .button {
   border-color: color-mix(in srgb, var(--premium-blue) 78%, white 10%);
   border-radius: var(--app-control-radius);
-  background: linear-gradient(135deg, var(--premium-blue), color-mix(in srgb, var(--premium-violet) 70%, var(--premium-blue)));
+  background: linear-gradient(135deg, var(--premium-action), var(--premium-action-end));
   color: #fff;
   box-shadow: 0 12px 28px color-mix(in srgb, var(--premium-blue) 18%, transparent), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transition:

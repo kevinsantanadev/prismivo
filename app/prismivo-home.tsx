@@ -379,7 +379,10 @@ export default function PrismivoHome() {
             </div>
           </div>
 
-          <ProductPreview content={content.preview} />
+          <div className="hero-visual">
+            <KineticPrism variant="hero" />
+            <ProductPreview content={content.preview} />
+          </div>
 
           <div className="metric-strip" aria-label="Métricas demonstrativas" data-reveal>
             {content.metrics.map(([value, label], index) => {
@@ -398,7 +401,7 @@ export default function PrismivoHome() {
               {content.prism.points.map((point, index) => <span key={point}><strong>0{index + 1}</strong>{point}</span>)}
             </div>
           </div>
-          <KineticPrism />
+          <KineticPrism variant="showcase" />
         </section>
 
         <section className="section product-section" id="produto" aria-labelledby="product-title" data-reveal>

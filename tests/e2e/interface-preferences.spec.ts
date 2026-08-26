@@ -35,13 +35,13 @@ test("barra lateral adaptável acompanha o tema e respeita escolhas explícitas"
   });
 
   const sidebar = page.locator(".app-sidebar");
-  await expect.poll(() => sidebar.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe("rgb(248, 250, 245)");
+  await expect.poll(() => sidebar.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe("rgb(248, 250, 255)");
 
   await page.evaluate(() => { document.documentElement.dataset.theme = "dark"; });
-  await expect.poll(() => sidebar.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe("rgb(17, 21, 18)");
+  await expect.poll(() => sidebar.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe("rgb(9, 14, 25)");
 
   await page.evaluate(() => { document.documentElement.dataset.sidebarMode = "light"; });
-  await expect.poll(() => sidebar.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe("rgb(248, 250, 245)");
+  await expect.poll(() => sidebar.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe("rgb(248, 250, 255)");
 });
 
 test("largura, densidade e cantos alteram o layout sem overflow", async ({ page }) => {
@@ -84,7 +84,7 @@ test("personalização permanece utilizável na matriz de celulares", async ({ p
     localStorage.setItem("prismivo-theme", "light");
     localStorage.setItem("prismivo-sidebar-mode", "adaptive");
   });
-  for (const width of [320, 360, 390, 412, 430]) {
+  for (const width of [320, 360, 375, 390, 393, 412, 430]) {
     await page.setViewportSize({ width, height: 844 });
     await page.goto("/");
     await expect(page.locator("main")).toBeVisible();

@@ -46,6 +46,11 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Vinte e quatro tabelas de produto com Row Level Security e isolamento por usuário e organização;
 - Bucket privado no Supabase Storage, limitado a 5 MB e com formatos permitidos;
 - Dashboard protegido com clientes, projetos, histórico e notificações;
+- Agenda operacional unificada para tarefas, aprovações e prazos de projetos, com pesquisa, filtros e agrupamento por urgência;
+- Dashboard personalizável com salvamento explícito, no mínimo três áreas e Prismivo Pulse calculado a partir dos prazos reais;
+- Rotinas inteligentes em prévia local para antecipar tarefas, aprovações e entregas sem alterar os registros de origem;
+- Saúde operacional da carteira calculada por cliente, com projetos ativos, atrasos, progresso médio e próximo prazo;
+- Matriz visual de permissões que reflete os mesmos papéis e verificações aplicados pelo servidor;
 - Criação funcional de projetos com limite de plano validado no servidor;
 - Carteira de clientes com cadastro, limite do plano e pesquisa local;
 - Gestão de projetos com pesquisa, filtros e atualização persistente de progresso;
@@ -83,8 +88,8 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Upload privado com validação de tamanho, extensão, MIME e assinatura;
 - Download autenticado, exclusão lógica e vínculo de arquivos a projetos;
 - Atendimento com protocolo, prioridade, mensagens, encerramento e reabertura;
-- Setenta e dois testes unitários e de componentes para validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização, preferências transacionais, navegação móvel e segurança;
-- Cento e oito execuções E2E em Chrome desktop, Android/Chromium e iOS/WebKit para cadastro, preferências, contraste WCAG nos temas claro/escuro/preto e branco, foco por teclado, proteção de rotas, orientação retrato/paisagem e responsividade em telas compactas e atuais;
+- Oitenta e dois testes unitários e de componentes para validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização, agenda, rotinas inteligentes, personalização, navegação móvel e segurança;
+- Cento e trinta e duas execuções E2E em Chrome desktop, Android/Chromium e iOS/WebKit para cadastro, preferências, contraste WCAG nos temas claro/escuro/preto e branco, foco por teclado, proteção de rotas, orientação retrato/paisagem e responsividade em telas compactas e atuais;
 - Matriz móvel com Galaxy S9+, Galaxy S24, Pixel 8, iPhone SE e iPhone 16, incluindo formulários, menus, áreas de toque, escala ampliada, superfícies privadas representativas e contenção de tabelas;
 - Pipeline de CI com auditoria das dependências de produção, testes unitários, tipagem, lint, build e Playwright antes de cada integração à branch principal.
 - Preview e produção independentes na Vercel com build nativo do Next.js, variáveis isoladas por ambiente e status `READY` validado;
@@ -195,6 +200,7 @@ Cada pessoa cria a própria conta e confirma o e-mail. No primeiro acesso, o onb
 - [Migração de autenticação e hospedagem](docs/AUTH_HOSTING_MIGRATION.md)
 - [Checklist de publicação](docs/DEPLOYMENT_CHECKLIST.md)
 - [Auditoria final pré-produção](docs/FINAL_AUDIT.md)
+- [Escopo e gates do Marco 23](docs/MARCO-23.md)
 - [Runbook de produção e rollback](docs/PRODUCTION_RUNBOOK.md)
 
 ## Próximos marcos

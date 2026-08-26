@@ -3,6 +3,7 @@ import Link from "next/link";
 import {
   Bell,
   Building2,
+  CalendarDays,
   FileCheck2,
   Files,
   FolderKanban,
@@ -17,6 +18,7 @@ import {
   Settings2,
   UserRoundCog,
   Users,
+  Workflow,
 } from "lucide-react";
 import { signOutPath } from "@/app/session-auth";
 import {
@@ -51,6 +53,7 @@ type WorkspaceSummary = {
 
 const navItems = [
   ["dashboard", "/app", LayoutDashboard],
+  ["agenda", "/app/agenda", CalendarDays],
   ["tasks", "/app/tarefas", ListChecks],
   ["projects", "/app/projetos", FolderKanban],
   ["clients", "/app/clientes", Users],
@@ -58,10 +61,12 @@ const navItems = [
   ["files", "/app/arquivos", Files],
   ["support", "/app/atendimento", Headphones],
   ["content", "/app/conteudo", Newspaper],
+  ["automations", "/app/automacoes", Workflow],
   ["billing", "/app/assinatura", ReceiptText],
   ["notifications", "/app/notificacoes", Bell],
   ["team", "/app/equipe", UserRoundCog],
   ["admin", "/app/administracao", ShieldCheck],
+  ["permissions", "/app/permissoes", ShieldCheck],
   ["settings", "/app/configuracoes", Settings2],
 ] as const;
 

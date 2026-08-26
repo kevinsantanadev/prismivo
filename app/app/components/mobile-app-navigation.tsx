@@ -3,6 +3,7 @@
 import Link from "next/link";
 import {
   Bell,
+  CalendarDays,
   FileCheck2,
   Files,
   FolderKanban,
@@ -17,6 +18,7 @@ import {
   ShieldCheck,
   UserRoundCog,
   Users,
+  Workflow,
   X,
 } from "lucide-react";
 import { useEffect, useId, useRef, useState } from "react";
@@ -25,6 +27,7 @@ import type { AppSection, MobileNavigationCopy } from "@/lib/app-shell-i18n";
 
 const icons = {
   dashboard: LayoutDashboard,
+  agenda: CalendarDays,
   tasks: ListChecks,
   projects: FolderKanban,
   clients: Users,
@@ -32,10 +35,12 @@ const icons = {
   files: Files,
   support: Headphones,
   content: Newspaper,
+  automations: Workflow,
   billing: ReceiptText,
   notifications: Bell,
   team: UserRoundCog,
   admin: ShieldCheck,
+  permissions: ShieldCheck,
   settings: Settings2,
 } satisfies Record<AppSection, typeof LayoutDashboard>;
 

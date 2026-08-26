@@ -5,6 +5,7 @@ import { findSupabaseWorkspaceByEmail } from "@/lib/supabase/workspace";
 import { normalizePrimaryNavigation } from "@/lib/interface-preferences";
 import {
   getSupabaseApprovalsData,
+  getSupabaseAgendaData,
   getSupabaseClientDetail,
   getSupabaseClientsData,
   getSupabaseDashboardData,
@@ -122,6 +123,7 @@ export async function getProjectsData(organizationId: string) {
   return db
     .select({
       id: projects.id,
+      clientId: projects.clientId,
       name: projects.name,
       description: projects.description,
       status: projects.status,
@@ -337,4 +339,15 @@ export async function getDashboardData(organizationId: string, userId: string) {
     activities: recentActivities,
     notifications: recentNotifications,
   };
+}
+
+export async function getAgendaData(organizationId: string) {
+  if (isSupabaseConfigured()) return getSupabaseAgendaData(organizationId);
+  const { buildAgendaEvents } = await import("@/lib/marco23");
+  const [taskItems, approvalItems, projectItems] = await Promise.all([
+    getTasksData(organizationId),
+    getApprovalsData(organizationId),
+    getProjectsData(organizationId),
+  ]);
+  return buildAgendaEvents({ tasks: taskItems, approvals: approvalItems, projects: projectItems });
 }

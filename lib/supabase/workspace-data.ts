@@ -1,5 +1,6 @@
 import { createSupabaseServerClient } from "./server";
 import { getTicketAttachments } from "./ticket-attachments";
+import { buildAgendaEvents } from "@/lib/marco23";
 
 type ClientRelation = { name: string | null; company?: string | null };
 type ProjectRelation = { id: string; name: string; client?: ClientRelation | ClientRelation[] | null };
@@ -32,12 +33,13 @@ export async function getSupabaseProjectsData(organizationId: string) {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
     .from("projects")
-    .select("id, name, description, status, progress, due_date, is_demo, created_at, client:clients(name)")
+    .select("id, client_id, name, description, status, progress, due_date, is_demo, created_at, client:clients(name)")
     .eq("organization_id", organizationId)
     .order("created_at", { ascending: false });
   if (error) throw error;
   return (data ?? []).map((row) => ({
     id: row.id,
+    clientId: row.client_id,
     name: row.name,
     description: row.description,
     status: row.status,
@@ -222,6 +224,15 @@ export async function getSupabaseDashboardData(organizationId: string, userId: s
     activities: (activitiesResult.data ?? []).map((row) => ({ id: row.id, type: row.type, title: row.title, detail: row.detail, createdAt: row.created_at })),
     notifications: (notificationsResult.data ?? []).map((row) => ({ id: row.id, category: row.category, title: row.title, body: row.body, readAt: row.read_at, createdAt: row.created_at })),
   };
+}
+
+export async function getSupabaseAgendaData(organizationId: string) {
+  const [tasks, approvals, projects] = await Promise.all([
+    getSupabaseTasksData(organizationId),
+    getSupabaseApprovalsData(organizationId),
+    getSupabaseProjectsData(organizationId),
+  ]);
+  return buildAgendaEvents({ tasks, approvals, projects });
 }
 
 async function profileNames(userIds: string[]) {

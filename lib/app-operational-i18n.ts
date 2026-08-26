@@ -19,7 +19,7 @@ export const operationalCopy = {
       metrics: [
         ["Clientes ativos", "Limite do plano: 3"],
         ["Projetos ativos", "Inclui cenários demonstrativos"],
-        ["Aprovações no prazo", "Métrica demonstrativa"],
+        ["Prazos sob controle", "Calculado pela agenda ativa"],
         ["Notificações", "Itens ainda não lidos"],
       ],
       firstSteps: "PRIMEIROS PASSOS",
@@ -239,7 +239,7 @@ export const operationalCopy = {
     },
     dashboard: {
       eyebrow: "OPERATION IN MOTION", greeting: (name: string) => `Great work, ${name}.`, intro: "See what needs attention and move the next step forward with context.", summaryAria: "Operational summary",
-      metrics: [["Active clients", "Plan limit: 3"], ["Active projects", "Includes demonstration scenarios"], ["On-time approvals", "Demonstration metric"], ["Notifications", "Items not read yet"]],
+      metrics: [["Active clients", "Plan limit: 3"], ["Active projects", "Includes demonstration scenarios"], ["Deadlines under control", "Calculated from the active schedule"], ["Notifications", "Items not read yet"]],
       firstSteps: "FIRST STEPS", prepare: "Prepare your workspace", stepCount: "2 of 3", companyCreated: "Company created", companyCreatedDetail: "Identity and workspace configured", meetAurora: "Meet Project Aurora", meetAuroraDetail: "A safe example to explore", createRealProject: "Create a real project", createRealProjectDetail: "Use the “New project” button",
       pulse: "PRISMIVO PULSE", health: "Operational health", pulseText: "Your workspace started organized. Create a real project to enable operation-based recommendations.", highClarity: "High clarity", oneSuggestion: "1 suggested action",
       activePortfolio: "ACTIVE PORTFOLIO", recentProjects: "Recent projects", viewAll: "View all", noProjects: "No projects yet", noProjectsDetail: "Create the first project to track activities and clients.", recentProjectsCaption: "Recent company projects", table: ["Project", "Client", "Progress", "Deadline", "Status"], demo: "Demo", completed: (value: number) => `${value}% complete`, active: "Active", noDeadline: "No deadline",
@@ -296,7 +296,7 @@ export const operationalCopy = {
     },
     dashboard: {
       eyebrow: "OPERACIÓN EN MOVIMIENTO", greeting: (name: string) => `Buen trabajo, ${name}.`, intro: "Sigue lo que requiere atención y conduce el próximo paso con contexto.", summaryAria: "Resumen operativo",
-      metrics: [["Clientes activos", "Límite del plan: 3"], ["Proyectos activos", "Incluye escenarios demostrativos"], ["Aprobaciones a tiempo", "Métrica demostrativa"], ["Notificaciones", "Elementos aún no leídos"]],
+      metrics: [["Clientes activos", "Límite del plan: 3"], ["Proyectos activos", "Incluye escenarios demostrativos"], ["Plazos bajo control", "Calculado con la agenda activa"], ["Notificaciones", "Elementos aún no leídos"]],
       firstSteps: "PRIMEROS PASOS", prepare: "Prepara tu espacio", stepCount: "2 de 3", companyCreated: "Empresa creada", companyCreatedDetail: "Identidad y espacio configurados", meetAurora: "Conoce el Proyecto Aurora", meetAuroraDetail: "Un ejemplo seguro para explorar", createRealProject: "Crea un proyecto real", createRealProjectDetail: "Usa el botón “Nuevo proyecto”",
       pulse: "PRISMIVO PULSE", health: "Salud de la operación", pulseText: "Tu espacio comenzó organizado. Crea un proyecto real para activar recomendaciones basadas en la operación.", highClarity: "Claridad alta", oneSuggestion: "1 acción sugerida",
       activePortfolio: "PORTAFOLIO ACTIVO", recentProjects: "Proyectos recientes", viewAll: "Ver todos", noProjects: "Todavía no hay proyectos", noProjectsDetail: "Crea el primer proyecto para acompañar actividades y clientes.", recentProjectsCaption: "Proyectos recientes de la empresa", table: ["Proyecto", "Cliente", "Progreso", "Plazo", "Estado"], demo: "Demostración", completed: (value: number) => `${value}% completado`, active: "Activo", noDeadline: "Sin plazo",

@@ -2186,6 +2186,7 @@ body.preferences-open {
 .agenda-toolbar h2 { margin: 5px 0 0; font-size: 1.35rem; }
 .agenda-filters { display: flex; min-width: 0; align-items: center; gap: 9px; }
 .agenda-search { width: min(360px, 30vw); }
+.agenda-search input { min-height: 44px; }
 .agenda-select select,
 .agenda-month input {
   min-height: 44px;

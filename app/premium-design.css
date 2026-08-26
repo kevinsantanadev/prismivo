@@ -80,7 +80,7 @@
   --pearl-soft: #f8faff;
   --text: #111a32;
   --text-soft: #58647b;
-  --text-faint: #748098;
+  --text-faint: #647087;
   --ink: #0b1020;
   --violet: #6f54e8;
   --violet-soft: #806bed;
@@ -1552,6 +1552,13 @@ body {
 .app-summary-strip strong,
 .admin-metric strong {
   font-variant-numeric: tabular-nums;
+}
+
+.app-metrics article > div > span,
+.activity-list small,
+.audit-list small,
+.status-timestamp {
+  color: var(--app-muted);
 }
 
 .responsive-table {

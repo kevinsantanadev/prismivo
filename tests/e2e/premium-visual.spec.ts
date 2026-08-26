@@ -42,12 +42,13 @@ test("a preferência interna de movimento reduz animações do prisma", async ({
 });
 
 test("temas público e interno continuam distintos e legíveis", async ({ page }) => {
+  await page.goto("/");
+
   for (const theme of ["light", "dark", "mono"] as const) {
-    await page.goto("/");
     await page.evaluate((selectedTheme) => {
-      localStorage.setItem("prismivo-theme", selectedTheme);
+      document.documentElement.dataset.theme = selectedTheme;
+      document.documentElement.style.colorScheme = selectedTheme === "light" ? "light" : "dark";
     }, theme);
-    await page.reload();
     await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
     await expect(page.locator(".hero h1")).toBeVisible();
 

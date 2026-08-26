@@ -667,12 +667,6 @@ body {
 /* Landing sections                                                            */
 /* -------------------------------------------------------------------------- */
 
-.site-shell .section:not(.prism-showcase),
-.site-footer {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 760px;
-}
-
 .metric-strip {
   overflow: hidden;
   border-color: var(--line);
@@ -1297,6 +1291,26 @@ body {
   --app-panel-highlight: #ffffff;
   --app-depth-soft: 0 1px 1px rgba(21, 34, 65, 0.03), 0 12px 32px rgba(30, 45, 79, 0.055);
   --app-depth-raised: 0 2px 2px rgba(21, 34, 65, 0.04), 0 22px 56px rgba(30, 45, 79, 0.1);
+}
+
+:root[data-theme="dark"] .app-layout {
+  --app-bg: #080b13;
+  --app-surface: #111622;
+  --app-ink: #f3f6ff;
+  --app-muted: #9ba6bb;
+  --app-line: rgba(205, 216, 250, 0.1);
+  --app-header: rgba(8, 11, 19, 0.82);
+  --app-elevated: #151b2a;
+  --app-control: #121827;
+  --app-sidebar-bg: #090e19;
+  --app-sidebar-ink: #f4f6ff;
+  --app-sidebar-muted: #929db2;
+  --app-sidebar-line: rgba(205, 216, 250, 0.1);
+  --app-sidebar-hover: color-mix(in srgb, var(--lime) 9%, transparent);
+  --app-sidebar-accent: var(--lime);
+  --app-panel-highlight: var(--app-elevated);
+  --app-depth-soft: 0 1px 1px rgba(0, 0, 0, 0.1), 0 12px 32px rgba(0, 0, 0, 0.16);
+  --app-depth-raised: 0 1px 1px rgba(0, 0, 0, 0.12), 0 22px 56px rgba(0, 0, 0, 0.24);
 }
 
 :root[data-theme="mono"] .app-layout {
@@ -2166,13 +2180,16 @@ body {
 
   .access-card-status {
     align-items: flex-start;
+    gap: 8px;
   }
 
   .access-card-status-label {
+    flex: 1 1 auto;
     line-height: 1.4;
   }
 
   .access-status-badge {
+    align-self: flex-start;
     min-height: 26px;
   }
 
@@ -2211,6 +2228,11 @@ body {
 
   .app-content {
     width: min(100% - 32px, var(--app-content-max));
+    padding-bottom: calc(104px + env(safe-area-inset-bottom));
+  }
+
+  .responsive-table table {
+    min-width: 920px;
   }
 
   .app-welcome h1,
@@ -2358,11 +2380,6 @@ body {
   .access-card,
   .onboarding-card {
     padding: 22px 16px;
-  }
-
-  .access-card-status {
-    flex-direction: column;
-    align-items: flex-start;
   }
 
   .app-content {

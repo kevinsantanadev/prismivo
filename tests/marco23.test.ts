@@ -44,8 +44,21 @@ describe("Marco 23 operational intelligence", () => {
       { clientId: "c1", status: "completed", progress: 100, dueDate: "2026-08-10" },
     ];
     const insights = deriveClientInsights(clients, projects, "2026-08-26");
-    expect(insights[0]).toMatchObject({ health: "attention", overdueProjects: 1, activeProjects: 1, averageProgress: 60 });
+    expect(insights[0]).toMatchObject({ health: "attention", overdueProjects: 1, activeProjects: 1, averageProgress: 60, nextDeadline: null });
     expect(insights[1]).toMatchObject({ health: "inactive", activeProjects: 0 });
+  });
+
+  it("uses the nearest upcoming project date as the next CRM deadline", () => {
+    const [insight] = deriveClientInsights(
+      [{ id: "c1", status: "active" }],
+      [
+        { clientId: "c1", status: "active", progress: 20, dueDate: "2026-08-20" },
+        { clientId: "c1", status: "active", progress: 40, dueDate: "2026-09-10" },
+        { clientId: "c1", status: "active", progress: 60, dueDate: "2026-09-02" },
+      ],
+      "2026-08-26",
+    );
+    expect(insight.nextDeadline).toBe("2026-09-02");
   });
 
   it("generates local smart alerts according to saved lead time", () => {

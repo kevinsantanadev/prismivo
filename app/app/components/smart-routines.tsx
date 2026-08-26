@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { BellRing, CheckCircle2, ChevronRight, Radar, Save, Workflow } from "lucide-react";
 import { useState, useSyncExternalStore } from "react";
 import { defaultSmartRoutines, getSmartAlerts, type AgendaEvent, type SmartRoutineId, type SmartRoutinePreferences } from "@/lib/marco23";
@@ -13,6 +14,7 @@ const storageEvent = "prismivo-smart-routines";
 const defaultSnapshot = JSON.stringify(defaultSmartRoutines);
 
 export function SmartRoutines({ events, locale, today }: { events: AgendaEvent[]; locale: SiteLocale; today: string }) {
+  const router = useRouter();
   const copy = getMarco23Copy(locale).routines;
   const snapshot = useSyncExternalStore(subscribeToSmartRoutines, getSmartRoutineSnapshot, () => defaultSnapshot);
   const savedPreferences = parseRoutinePreferences(snapshot);
@@ -57,7 +59,7 @@ export function SmartRoutines({ events, locale, today }: { events: AgendaEvent[]
       </section>
 
       <section className="dashboard-panel routine-alerts" aria-labelledby="routine-alerts-title">
-        <div className="panel-heading"><div><span className="panel-kicker">MONITOR</span><h2 id="routine-alerts-title">{copy.alertTitle}</h2>{lastScan && <small className="routine-last-scan">{new Intl.DateTimeFormat(toIntlLocale(locale), { hour: "2-digit", minute: "2-digit" }).format(lastScan)}</small>}</div><button type="button" onClick={() => setLastScan(new Date())}><Radar aria-hidden="true" />{copy.scan}</button></div>
+        <div className="panel-heading"><div><span className="panel-kicker">MONITOR</span><h2 id="routine-alerts-title">{copy.alertTitle}</h2>{lastScan && <small className="routine-last-scan">{new Intl.DateTimeFormat(toIntlLocale(locale), { hour: "2-digit", minute: "2-digit" }).format(lastScan)}</small>}</div><button type="button" onClick={() => { router.refresh(); setLastScan(new Date()); }}><Radar aria-hidden="true" />{copy.scan}</button></div>
         {alerts.length === 0 ? <div className="empty-state compact"><CheckCircle2 aria-hidden="true" /><h3>{copy.noAlerts}</h3><p>{copy.noAlertsDetail}</p></div> : <div className="routine-alert-list">{alerts.map((alert) => <article key={alert.id}><span className={`routine-alert-icon kind-${alert.kind}`}><BellRing aria-hidden="true" /></span><div><span>{getMarco23Copy(locale).agenda.kinds[alert.kind]}</span><h3>{alert.title}</h3><p>{alert.context}{alert.clientName && alert.clientName !== alert.context ? ` · ${alert.clientName}` : ""}</p><time dateTime={alert.date}>{new Intl.DateTimeFormat(toIntlLocale(locale), { dateStyle: "medium" }).format(new Date(`${alert.date}T12:00:00`))}</time></div><Link href={alert.href} aria-label={`${copy.open}: ${alert.title}`}><span>{copy.open}</span><ChevronRight aria-hidden="true" /></Link></article>)}</div>}
       </section>
     </div>

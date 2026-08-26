@@ -3,9 +3,12 @@
 import { cleanup, render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom/vitest";
 import userEvent from "@testing-library/user-event";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { SmartRoutines } from "@/app/app/components/smart-routines";
 import type { AgendaEvent } from "@/lib/marco23";
+
+const { refresh } = vi.hoisted(() => ({ refresh: vi.fn() }));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ refresh }) }));
 
 const events: AgendaEvent[] = [
   {
@@ -22,7 +25,10 @@ const events: AgendaEvent[] = [
   },
 ];
 
-beforeEach(() => window.localStorage.clear());
+beforeEach(() => {
+  window.localStorage.clear();
+  refresh.mockClear();
+});
 afterEach(cleanup);
 
 describe("Marco 23 smart routines", () => {
@@ -44,5 +50,12 @@ describe("Marco 23 smart routines", () => {
     window.localStorage.setItem("prismivo:marco23:smart-routines", "{invalid");
     render(<SmartRoutines events={events} locale="pt-BR" today="2026-08-26" />);
     expect(screen.getByText("Revisar contrato")).toBeVisible();
+  });
+
+  it("refreshes source records when the user requests a new scan", async () => {
+    const user = userEvent.setup();
+    render(<SmartRoutines events={events} locale="pt-BR" today="2026-08-26" />);
+    await user.click(screen.getByRole("button", { name: "Verificar agora" }));
+    expect(refresh).toHaveBeenCalledOnce();
   });
 });

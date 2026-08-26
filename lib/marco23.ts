@@ -147,7 +147,10 @@ export function deriveClientInsights(
     const linked = projects.filter((project) => project.clientId === client.id);
     const active = linked.filter((project) => !["completed", "archived"].includes(project.status));
     const overdue = active.filter((project) => project.dueDate && project.dueDate < today);
-    const deadlines = active.map((project) => project.dueDate).filter((date): date is string => Boolean(date)).sort();
+    const deadlines = active
+      .map((project) => project.dueDate)
+      .filter((date): date is string => date !== null && date >= today)
+      .sort();
     const averageProgress = linked.length
       ? Math.round(linked.reduce((total, project) => total + project.progress, 0) / linked.length)
       : 0;

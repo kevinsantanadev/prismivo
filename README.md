@@ -88,7 +88,7 @@ SaaS B2B freemium: o plano Inicial é gratuito e permite até três clientes e t
 - Upload privado com validação de tamanho, extensão, MIME e assinatura;
 - Download autenticado, exclusão lógica e vínculo de arquivos a projetos;
 - Atendimento com protocolo, prioridade, mensagens, encerramento e reabertura;
-- Oitenta e dois testes unitários e de componentes para validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização, agenda, rotinas inteligentes, personalização, navegação móvel e segurança;
+- Oitenta e quatro testes unitários e de componentes para validação, permissões, relatórios, conteúdo, cobrança, entregáveis, localização, agenda, rotinas inteligentes, personalização, navegação móvel e segurança;
 - Cento e trinta e duas execuções E2E em Chrome desktop, Android/Chromium e iOS/WebKit para cadastro, preferências, contraste WCAG nos temas claro/escuro/preto e branco, foco por teclado, proteção de rotas, orientação retrato/paisagem e responsividade em telas compactas e atuais;
 - Matriz móvel com Galaxy S9+, Galaxy S24, Pixel 8, iPhone SE e iPhone 16, incluindo formulários, menus, áreas de toque, escala ampliada, superfícies privadas representativas e contenção de tabelas;
 - Pipeline de CI com auditoria das dependências de produção, testes unitários, tipagem, lint, build e Playwright antes de cada integração à branch principal.

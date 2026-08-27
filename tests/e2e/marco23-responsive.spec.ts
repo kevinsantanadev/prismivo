@@ -33,16 +33,25 @@ test("the overview compacts a remaining widget instead of leaving an empty colum
   for (const width of [1280, 390]) {
     await page.setViewportSize({ width, height: 844 });
     await page.goto("/");
+    await expect(page.locator("main")).toBeVisible();
     await page.evaluate(() => {
       document.body.innerHTML = `<main class="app-content"><section class="dashboard-widget-layout"><div class="dashboard-widget-slot widget-pulse"><article class="dashboard-panel"><h2>Saúde da operação</h2><p>Conteúdo operacional</p></article></div></section></main>`;
     });
 
-    const placement = await page.evaluate(() => {
-      const layout = document.querySelector(".dashboard-widget-layout")!.getBoundingClientRect();
-      const widget = document.querySelector(".widget-pulse")!.getBoundingClientRect();
-      return { leftGap: widget.left - layout.left, overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth };
-    });
-    expect(placement.leftGap, `widget left gap at ${width}px`).toBeLessThanOrEqual(1);
-    expect(placement.overflow, `overflow at ${width}px`).toBeLessThanOrEqual(1);
+    const layout = page.locator(".dashboard-widget-layout");
+    const widget = page.locator(".widget-pulse");
+    await expect(layout).toBeVisible();
+    await expect(widget).toBeVisible();
+
+    const [layoutBox, widgetBox, overflow] = await Promise.all([
+      layout.boundingBox(),
+      widget.boundingBox(),
+      page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth),
+    ]);
+    if (!layoutBox || !widgetBox) {
+      throw new Error(`dashboard widget geometry unavailable at ${width}px`);
+    }
+    expect(widgetBox.x - layoutBox.x, `widget left gap at ${width}px`).toBeLessThanOrEqual(1);
+    expect(overflow, `overflow at ${width}px`).toBeLessThanOrEqual(1);
   }
 });

@@ -27,10 +27,11 @@ export default async function FilesPage() {
   const copy = getOperationalCopy(locale);
   const totalBytes = files.reduce((total, file) => total + file.sizeBytes, 0);
   const projectFiles = files.filter((file) => file.projectId).length;
+  const activeProjects = projects.filter((project) => project.status === "active");
 
   return (
     <AppShell active="files" title="Arquivos" description="Documentos privados e vinculados" workspace={workspace} unreadCount={unreadCount}>
-      <section className="app-page-intro"><div><span className="eyebrow">{copy.files.eyebrow}</span><h1>{copy.files.title}</h1><p>{copy.files.intro}</p></div><FileUpload locale={locale} projects={projects.map(({ id, name }) => ({ id, name }))} /></section>
+      <section className="app-page-intro"><div><span className="eyebrow">{copy.files.eyebrow}</span><h1>{copy.files.title}</h1><p>{copy.files.intro}</p></div><FileUpload locale={locale} projects={activeProjects.map(({ id, name }) => ({ id, name }))} /></section>
       <section className="app-summary-strip" aria-label={copy.files.summaryAria}>
         <article><Files aria-hidden="true" /><span><strong>{files.length}</strong><small>{copy.files.active}</small></span></article>
         <article><HardDrive aria-hidden="true" /><span><strong>{formatBytes(totalBytes, locale)}</strong><small>{copy.files.stored}</small></span></article>

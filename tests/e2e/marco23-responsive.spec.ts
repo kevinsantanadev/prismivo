@@ -28,3 +28,21 @@ test("Marco 23 keeps agenda and routines usable across the phone matrix", async 
     await expect(page.locator(".routine-rule-list article")).toBeVisible();
   }
 });
+
+test("the overview compacts a remaining widget instead of leaving an empty column", async ({ page }) => {
+  for (const width of [1280, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    await page.goto("/");
+    await page.evaluate(() => {
+      document.body.innerHTML = `<main class="app-content"><section class="dashboard-widget-layout"><div class="dashboard-widget-slot widget-pulse"><article class="dashboard-panel"><h2>Saúde da operação</h2><p>Conteúdo operacional</p></article></div></section></main>`;
+    });
+
+    const placement = await page.evaluate(() => {
+      const layout = document.querySelector(".dashboard-widget-layout")!.getBoundingClientRect();
+      const widget = document.querySelector(".widget-pulse")!.getBoundingClientRect();
+      return { leftGap: widget.left - layout.left, overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth };
+    });
+    expect(placement.leftGap, `widget left gap at ${width}px`).toBeLessThanOrEqual(1);
+    expect(placement.overflow, `overflow at ${width}px`).toBeLessThanOrEqual(1);
+  }
+});

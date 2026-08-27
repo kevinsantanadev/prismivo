@@ -19,7 +19,7 @@ export async function uploadSupabaseFile(input: {
 }): Promise<MutationResult<{ id: string }>> {
   const supabase = await createSupabaseServerClient();
   if (input.projectId) {
-    const { data, error } = await supabase.from("projects").select("id").eq("organization_id", input.workspace.organizationId).eq("id", input.projectId).maybeSingle();
+    const { data, error } = await supabase.from("projects").select("id").eq("organization_id", input.workspace.organizationId).eq("id", input.projectId).eq("status", "active").maybeSingle();
     if (error) return failed();
     if (!data) return fail("PROJECT_NOT_FOUND", "Projeto não encontrado.", 404);
   }

@@ -16,6 +16,7 @@ import { getOperationalCopy } from "@/lib/app-operational-i18n";
 import { getRequestLocale } from "@/lib/site-locale-server";
 import { toIntlLocale, type SiteLocale } from "@/lib/site-locale";
 import { calculateOperationScore, dateKeyInSaoPaulo, summarizeAgenda } from "@/lib/marco23";
+import { activeProjectLimitForPlan } from "@/lib/project-limits";
 import { getMarco23Copy } from "@/lib/marco23-i18n";
 import { findWorkspaceByEmail, getAgendaData, getDashboardData } from "@/lib/workspace";
 import { AgendaRow } from "./components/agenda-board";
@@ -52,7 +53,7 @@ export default async function AppDashboardPage() {
 
   return (
     <AppShell active="dashboard" title="Visão geral" description="Dados protegidos da sua empresa" workspace={workspace} unreadCount={data.metrics.unread}>
-      <section className="app-welcome dashboard-marco23-welcome"><div><span className="eyebrow">{copy.dashboard.eyebrow}</span><h1>{copy.dashboard.greeting(firstName)}</h1><p>{copy.dashboard.intro}</p></div><div className="dashboard-intro-actions"><span className="marco-badge">MARCO 23</span><ProjectForm locale={locale} /></div></section>
+      <section className="app-welcome dashboard-marco23-welcome"><div><span className="eyebrow">{copy.dashboard.eyebrow}</span><h1>{copy.dashboard.greeting(firstName)}</h1><p>{copy.dashboard.intro}</p></div><div className="dashboard-intro-actions"><span className="marco-badge">MARCO 23</span><ProjectForm locale={locale} activeProjects={data.metrics.projects} projectLimit={activeProjectLimitForPlan(workspace.plan)} /></div></section>
 
       <article className="dashboard-panel onboarding-progress dashboard-onboarding-band">
         <div className="panel-heading"><div><span className="panel-kicker">{copy.dashboard.firstSteps}</span><h2>{copy.dashboard.prepare}</h2></div><strong>{copy.dashboard.stepCount}</strong></div>

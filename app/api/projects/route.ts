@@ -10,8 +10,7 @@ import { findWorkspaceByEmail } from "@/lib/workspace";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { supabaseMutationResponse } from "@/lib/supabase/http";
 import { createProjectRecord } from "@/lib/supabase/mutations";
-
-const FREE_PROJECT_LIMIT = 3;
+import { activeProjectLimitForPlan, isActiveProjectLimitReached } from "@/lib/project-limits";
 
 export async function POST(request: Request) {
   if (!isSameOriginRequest(request)) {
@@ -55,10 +54,11 @@ export async function POST(request: Request) {
       ),
     );
 
-  if (workspace.plan === "free" && Number(projectTotal?.value ?? 0) >= FREE_PROJECT_LIMIT) {
+  const projectLimit = activeProjectLimitForPlan(workspace.plan);
+  if (isActiveProjectLimitReached(Number(projectTotal?.value ?? 0), projectLimit)) {
     return apiError(
       "PLAN_LIMIT_REACHED",
-      "O plano gratuito permite até 3 projetos ativos. Arquive um projeto ou escolha outro plano.",
+      `Seu plano permite até ${projectLimit} projetos ativos. Arquive um projeto ou escolha outro plano.`,
       403,
     );
   }

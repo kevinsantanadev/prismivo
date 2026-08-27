@@ -4,6 +4,7 @@ import { FolderKanban, Search } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { ProjectProgress } from "./project-progress";
+import { ProjectLifecycleActions } from "./project-lifecycle-actions";
 import { getOperationalCopy } from "@/lib/app-operational-i18n";
 import { toIntlLocale, type SiteLocale } from "@/lib/site-locale";
 
@@ -18,7 +19,7 @@ type ProjectItem = {
   clientName: string | null;
 };
 
-export function ProjectDirectory({ projects, locale = "pt-BR" }: { projects: ProjectItem[]; locale?: SiteLocale }) {
+export function ProjectDirectory({ projects, locale = "pt-BR", canManage = false, canDelete = false }: { projects: ProjectItem[]; locale?: SiteLocale; canManage?: boolean; canDelete?: boolean }) {
   const copy = getOperationalCopy(locale);
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
@@ -40,13 +41,13 @@ export function ProjectDirectory({ projects, locale = "pt-BR" }: { projects: Pro
         <div><span className="panel-kicker">{copy.projects.execution}</span><h2 id="project-directory-title">{copy.projects.directoryTitle}</h2></div>
         <div className="directory-filters">
           <label className="app-search"><Search aria-hidden="true" /><span className="sr-only">{copy.projects.searchLabel}</span><input type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder={copy.projects.searchPlaceholder} /></label>
-          <label><span className="sr-only">{copy.projects.filterLabel}</span><select value={status} onChange={(event) => setStatus(event.target.value)}><option value="all">{copy.projects.all}</option><option value="active">{copy.projects.activePlural}</option><option value="completed">{copy.projects.completedPlural}</option></select></label>
+          <label><span className="sr-only">{copy.projects.filterLabel}</span><select value={status} onChange={(event) => setStatus(event.target.value)}><option value="all">{copy.projects.all}</option><option value="active">{copy.projects.activePlural}</option><option value="completed">{copy.projects.completedPlural}</option><option value="archived">{copy.projects.archivedPlural}</option></select></label>
         </div>
       </div>
       {filtered.length === 0 ? (
         <div className="empty-state"><FolderKanban aria-hidden="true" /><h3>{projects.length ? copy.projects.noResult : copy.projects.noProjects}</h3><p>{projects.length ? copy.projects.adjust : copy.projects.createFirst}</p></div>
       ) : (
-        <div className="responsive-table"><table><caption className="sr-only">{copy.projects.caption}</caption><thead><tr>{copy.projects.table.map((heading) => <th scope="col" key={heading}>{heading}</th>)}</tr></thead><tbody>{filtered.map((project) => <tr key={project.id}><td><strong><Link href={`/app/projetos/${project.id}`}>{project.name}</Link></strong>{project.isDemo && <small className="demo-badge">{copy.projects.demo}</small>}<span>{project.description || copy.common.noDescription}</span></td><td>{project.clientName || copy.common.noClient}</td><td><ProjectProgress id={project.id} progress={project.progress} locale={locale} /></td><td>{formatDate(project.dueDate, locale, copy.projects.noDeadline)}</td><td><span className={`status-badge ${project.status}`}>{project.status === "completed" ? copy.projects.completed : copy.projects.active}</span></td></tr>)}</tbody></table></div>
+        <div className="responsive-table"><table><caption className="sr-only">{copy.projects.caption}</caption><thead><tr>{copy.projects.table.map((heading) => <th scope="col" key={heading}>{heading}</th>)}{canManage && <th scope="col">{copy.projects.lifecycle.actions}</th>}</tr></thead><tbody>{filtered.map((project) => <tr key={project.id}><td><strong><Link href={`/app/projetos/${project.id}`}>{project.name}</Link></strong>{project.isDemo && <small className="demo-badge">{copy.projects.demo}</small>}<span>{project.description || copy.common.noDescription}</span></td><td>{project.clientName || copy.common.noClient}</td><td>{project.status === "archived" ? <span aria-hidden="true">—</span> : <ProjectProgress id={project.id} progress={project.progress} locale={locale} />}</td><td>{formatDate(project.dueDate, locale, copy.projects.noDeadline)}</td><td><span className={`status-badge ${project.status}`}>{project.status === "completed" ? copy.projects.completed : project.status === "archived" ? copy.projects.archived : copy.projects.active}</span></td>{canManage && <td><ProjectLifecycleActions id={project.id} name={project.name} status={project.status} canDelete={canDelete} locale={locale} /></td>}</tr>)}</tbody></table></div>
       )}
     </section>
   );

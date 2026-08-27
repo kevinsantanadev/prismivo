@@ -24,13 +24,14 @@ export default async function ApprovalsPage() {
     getRequestLocale(),
   ]);
   const copy = getOperationalCopy(locale);
+  const activeProjects = projects.filter((project) => project.status === "active");
   const pending = items.filter((item) => item.status === "pending").length;
   const approved = items.filter((item) => item.status === "approved").length;
   const changes = items.filter((item) => item.status === "changes_requested").length;
 
   return (
     <AppShell active="approvals" title="Aprovações" description="Decisões registradas e vinculadas ao projeto" workspace={workspace} unreadCount={unreadCount}>
-      <section className="app-page-intro"><div><span className="eyebrow">{copy.approvals.eyebrow}</span><h1>{copy.approvals.title}</h1><p>{copy.approvals.intro}</p></div><ApprovalForm locale={locale} projects={projects.map(({ id, name, clientName }) => ({ id, name, clientName }))} /></section>
+      <section className="app-page-intro"><div><span className="eyebrow">{copy.approvals.eyebrow}</span><h1>{copy.approvals.title}</h1><p>{copy.approvals.intro}</p></div><ApprovalForm locale={locale} projects={activeProjects.map(({ id, name, clientName }) => ({ id, name, clientName }))} /></section>
       <section className="app-summary-strip" aria-label={copy.approvals.summaryAria}><article><Clock3 aria-hidden="true" /><span><strong>{pending}</strong><small>{copy.approvals.pendingCount}</small></span></article><article><CheckCircle2 aria-hidden="true" /><span><strong>{approved}</strong><small>{copy.approvals.approvedCount}</small></span></article><article><RotateCcw aria-hidden="true" /><span><strong>{changes}</strong><small>{copy.approvals.changesCount}</small></span></article></section>
       <section className="approval-list" aria-labelledby="approval-list-title">
         <div className="section-mini-heading"><span className="panel-kicker">{copy.approvals.history}</span><h2 id="approval-list-title">{copy.approvals.requests}</h2></div>

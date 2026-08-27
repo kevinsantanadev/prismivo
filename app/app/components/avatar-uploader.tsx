@@ -1,6 +1,7 @@
 "use client";
 
 import { Camera, LoaderCircle, Trash2, Upload } from "lucide-react";
+import Image from "next/image";
 import { ChangeEvent, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getOperationalCopy } from "@/lib/app-operational-i18n";
@@ -20,22 +21,32 @@ export function AvatarUploader({ initialUrl, name, locale = "pt-BR" }: { initial
     if (!file || busy) return;
     setBusy(true); setMessage("");
     const formData = new FormData(); formData.set("avatar", file);
-    const response = await fetch("/api/profile/avatar", { method: "POST", body: formData });
-    const result = await response.json() as { ok: boolean; data?: { url?: string }; error?: { message?: string } };
-    setBusy(false); event.target.value = "";
-    if (!response.ok || !result.ok || !result.data?.url) return setMessage(locale === "pt-BR" && result.error?.message ? result.error.message : copy.uploadError);
-    setUrl(result.data.url); setMessage(copy.uploadSuccess); router.refresh();
+    try {
+      const response = await fetch("/api/profile/avatar", { method: "POST", body: formData });
+      const result = await response.json() as { ok: boolean; data?: { url?: string }; error?: { message?: string } };
+      if (!response.ok || !result.ok || !result.data?.url) return setMessage(locale === "pt-BR" && result.error?.message ? result.error.message : copy.uploadError);
+      setUrl(result.data.url); setMessage(copy.uploadSuccess); router.refresh();
+    } catch {
+      setMessage(copy.uploadError);
+    } finally {
+      setBusy(false); event.target.value = "";
+    }
   }
 
   async function remove() {
     if (!url || busy) return;
     setBusy(true); setMessage("");
-    const response = await fetch("/api/profile/avatar", { method: "DELETE" });
-    const result = await response.json() as { ok: boolean; error?: { message?: string } };
-    setBusy(false);
-    if (!response.ok || !result.ok) return setMessage(locale === "pt-BR" && result.error?.message ? result.error.message : copy.removeError);
-    setUrl(null); setMessage(copy.removeSuccess); router.refresh();
+    try {
+      const response = await fetch("/api/profile/avatar", { method: "DELETE" });
+      const result = await response.json() as { ok: boolean; error?: { message?: string } };
+      if (!response.ok || !result.ok) return setMessage(locale === "pt-BR" && result.error?.message ? result.error.message : copy.removeError);
+      setUrl(null); setMessage(copy.removeSuccess); router.refresh();
+    } catch {
+      setMessage(copy.removeError);
+    } finally {
+      setBusy(false);
+    }
   }
 
-  return <div className="avatar-uploader"><div className="profile-avatar-preview">{url ? <span style={{ backgroundImage: `url(${url})` }} role="img" aria-label={copy.imageOf(name)} /> : <strong>{initials}</strong>}<Camera aria-hidden="true" /></div><div><h3>{copy.title}</h3><p>{copy.detail}</p><div className="avatar-actions"><input ref={inputRef} className="sr-only" id="avatar-file" type="file" accept="image/jpeg,image/png,image/webp" onChange={upload} /><button type="button" onClick={() => inputRef.current?.click()} disabled={busy}>{busy ? <LoaderCircle className="spin" aria-hidden="true" /> : <Upload aria-hidden="true" />}{copy.choose}</button>{url && <button className="text-danger-button" type="button" onClick={remove} disabled={busy}><Trash2 aria-hidden="true" />{copy.remove}</button>}</div>{message && <small role="status">{message}</small>}</div></div>;
+  return <div className="avatar-uploader"><div className="profile-avatar-preview">{url ? <Image className="profile-avatar-image" src={url} alt={copy.imageOf(name)} fill sizes="112px" unoptimized onError={() => { setUrl(null); setMessage(copy.loadError); }} /> : <strong>{initials}</strong>}<Camera aria-hidden="true" /></div><div><h3>{copy.title}</h3><p>{copy.detail}</p><div className="avatar-actions"><input ref={inputRef} className="sr-only" id="avatar-file" type="file" accept="image/jpeg,image/png,image/webp" onChange={upload} /><button type="button" onClick={() => inputRef.current?.click()} disabled={busy}>{busy ? <LoaderCircle className="spin" aria-hidden="true" /> : <Upload aria-hidden="true" />}{copy.choose}</button>{url && <button className="text-danger-button" type="button" onClick={remove} disabled={busy}><Trash2 aria-hidden="true" />{copy.remove}</button>}</div>{message && <small role="status">{message}</small>}</div></div>;
 }

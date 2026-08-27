@@ -1,11 +1,13 @@
 import { expect, test } from "@playwright/test";
 
-test("o prisma premium é vetorial, visível e não cria uma dependência de canvas", async ({ page }) => {
+test("o hero mantém a prévia livre e o prisma permanece na seção de identidade", async ({ page }) => {
   await page.goto("/");
 
   const hero = page.locator(".hero");
-  const prism = hero.locator(".kinetic-prism-hero");
+  const prism = page.locator(".kinetic-prism-showcase");
   await expect(hero).toBeVisible();
+  await expect(hero.locator(".kinetic-prism-scene")).toHaveCount(0);
+  await expect(hero.locator(".dashboard-frame")).toBeVisible();
   await expect(prism).toBeVisible();
   await expect(prism.locator("svg.prism-svg")).toHaveCount(1);
   await expect(prism.locator("canvas")).toHaveCount(0);
@@ -34,7 +36,7 @@ test("a preferência interna de movimento reduz animações do prisma", async ({
   await page.goto("/");
   await expect(page.locator("html")).toHaveAttribute("data-motion", "reduced");
 
-  const motion = await page.locator(".kinetic-prism-hero").evaluate((element) => ({
+  const motion = await page.locator(".kinetic-prism-showcase").evaluate((element) => ({
     crystal: getComputedStyle(element.querySelector(".prism-crystal")!).animationName,
     energy: getComputedStyle(element.querySelector(".prism-energy-line")!).animationName,
     object: getComputedStyle(element.querySelector(".kinetic-prism")!).animationName,

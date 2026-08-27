@@ -38,7 +38,7 @@ export async function findSupabaseWorkspaceByEmail(email: string): Promise<Supab
   const normalizedEmail = email.trim().toLowerCase();
   const { data: profile, error: profileError } = await supabase
     .from("profiles")
-    .select("id, email, name, locale, status, avatar_path, bio, job_title, phone, location, website, theme, accent_color, interface_filter, color_vision_mode, sidebar_mode, interface_density, content_width, corner_style, text_scale, motion_mode, primary_navigation")
+    .select("id, email, name, locale, status, avatar_path, updated_at, bio, job_title, phone, location, website, theme, accent_color, interface_filter, color_vision_mode, sidebar_mode, interface_density, content_width, corner_style, text_scale, motion_mode, primary_navigation")
     .eq("email", normalizedEmail)
     .eq("status", "active")
     .maybeSingle();
@@ -61,11 +61,7 @@ export async function findSupabaseWorkspaceByEmail(email: string): Promise<Supab
 
   if (membershipError || !membership || !organization) return null;
 
-  let avatarUrl: string | null = null;
-  if (profile.avatar_path) {
-    const signed = await supabase.storage.from("prismivo-avatars").createSignedUrl(profile.avatar_path, 60 * 60);
-    avatarUrl = signed.data?.signedUrl ?? null;
-  }
+  const avatarUrl = profile.avatar_path ? `/api/profile/avatar?v=${encodeURIComponent(profile.updated_at)}` : null;
 
   return {
     userId: profile.id,

@@ -47,7 +47,9 @@ test("registra evidências estáveis da landing e da autenticação", async ({ p
 
   await page.goto("/");
   await expect(page.locator(".hero h1")).toBeVisible();
-  await expect(page.locator(".kinetic-prism-hero svg")).toBeVisible();
+  await expect(page.locator(".hero .dashboard-frame")).toBeVisible();
+  await expect(page.locator(".hero .kinetic-prism-scene")).toHaveCount(0);
+  await expect(page.locator(".kinetic-prism-showcase svg")).toBeVisible();
   await captureResponsiveEvidence(page, testInfo, "landing-premium");
 
   await page.goto("/entrar");

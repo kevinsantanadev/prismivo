@@ -30,6 +30,7 @@ import {
 import { getRequestLocale } from "@/lib/site-locale-server";
 import { normalizePrimaryNavigation, type QuickNavigationSection } from "@/lib/interface-preferences";
 import { MobileAppNavigation } from "./mobile-app-navigation";
+import { ProfileAvatar } from "./profile-avatar";
 import { WorkspacePreferencesSync } from "./workspace-preferences-sync";
 
 type WorkspaceSummary = {
@@ -195,7 +196,7 @@ export async function AppShell({
               title={copy.settingsFor(workspace.userName)}
               aria-label={copy.openProfile}
             >
-              {workspace.avatarUrl ? <span className="user-avatar-image" style={{ backgroundImage: `url(${workspace.avatarUrl})` }} aria-hidden="true" /> : initials}
+              <ProfileAvatar url={workspace.avatarUrl} initials={initials} />
             </Link>
           </div>
         </header>

@@ -92,10 +92,11 @@ export async function getSupabaseTasksData(organizationId: string, projectId?: s
   const supabase = await createSupabaseServerClient();
   let query = supabase
     .from("tasks")
-    .select("id, title, description, status, priority, due_date, completed_at, created_at, project:projects!inner(id, name, client:clients(name))")
+    .select("id, title, description, status, priority, due_date, completed_at, created_at, project:projects!inner(id, name, status, client:clients(name))")
     .eq("organization_id", organizationId)
     .order("created_at", { ascending: false });
   if (projectId) query = query.eq("project_id", projectId);
+  else query = query.neq("project.status", "archived");
   const { data, error } = await query;
   if (error) throw error;
   return (data ?? []).map((row) => {
@@ -177,8 +178,9 @@ export async function getSupabaseApprovalsData(organizationId: string) {
   const supabase = await createSupabaseServerClient();
   const { data, error } = await supabase
     .from("approvals")
-    .select("id, title, description, status, due_date, decided_at, created_at, project_id, project:projects!inner(name, client:clients(name))")
+    .select("id, title, description, status, due_date, decided_at, created_at, project_id, project:projects!inner(name, status, client:clients(name))")
     .eq("organization_id", organizationId)
+    .neq("project.status", "archived")
     .order("created_at", { ascending: false });
   if (error) throw error;
   return (data ?? []).map((row) => {
@@ -212,7 +214,7 @@ export async function getSupabaseDashboardData(organizationId: string, userId: s
     supabase.from("clients").select("id", { count: "exact", head: true }).eq("organization_id", organizationId).eq("status", "active"),
     supabase.from("projects").select("id", { count: "exact", head: true }).eq("organization_id", organizationId).eq("status", "active"),
     supabase.from("notifications").select("id", { count: "exact", head: true }).eq("user_id", userId).is("read_at", null),
-    supabase.from("projects").select("id, name, description, status, progress, due_date, is_demo, client:clients(name)").eq("organization_id", organizationId).order("created_at", { ascending: false }).limit(8),
+    supabase.from("projects").select("id, name, description, status, progress, due_date, is_demo, client:clients(name)").eq("organization_id", organizationId).neq("status", "archived").order("created_at", { ascending: false }).limit(8),
     supabase.from("activities").select("id, type, title, detail, created_at").eq("organization_id", organizationId).order("created_at", { ascending: false }).limit(6),
     supabase.from("notifications").select("id, category, title, body, read_at, created_at").eq("user_id", userId).order("created_at", { ascending: false }).limit(5),
   ]);

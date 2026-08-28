@@ -1,4 +1,5 @@
 import { createSupabaseServerClient } from "./server";
+import { activeProjectLimitForPlan, isActiveProjectLimitReached, normalizeActiveProjectLimit } from "@/lib/project-limits";
 
 type Workspace = {
   userId: string;
@@ -29,9 +30,12 @@ export async function createClientRecord(workspace: Workspace, input: { name: st
 
 export async function createProjectRecord(workspace: Workspace, input: { name: string; clientName: string; description: string; dueDate?: string }): Promise<MutationResult<{ id: string }>> {
   const supabase = await createSupabaseServerClient();
-  const { count, error: countError } = await supabase.from("projects").select("id", { count: "exact", head: true }).eq("organization_id", workspace.organizationId).eq("status", "active");
-  if (countError) return failed();
-  if (workspace.plan === "free" && (count ?? 0) >= 3) return fail("PLAN_LIMIT_REACHED", "O plano gratuito permite até 3 projetos ativos. Arquive um projeto ou escolha outro plano.", 403);
+  const [projectCount, limit] = await Promise.all([
+    supabase.from("projects").select("id", { count: "exact", head: true }).eq("organization_id", workspace.organizationId).eq("status", "active"),
+    getActiveProjectLimit(supabase, workspace.plan),
+  ]);
+  if (projectCount.error) return failed();
+  if (isActiveProjectLimitReached(projectCount.count ?? 0, limit)) return planLimitFailure(limit!);
 
   const { data: existingClient, error: clientLookupError } = await supabase.from("clients").select("id").eq("organization_id", workspace.organizationId).eq("name", input.clientName).limit(1).maybeSingle();
   if (clientLookupError) return failed();
@@ -47,6 +51,7 @@ export async function createProjectRecord(workspace: Workspace, input: { name: s
   const { error } = await supabase.from("projects").insert({ id, organization_id: workspace.organizationId, client_id: clientId, name: input.name, description: input.description, due_date: input.dueDate || null, progress: 0 });
   if (error) {
     if (createdClient) await supabase.from("clients").delete().eq("id", clientId);
+    if (error.code === "23514" && error.message.includes("PLAN_LIMIT_REACHED") && limit !== null) return planLimitFailure(limit);
     return failed("PROJECT_CREATE_FAILED", "Não foi possível criar o projeto agora.");
   }
   await recordSideEffects(workspace, {
@@ -56,12 +61,79 @@ export async function createProjectRecord(workspace: Workspace, input: { name: s
   return success({ id });
 }
 
-export async function updateProjectProgressRecord(workspace: Workspace, id: string, progress: number): Promise<MutationResult<{ id: string; progress: number }>> {
+export async function updateProjectLifecycleRecord(
+  workspace: Workspace,
+  id: string,
+  action: "archive" | "restore",
+): Promise<MutationResult<{ id: string; status: string }>> {
   const supabase = await createSupabaseServerClient();
-  const { data: project, error: lookupError } = await supabase.from("projects").select("id, name").eq("organization_id", workspace.organizationId).eq("id", id).maybeSingle();
+  const { data: project, error: lookupError } = await supabase
+    .from("projects")
+    .select("id, name, status, progress")
+    .eq("organization_id", workspace.organizationId)
+    .eq("id", id)
+    .maybeSingle();
   if (lookupError) return failed();
   if (!project) return fail("PROJECT_NOT_FOUND", "Projeto não encontrado.", 404);
+
+  if (action === "archive") {
+    if (project.status === "archived") return success({ id, status: "archived" });
+    const { error } = await supabase.from("projects").update({ status: "archived", updated_at: new Date().toISOString() })
+      .eq("organization_id", workspace.organizationId).eq("id", id);
+    if (error) return failed("PROJECT_ARCHIVE_FAILED", "Não foi possível arquivar o projeto.");
+    await recordActivity(workspace, { type: "project.archived", title: "Projeto arquivado", detail: `${project.name} saiu do limite de projetos ativos.`, resourceType: "project", resourceId: id });
+    return success({ id, status: "archived" });
+  }
+
+  if (project.status !== "archived") return success({ id, status: project.status });
+  const restoredStatus = project.progress === 100 ? "completed" : "active";
+  if (restoredStatus === "active") {
+    const [projectCount, limit] = await Promise.all([
+      supabase.from("projects").select("id", { count: "exact", head: true }).eq("organization_id", workspace.organizationId).eq("status", "active"),
+      getActiveProjectLimit(supabase, workspace.plan),
+    ]);
+    if (projectCount.error) return failed();
+    if (isActiveProjectLimitReached(projectCount.count ?? 0, limit)) return planLimitFailure(limit!);
+  }
+  const { error } = await supabase.from("projects").update({ status: restoredStatus, updated_at: new Date().toISOString() })
+    .eq("organization_id", workspace.organizationId).eq("id", id);
+  if (error?.code === "23514" && error.message.includes("PLAN_LIMIT_REACHED")) {
+    const limit = await getActiveProjectLimit(supabase, workspace.plan);
+    if (limit !== null) return planLimitFailure(limit);
+  }
+  if (error) return failed("PROJECT_RESTORE_FAILED", "Não foi possível restaurar o projeto.");
+  await recordActivity(workspace, { type: "project.restored", title: "Projeto restaurado", detail: `${project.name} voltou para a operação.`, resourceType: "project", resourceId: id });
+  return success({ id, status: restoredStatus });
+}
+
+export async function deleteProjectRecord(
+  workspace: Workspace,
+  id: string,
+): Promise<MutationResult<{ id: string; deleted: true }>> {
+  if (!["owner", "admin"].includes(workspace.role)) return fail("FORBIDDEN", "Somente proprietários e administradores podem excluir projetos.", 403);
+  const supabase = await createSupabaseServerClient();
+  const { data: project, error: lookupError } = await supabase.from("projects").select("id, name, status")
+    .eq("organization_id", workspace.organizationId).eq("id", id).maybeSingle();
+  if (lookupError) return failed();
+  if (!project) return fail("PROJECT_NOT_FOUND", "Projeto não encontrado.", 404);
+  if (project.status !== "archived") return fail("PROJECT_MUST_BE_ARCHIVED", "Arquive o projeto antes de excluí-lo definitivamente.", 409);
+  const { error } = await supabase.from("projects").delete().eq("organization_id", workspace.organizationId).eq("id", id);
+  if (error) return failed("PROJECT_DELETE_FAILED", "Não foi possível excluir o projeto.");
+  await recordActivity(workspace, { type: "project.deleted", title: "Projeto excluído", detail: project.name, resourceType: "project", resourceId: id });
+  return success({ id, deleted: true });
+}
+
+export async function updateProjectProgressRecord(workspace: Workspace, id: string, progress: number): Promise<MutationResult<{ id: string; progress: number }>> {
+  const supabase = await createSupabaseServerClient();
+  const { data: project, error: lookupError } = await supabase.from("projects").select("id, name, status").eq("organization_id", workspace.organizationId).eq("id", id).maybeSingle();
+  if (lookupError) return failed();
+  if (!project) return fail("PROJECT_NOT_FOUND", "Projeto não encontrado.", 404);
+  if (project.status === "archived") return fail("PROJECT_ARCHIVED", "Restaure o projeto antes de alterar o progresso.", 409);
   const { error } = await supabase.from("projects").update({ progress, status: progress === 100 ? "completed" : "active", updated_at: new Date().toISOString() }).eq("organization_id", workspace.organizationId).eq("id", id);
+  if (error?.code === "23514" && error.message.includes("PLAN_LIMIT_REACHED")) {
+    const limit = await getActiveProjectLimit(supabase, workspace.plan);
+    if (limit !== null) return planLimitFailure(limit);
+  }
   if (error) return failed("PROJECT_PROGRESS_FAILED", "Não foi possível atualizar o progresso.");
   await recordActivity(workspace, { type: "project.progress_updated", title: "Progresso atualizado", detail: `${project.name} avançou para ${progress}%.`, resourceType: "project", resourceId: id });
   return success({ id, progress });
@@ -69,7 +141,7 @@ export async function updateProjectProgressRecord(workspace: Workspace, id: stri
 
 export async function createApprovalRecord(workspace: Workspace, input: { projectId: string; title: string; description: string; dueDate?: string }): Promise<MutationResult<{ id: string }>> {
   const supabase = await createSupabaseServerClient();
-  const { data: project, error: lookupError } = await supabase.from("projects").select("id, name").eq("organization_id", workspace.organizationId).eq("id", input.projectId).maybeSingle();
+  const { data: project, error: lookupError } = await supabase.from("projects").select("id, name").eq("organization_id", workspace.organizationId).eq("id", input.projectId).eq("status", "active").maybeSingle();
   if (lookupError) return failed();
   if (!project) return fail("PROJECT_NOT_FOUND", "Projeto não encontrado.", 404);
   const id = `apr_${crypto.randomUUID()}`;
@@ -113,7 +185,7 @@ export async function decideApprovalRecord(workspace: Workspace, id: string, dec
 
 export async function createTaskRecord(workspace: Workspace, input: { projectId: string; title: string; description: string; priority: string; dueDate?: string }): Promise<MutationResult<{ id: string }>> {
   const supabase = await createSupabaseServerClient();
-  const { data: project, error: lookupError } = await supabase.from("projects").select("id, name").eq("organization_id", workspace.organizationId).eq("id", input.projectId).maybeSingle();
+  const { data: project, error: lookupError } = await supabase.from("projects").select("id, name").eq("organization_id", workspace.organizationId).eq("id", input.projectId).eq("status", "active").maybeSingle();
   if (lookupError) return failed();
   if (!project) return fail("PROJECT_NOT_FOUND", "Projeto não encontrado.", 404);
   const id = `tsk_${crypto.randomUUID()}`;
@@ -128,9 +200,12 @@ export async function createTaskRecord(workspace: Workspace, input: { projectId:
 
 export async function updateTaskStatusRecord(workspace: Workspace, id: string, status: "todo" | "in_progress" | "done"): Promise<MutationResult<{ id: string; status: string }>> {
   const supabase = await createSupabaseServerClient();
-  const { data: task, error: lookupError } = await supabase.from("tasks").select("id, title").eq("organization_id", workspace.organizationId).eq("id", id).maybeSingle();
+  const { data: task, error: lookupError } = await supabase.from("tasks").select("id, title, project_id").eq("organization_id", workspace.organizationId).eq("id", id).maybeSingle();
   if (lookupError) return failed();
   if (!task) return fail("TASK_NOT_FOUND", "Tarefa não encontrada.", 404);
+  const { data: project, error: projectError } = await supabase.from("projects").select("id").eq("organization_id", workspace.organizationId).eq("id", task.project_id).neq("status", "archived").maybeSingle();
+  if (projectError) return failed();
+  if (!project) return fail("PROJECT_ARCHIVED", "Restaure o projeto antes de alterar tarefas.", 409);
   const { error } = await supabase.from("tasks").update({ status, completed_at: status === "done" ? new Date().toISOString() : null, updated_at: new Date().toISOString() }).eq("organization_id", workspace.organizationId).eq("id", id);
   if (error) return failed("TASK_UPDATE_FAILED", "Não foi possível atualizar a tarefa.");
   await recordActivity(workspace, { type: "task.status_updated", title: "Status da tarefa atualizado", detail: `${task.title}: ${taskStatusLabel(status)}.`, resourceType: "task", resourceId: id });
@@ -236,6 +311,21 @@ function fail<T>(code: string, message: string, status: number): MutationResult<
 
 function failed<T>(code = "OPERATION_FAILED", message = "Não foi possível concluir a operação agora."): MutationResult<T> {
   return fail(code, message, 500);
+}
+
+type SupabaseServerClient = Awaited<ReturnType<typeof createSupabaseServerClient>>;
+
+async function getActiveProjectLimit(supabase: SupabaseServerClient, plan: string) {
+  const { data, error } = await supabase.from("plans").select("limits").eq("code", plan).eq("active", true).maybeSingle();
+  if (error || !data) return activeProjectLimitForPlan(plan);
+  const limits = data.limits && typeof data.limits === "object" && !Array.isArray(data.limits)
+    ? data.limits as Record<string, unknown>
+    : {};
+  return normalizeActiveProjectLimit(limits.active_projects, plan);
+}
+
+function planLimitFailure<T>(limit: number): MutationResult<T> {
+  return fail("PLAN_LIMIT_REACHED", `Seu plano permite até ${limit} projetos ativos. Arquive um projeto ou escolha outro plano.`, 403);
 }
 
 function taskStatusLabel(status: "todo" | "in_progress" | "done") {

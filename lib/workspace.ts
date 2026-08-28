@@ -1,10 +1,11 @@
-import { and, desc, eq, sql } from "drizzle-orm";
+import { and, desc, eq, ne, sql } from "drizzle-orm";
 import { getDb } from "@/db";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { findSupabaseWorkspaceByEmail } from "@/lib/supabase/workspace";
 import { normalizePrimaryNavigation } from "@/lib/interface-preferences";
 import {
   getSupabaseApprovalsData,
+  getSupabaseAgendaData,
   getSupabaseClientDetail,
   getSupabaseClientsData,
   getSupabaseDashboardData,
@@ -122,6 +123,7 @@ export async function getProjectsData(organizationId: string) {
   return db
     .select({
       id: projects.id,
+      clientId: projects.clientId,
       name: projects.name,
       description: projects.description,
       status: projects.status,
@@ -160,7 +162,7 @@ export async function getProjectDetail(organizationId: string, projectId: string
 export async function getTasksData(organizationId: string, projectId?: string) {
   if (isSupabaseConfigured()) return getSupabaseTasksData(organizationId, projectId);
   const db = getDb();
-  const ownership = projectId ? and(eq(tasks.organizationId, organizationId), eq(tasks.projectId, projectId)) : eq(tasks.organizationId, organizationId);
+  const ownership = projectId ? and(eq(tasks.organizationId, organizationId), eq(tasks.projectId, projectId)) : and(eq(tasks.organizationId, organizationId), ne(projects.status, "archived"));
   return db.select({ id: tasks.id, title: tasks.title, description: tasks.description, status: tasks.status, priority: tasks.priority, dueDate: tasks.dueDate, completedAt: tasks.completedAt, createdAt: tasks.createdAt, projectId: projects.id, projectName: projects.name, clientName: clients.name })
     .from(tasks).innerJoin(projects, eq(projects.id, tasks.projectId)).leftJoin(clients, eq(clients.id, projects.clientId)).where(ownership).orderBy(desc(tasks.createdAt));
 }
@@ -219,7 +221,7 @@ export async function getApprovalsData(organizationId: string) {
     .from(approvals)
     .innerJoin(projects, eq(projects.id, approvals.projectId))
     .leftJoin(clients, eq(clients.id, projects.clientId))
-    .where(eq(approvals.organizationId, organizationId))
+    .where(and(eq(approvals.organizationId, organizationId), ne(projects.status, "archived")))
     .orderBy(desc(approvals.createdAt));
 }
 
@@ -295,7 +297,7 @@ export async function getDashboardData(organizationId: string, userId: string) {
     })
     .from(projects)
     .leftJoin(clients, eq(clients.id, projects.clientId))
-    .where(eq(projects.organizationId, organizationId))
+    .where(and(eq(projects.organizationId, organizationId), ne(projects.status, "archived")))
     .orderBy(desc(projects.createdAt))
     .limit(8);
 
@@ -337,4 +339,15 @@ export async function getDashboardData(organizationId: string, userId: string) {
     activities: recentActivities,
     notifications: recentNotifications,
   };
+}
+
+export async function getAgendaData(organizationId: string) {
+  if (isSupabaseConfigured()) return getSupabaseAgendaData(organizationId);
+  const { buildAgendaEvents } = await import("@/lib/marco23");
+  const [taskItems, approvalItems, projectItems] = await Promise.all([
+    getTasksData(organizationId),
+    getApprovalsData(organizationId),
+    getProjectsData(organizationId),
+  ]);
+  return buildAgendaEvents({ tasks: taskItems, approvals: approvalItems, projects: projectItems });
 }

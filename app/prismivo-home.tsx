@@ -380,7 +380,6 @@ export default function PrismivoHome() {
           </div>
 
           <div className="hero-visual">
-            <KineticPrism variant="hero" />
             <ProductPreview content={content.preview} />
           </div>
 

@@ -1,7 +1,7 @@
 import { and, eq, sql } from "drizzle-orm";
 import { getSessionUser } from "@/app/session-auth";
 import { getDb } from "@/db";
-import { activities, tasks } from "@/db/schema";
+import { activities, projects, tasks } from "@/db/schema";
 import { apiError, apiSuccess, isJsonRequest, isSameOriginRequest } from "@/lib/api";
 import { hasPermission } from "@/lib/permissions";
 import { taskStatusSchema } from "@/lib/validation";
@@ -27,9 +27,11 @@ export async function PATCH(request: Request, context: { params: Promise<{ id: s
     return supabaseMutationResponse(await updateTaskStatusRecord(workspace, id, parsed.data.status));
   }
   const db = getDb();
-  const [ownedTask] = await db.select({ id: tasks.id, title: tasks.title }).from(tasks)
+  const [ownedTask] = await db.select({ id: tasks.id, title: tasks.title, projectStatus: projects.status }).from(tasks)
+    .innerJoin(projects, eq(projects.id, tasks.projectId))
     .where(and(eq(tasks.id, id), eq(tasks.organizationId, workspace.organizationId))).limit(1);
   if (!ownedTask) return apiError("TASK_NOT_FOUND", "Tarefa não encontrada.", 404);
+  if (ownedTask.projectStatus === "archived") return apiError("PROJECT_ARCHIVED", "Restaure o projeto antes de alterar tarefas.", 409);
   try {
     await db.batch([
       db.update(tasks).set({ status: parsed.data.status, completedAt: parsed.data.status === "done" ? sql`CURRENT_TIMESTAMP` : null, updatedAt: sql`CURRENT_TIMESTAMP` }).where(and(eq(tasks.id, id), eq(tasks.organizationId, workspace.organizationId))),

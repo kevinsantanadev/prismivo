@@ -122,6 +122,7 @@ export async function createDeliverableRecord(
     .select("id, name")
     .eq("organization_id", workspace.organizationId)
     .eq("id", projectId)
+    .eq("status", "active")
     .maybeSingle();
   if (projectError) return failed();
   if (!project) return fail("PROJECT_NOT_FOUND", "Projeto não encontrado.", 404);

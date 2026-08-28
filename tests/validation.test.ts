@@ -18,6 +18,7 @@ import {
   notificationActionSchema,
   onboardingSchema,
   projectProgressSchema,
+  projectLifecycleSchema,
   projectSchema,
   settingsSchema,
   taskSchema,
@@ -246,6 +247,12 @@ describe("operational module validation", () => {
   it("accepts only bounded integer project progress", () => {
     expect(projectProgressSchema.safeParse({ progress: 75 }).success).toBe(true);
     expect(projectProgressSchema.safeParse({ progress: 120 }).success).toBe(false);
+  });
+
+  it("allows archive and restore without accepting destructive actions through PATCH", () => {
+    expect(projectLifecycleSchema.safeParse({ action: "archive" }).success).toBe(true);
+    expect(projectLifecycleSchema.safeParse({ action: "restore" }).success).toBe(true);
+    expect(projectLifecycleSchema.safeParse({ action: "delete" }).success).toBe(false);
   });
 
   it("requires exactly one notification action", () => {

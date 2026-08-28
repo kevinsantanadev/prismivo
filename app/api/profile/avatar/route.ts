@@ -2,7 +2,7 @@ import { getSessionUser } from "@/app/session-auth";
 import { apiError, isSameOriginRequest } from "@/lib/api";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { supabaseMutationResponse } from "@/lib/supabase/http";
-import { deleteProfileAvatar, uploadProfileAvatar } from "@/lib/supabase/profile";
+import { deleteProfileAvatar, downloadProfileAvatar, uploadProfileAvatar } from "@/lib/supabase/profile";
 import { findWorkspaceByEmail } from "@/lib/workspace";
 
 const MAX_AVATAR_BYTES = 2 * 1024 * 1024;
@@ -34,6 +34,21 @@ export async function POST(request: Request) {
   const bytes = await file.arrayBuffer();
   if (!hasImageSignature(file.type, new Uint8Array(bytes))) return apiError("AVATAR_SIGNATURE_INVALID", "O conteúdo não corresponde ao formato da imagem.", 422);
   return supabaseMutationResponse(await uploadProfileAvatar(authorized.workspace, { extension: ALLOWED[file.type], contentType: file.type, bytes }), 201);
+}
+
+export async function GET() {
+  const authorized = await getWorkspace();
+  if ("response" in authorized) return authorized.response;
+  const result = await downloadProfileAvatar(authorized.workspace);
+  if (!result.ok) return apiError(result.code, result.message, result.status);
+  return new Response(result.data.body, {
+    headers: {
+      "cache-control": "private, no-store",
+      "content-length": String(result.data.size),
+      "content-type": result.data.contentType,
+      "x-content-type-options": "nosniff",
+    },
+  });
 }
 
 export async function DELETE(request: Request) {

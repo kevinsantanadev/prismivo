@@ -12,7 +12,6 @@ export type TeamMember = {
   id: string;
   userId: string;
   name: string;
-  email: string;
   role: string;
   status: string;
   joinedAt: string;
@@ -31,7 +30,7 @@ type MemberRpcRow = {
   membership_id: string;
   user_id: string;
   member_name: string;
-  member_email: string;
+  member_email: string | null;
   member_role: string;
   member_status: string;
   joined_at: string;
@@ -61,7 +60,6 @@ export async function getTeamData(organizationId: string) {
       id: row.membership_id,
       userId: row.user_id,
       name: row.member_name,
-      email: row.member_email,
       role: row.member_role,
       status: row.member_status,
       joinedAt: row.joined_at,

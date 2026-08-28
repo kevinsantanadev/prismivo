@@ -2,6 +2,7 @@ import type { SiteLocale } from "./site-locale";
 
 export type AppSection =
   | "dashboard"
+  | "agenda"
   | "tasks"
   | "projects"
   | "clients"
@@ -9,10 +10,12 @@ export type AppSection =
   | "files"
   | "support"
   | "content"
+  | "automations"
   | "billing"
   | "notifications"
   | "team"
   | "admin"
+  | "permissions"
   | "settings";
 
 export const appShellCopy = {
@@ -32,9 +35,9 @@ export const appShellCopy = {
     settingsFor: (name: string) => `Configurações de ${name}`,
     openProfile: "Abrir configurações do perfil",
     nav: {
-      dashboard: "Visão geral", tasks: "Tarefas", projects: "Projetos", clients: "Clientes",
+      dashboard: "Visão geral", agenda: "Agenda", tasks: "Tarefas", projects: "Projetos", clients: "Clientes",
       approvals: "Aprovações", files: "Arquivos", support: "Atendimento", content: "Conteúdo",
-      billing: "Planos", notifications: "Notificações", team: "Equipe", admin: "Administração", settings: "Configurações",
+      automations: "Automações", billing: "Planos", notifications: "Notificações", team: "Equipe", admin: "Administração", permissions: "Permissões", settings: "Configurações",
     },
   },
   en: {
@@ -53,9 +56,9 @@ export const appShellCopy = {
     settingsFor: (name: string) => `Settings for ${name}`,
     openProfile: "Open profile settings",
     nav: {
-      dashboard: "Overview", tasks: "Tasks", projects: "Projects", clients: "Clients",
+      dashboard: "Overview", agenda: "Schedule", tasks: "Tasks", projects: "Projects", clients: "Clients",
       approvals: "Approvals", files: "Files", support: "Support", content: "Content",
-      billing: "Plans", notifications: "Notifications", team: "Team", admin: "Administration", settings: "Settings",
+      automations: "Automations", billing: "Plans", notifications: "Notifications", team: "Team", admin: "Administration", permissions: "Permissions", settings: "Settings",
     },
   },
   es: {
@@ -74,9 +77,9 @@ export const appShellCopy = {
     settingsFor: (name: string) => `Configuración de ${name}`,
     openProfile: "Abrir la configuración del perfil",
     nav: {
-      dashboard: "Resumen", tasks: "Tareas", projects: "Proyectos", clients: "Clientes",
+      dashboard: "Resumen", agenda: "Agenda", tasks: "Tareas", projects: "Proyectos", clients: "Clientes",
       approvals: "Aprobaciones", files: "Archivos", support: "Atención", content: "Contenido",
-      billing: "Planes", notifications: "Notificaciones", team: "Equipo", admin: "Administración", settings: "Configuración",
+      automations: "Automatizaciones", billing: "Planes", notifications: "Notificaciones", team: "Equipo", admin: "Administración", permissions: "Permisos", settings: "Configuración",
     },
   },
 } satisfies Record<SiteLocale, {
@@ -115,6 +118,7 @@ export function getMobileNavigationCopy(locale: SiteLocale): MobileNavigationCop
 const translatedShellText: Record<Exclude<SiteLocale, "pt-BR">, Record<string, string>> = {
   en: {
     "Visão geral": "Overview",
+    "Agenda": "Schedule",
     "Tarefas": "Tasks",
     "Projetos": "Projects",
     "Clientes": "Clients",
@@ -122,6 +126,7 @@ const translatedShellText: Record<Exclude<SiteLocale, "pt-BR">, Record<string, s
     "Arquivos": "Files",
     "Atendimento": "Support",
     "Estúdio de conteúdo": "Content studio",
+    "Rotinas inteligentes e alertas de prazo": "Smart routines and deadline alerts",
     "Planos e assinatura": "Plans and subscription",
     "Notificações": "Notifications",
     "Equipe": "Team",
@@ -143,9 +148,12 @@ const translatedShellText: Record<Exclude<SiteLocale, "pt-BR">, Record<string, s
     "Indicadores, relatórios e auditoria": "Metrics, reports, and audit",
     "Histórico do atendimento": "Support history",
     "Papéis, convites e acessos": "Roles, invitations, and access",
+    "Transparência de acessos e responsabilidades": "Clear access and responsibility boundaries",
+    "Prazos, decisões e prioridades em uma linha do tempo": "Deadlines, decisions, and priorities in one timeline",
   },
   es: {
     "Visão geral": "Resumen",
+    "Agenda": "Agenda",
     "Tarefas": "Tareas",
     "Projetos": "Proyectos",
     "Clientes": "Clientes",
@@ -153,6 +161,7 @@ const translatedShellText: Record<Exclude<SiteLocale, "pt-BR">, Record<string, s
     "Arquivos": "Archivos",
     "Atendimento": "Atención",
     "Estúdio de conteúdo": "Estudio de contenido",
+    "Rotinas inteligentes e alertas de prazo": "Rutinas inteligentes y alertas de plazo",
     "Planos e assinatura": "Planes y suscripción",
     "Notificações": "Notificaciones",
     "Equipe": "Equipo",
@@ -174,6 +183,8 @@ const translatedShellText: Record<Exclude<SiteLocale, "pt-BR">, Record<string, s
     "Indicadores, relatórios e auditoria": "Indicadores, informes y auditoría",
     "Histórico do atendimento": "Historial de atención",
     "Papéis, convites e acessos": "Roles, invitaciones y accesos",
+    "Transparência de acessos e responsabilidades": "Claridad sobre accesos y responsabilidades",
+    "Prazos, decisões e prioridades em uma linha do tempo": "Plazos, decisiones y prioridades en una línea de tiempo",
   },
 };
 

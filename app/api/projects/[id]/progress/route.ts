@@ -35,11 +35,12 @@ export async function PATCH(
 
   const db = getDb();
   const [ownedProject] = await db
-    .select({ id: projects.id, name: projects.name })
+    .select({ id: projects.id, name: projects.name, status: projects.status })
     .from(projects)
     .where(and(eq(projects.id, id), eq(projects.organizationId, workspace.organizationId)))
     .limit(1);
   if (!ownedProject) return apiError("PROJECT_NOT_FOUND", "Projeto não encontrado.", 404);
+  if (ownedProject.status === "archived") return apiError("PROJECT_ARCHIVED", "Restaure o projeto antes de alterar o progresso.", 409);
 
   try {
     await db.batch([

@@ -85,6 +85,9 @@ O Prismivo substitui fragmentação por uma fonte confiável de contexto. Cada a
 ### Autenticadas
 
 - `/app` — dashboard;
+- `/app/agenda` — agenda operacional unificada;
+- `/app/automacoes` — rotinas inteligentes e alertas por prazo;
+- `/app/permissoes` — transparência de papéis e capacidades;
 - `/app/tarefas` — quadro de execução;
 - `/app/clientes`, `/app/clientes/[id]`;
 - `/app/projetos`, `/app/projetos/[id]`;
@@ -93,7 +96,7 @@ O Prismivo substitui fragmentação por uma fonte confiável de contexto. Cada a
 - `/app/cobranca`, `/app/historico`;
 - `/app/configuracoes/*`.
 
-As rotas `/app`, `/app/tarefas`, `/app/clientes`, `/app/clientes/[id]`, `/app/projetos`, `/app/projetos/[id]`, `/app/aprovacoes`, `/app/arquivos`, `/app/notificacoes`, `/app/atendimento`, `/app/atendimento/[id]` e `/app/configuracoes` já possuem telas próprias no marco atual.
+As rotas `/app`, `/app/agenda`, `/app/automacoes`, `/app/permissoes`, `/app/tarefas`, `/app/clientes`, `/app/clientes/[id]`, `/app/projetos`, `/app/projetos/[id]`, `/app/aprovacoes`, `/app/arquivos`, `/app/notificacoes`, `/app/atendimento`, `/app/atendimento/[id]` e `/app/configuracoes` já possuem telas próprias no marco atual.
 
 ### Administrativas
 

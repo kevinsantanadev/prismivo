@@ -27,7 +27,7 @@ export async function POST(request: Request) {
   }
   const db = getDb();
   const [ownedProject] = await db.select({ id: projects.id, name: projects.name }).from(projects)
-    .where(and(eq(projects.id, parsed.data.projectId), eq(projects.organizationId, workspace.organizationId))).limit(1);
+    .where(and(eq(projects.id, parsed.data.projectId), eq(projects.organizationId, workspace.organizationId), eq(projects.status, "active"))).limit(1);
   if (!ownedProject) return apiError("PROJECT_NOT_FOUND", "Projeto não encontrado.", 404);
   const taskId = `tsk_${crypto.randomUUID()}`;
   try {

@@ -109,6 +109,10 @@ export const projectProgressSchema = z.object({
   progress: z.number().int().min(0).max(100),
 });
 
+export const projectLifecycleSchema = z.object({
+  action: z.enum(["archive", "restore"]),
+});
+
 export const notificationActionSchema = z.object({
   notificationId: z.string().trim().min(1).optional(),
   markAll: z.boolean().optional(),

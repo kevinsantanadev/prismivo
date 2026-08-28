@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
-import { ArrowLeft, BriefcaseBusiness, Building2, CalendarDays, Mail } from "lucide-react";
+import { Activity, ArrowLeft, BriefcaseBusiness, Building2, CalendarDays, Gauge, Mail, TriangleAlert } from "lucide-react";
 import { requireSessionUser } from "@/app/session-auth";
 import { getOperationalCopy } from "@/lib/app-operational-i18n";
+import { deriveClientInsights } from "@/lib/marco23";
+import { getMarco23Copy } from "@/lib/marco23-i18n";
 import { toIntlLocale, type SiteLocale } from "@/lib/site-locale";
 import { getRequestLocale } from "@/lib/site-locale-server";
 import { findWorkspaceByEmail, getClientDetail, getUnreadNotificationCount } from "@/lib/workspace";
@@ -24,6 +26,11 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
   ]);
   if (!detail) notFound();
   const copy = getOperationalCopy(locale);
+  const crm = getMarco23Copy(locale).crm;
+  const insight = deriveClientInsights(
+    [{ id: detail.client.id, status: detail.client.status }],
+    detail.projects.map((project) => ({ ...project, clientId: detail.client.id })),
+  )[0];
 
   return (
     <AppShell active="clients" title={detail.client.name} description="Cliente e projetos vinculados" workspace={workspace} unreadCount={unreadCount}>
@@ -37,6 +44,16 @@ export default async function ClientDetailPage({ params }: { params: Promise<{ i
         <article><Mail aria-hidden="true" /><span><small>{copy.clients.email}</small><strong>{detail.client.email || copy.clients.notProvidedMasculine}</strong></span></article>
         <article><CalendarDays aria-hidden="true" /><span><small>{copy.clients.since}</small><strong>{formatDate(detail.client.createdAt, locale)}</strong></span></article>
         <article><BriefcaseBusiness aria-hidden="true" /><span><small>{copy.clients.projects}</small><strong>{detail.projects.length}</strong></span></article>
+      </section>
+      <section className="dashboard-panel crm-relationship-panel" aria-labelledby="crm-relationship-title">
+        <div className="panel-heading"><div><span className="panel-kicker">{crm.portfolioHealth}</span><h2 id="crm-relationship-title">{crm.relationshipOverview}</h2></div><span className={`crm-health ${insight.health}`}>{crm[insight.health]}</span></div>
+        <p>{crm.relationshipDetail}</p>
+        <div className="crm-insight-grid">
+          <article><Activity aria-hidden="true" /><span><strong>{insight.activeProjects}</strong><small>{crm.activeProjects}</small></span></article>
+          <article><Gauge aria-hidden="true" /><span><strong>{insight.averageProgress}%</strong><small>{crm.averageProgress}</small></span></article>
+          <article><TriangleAlert aria-hidden="true" /><span><strong>{insight.overdueProjects}</strong><small>{crm.overdue}</small></span></article>
+          <article><CalendarDays aria-hidden="true" /><span><strong>{insight.nextDeadline ? formatShortDate(insight.nextDeadline, locale) : "—"}</strong><small>{crm.nextDeadline}</small></span></article>
+        </div>
       </section>
       <section className="dashboard-panel detail-section" aria-labelledby="client-projects-title">
         <div className="section-mini-heading"><span className="panel-kicker">{copy.clients.linkedWork}</span><h2 id="client-projects-title">{copy.clients.clientProjects}</h2></div>

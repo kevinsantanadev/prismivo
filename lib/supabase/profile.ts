@@ -105,9 +105,19 @@ export async function uploadProfileAvatar(
   }
 
   if (current.data?.avatar_path) await supabase.storage.from(AVATAR_BUCKET).remove([current.data.avatar_path]);
-  const signed = await supabase.storage.from(AVATAR_BUCKET).createSignedUrl(path, 60 * 60);
-  if (signed.error || !signed.data?.signedUrl) return failure("AVATAR_URL_FAILED", "A foto foi salva, mas não pôde ser exibida agora.");
-  return { ok: true, data: { path, url: signed.data.signedUrl } };
+  return { ok: true, data: { path, url: `/api/profile/avatar?v=${Date.now()}` } };
+}
+
+export async function downloadProfileAvatar(
+  workspace: Workspace,
+): Promise<MutationResult<{ body: ArrayBuffer; contentType: string; size: number }>> {
+  const supabase = await createSupabaseServerClient();
+  const { data: profile, error: profileError } = await supabase.from("profiles").select("avatar_path").eq("id", workspace.userId).maybeSingle();
+  if (profileError) return failure("AVATAR_DOWNLOAD_FAILED", "Não foi possível carregar a foto.");
+  if (!profile?.avatar_path) return { ok: false, code: "AVATAR_NOT_FOUND", message: "Foto não encontrada.", status: 404 };
+  const { data, error } = await supabase.storage.from(AVATAR_BUCKET).download(profile.avatar_path);
+  if (error || !data) return { ok: false, code: "AVATAR_NOT_FOUND", message: "Foto não encontrada.", status: 404 };
+  return { ok: true, data: { body: await data.arrayBuffer(), contentType: data.type || "application/octet-stream", size: data.size } };
 }
 
 export async function deleteProfileAvatar(

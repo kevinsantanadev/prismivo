@@ -3,6 +3,8 @@ import { redirect } from "next/navigation";
 import { CheckCircle2, FolderKanban, Gauge } from "lucide-react";
 import { requireSessionUser } from "@/app/session-auth";
 import { getOperationalCopy } from "@/lib/app-operational-i18n";
+import { hasPermission } from "@/lib/permissions";
+import { activeProjectLimitForPlan } from "@/lib/project-limits";
 import { getRequestLocale } from "@/lib/site-locale-server";
 import { AppShell } from "../components/app-shell";
 import { ProjectDirectory } from "../components/project-directory";
@@ -22,14 +24,17 @@ export default async function ProjectsPage() {
     getRequestLocale(),
   ]);
   const copy = getOperationalCopy(locale).projects;
+  const activeProjects = projects.filter((project) => project.status === "active");
+  const visibleProjects = projects.filter((project) => project.status !== "archived");
   const completed = projects.filter((project) => project.status === "completed").length;
-  const averageProgress = projects.length ? Math.round(projects.reduce((total, project) => total + project.progress, 0) / projects.length) : 0;
+  const averageProgress = visibleProjects.length ? Math.round(visibleProjects.reduce((total, project) => total + project.progress, 0) / visibleProjects.length) : 0;
+  const projectLimit = activeProjectLimitForPlan(workspace.plan);
 
   return (
     <AppShell active="projects" title="Projetos" description="Execução e prazos em um só lugar" workspace={workspace} unreadCount={unreadCount}>
-      <section className="app-page-intro"><div><span className="eyebrow">{copy.eyebrow}</span><h1>{copy.title}</h1><p>{copy.intro}</p></div><ProjectForm locale={locale} /></section>
+      <section className="app-page-intro"><div><span className="eyebrow">{copy.eyebrow}</span><h1>{copy.title}</h1><p>{copy.intro}</p></div><ProjectForm locale={locale} activeProjects={activeProjects.length} projectLimit={projectLimit} /></section>
       <section className="app-summary-strip" aria-label={copy.summaryAria}><article><FolderKanban aria-hidden="true" /><span><strong>{projects.length}</strong><small>{copy.registered}</small></span></article><article><CheckCircle2 aria-hidden="true" /><span><strong>{completed}</strong><small>{copy.completedCount}</small></span></article><article><Gauge aria-hidden="true" /><span><strong>{averageProgress}%</strong><small>{copy.averageProgress}</small></span></article></section>
-      <ProjectDirectory projects={projects} locale={locale} />
+      <ProjectDirectory projects={projects} locale={locale} canManage={hasPermission(workspace.role, "projects.write")} canDelete={["owner", "admin"].includes(workspace.role)} />
     </AppShell>
   );
 }

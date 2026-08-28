@@ -37,7 +37,7 @@ export async function POST(request: Request) {
   }
   const db = getDb();
   if (projectId) {
-    const [ownedProject] = await db.select({ id: projects.id }).from(projects).where(and(eq(projects.id, projectId), eq(projects.organizationId, workspace.organizationId))).limit(1);
+    const [ownedProject] = await db.select({ id: projects.id }).from(projects).where(and(eq(projects.id, projectId), eq(projects.organizationId, workspace.organizationId), eq(projects.status, "active"))).limit(1);
     if (!ownedProject) return apiError("PROJECT_NOT_FOUND", "Projeto não encontrado.", 404);
   }
   const fileId = `fil_${crypto.randomUUID()}`;
